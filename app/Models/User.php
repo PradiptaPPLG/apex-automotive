@@ -55,10 +55,26 @@ class User extends Authenticatable
     }
 
     /**
+     * Determine whether the user is a Delivery Driver.
+     */
+    public function isDelivery(): bool
+    {
+        return $this->role === 'delivery';
+    }
+
+    /**
      * Get all inquiries belonging to this user.
      */
     public function inquiries(): HasMany
     {
         return $this->hasMany(Inquiry::class);
+    }
+
+    /**
+     * Get all deliveries assigned to this driver.
+     */
+    public function deliveryShipments(): HasMany
+    {
+        return $this->hasMany(Delivery::class, 'driver_id');
     }
 }
