@@ -334,6 +334,74 @@
         </div>
     </div>
 
+    {{-- Phase 4: E-Sign Contract SPA Modal --}}
+    <div id="contractModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+        <div class="glass-card max-w-2xl w-full p-6 border border-white/20 shadow-2xl relative bg-[#0c0c12] text-xs font-mono max-h-[90vh] flex flex-col">
+            <button onclick="toggleContractModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-2 mb-2 pb-3 border-b border-white/10 shrink-0">
+                <i class="fa-solid fa-file-signature text-red-500 text-lg"></i>
+                <div>
+                    <h3 class="text-sm font-serif font-bold text-white uppercase tracking-wider">Sales &amp; Purchase Agreement (SPA)</h3>
+                    <p class="text-[10px] text-neutral-400 font-mono">No. Kontrak: SPA/APEX/2026/0{{ $inquiry->id }} &nbsp;·&nbsp; Unit: {{ $inquiry->car_model }}</p>
+                </div>
+            </div>
+
+            <!-- Contract Content Body -->
+            <div class="overflow-y-auto pr-2 space-y-4 my-3 text-neutral-300 font-sans text-xs leading-relaxed shrink" style="max-height: 45vh;">
+                <div class="p-3 bg-red-600/10 border border-red-600/30 rounded-sm">
+                    <p class="text-red-400 font-mono font-bold text-[11px]"><i class="fa-solid fa-shield-halved mr-1"></i> RESMI &amp; MENGIKAT HUKUM</p>
+                    <p class="text-[11px] text-neutral-300 mt-0.5">Dokumen ini diterbitkan oleh PT Apex Automotive Indonesia dan dilindungi meterai elektronik sah (e-Meterai Republik Indonesia).</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase font-mono text-[11px] mb-1">PASAL 1 — HAK &amp; KEWAJIBAN PEMBELI</h4>
+                    <p class="text-neutral-400 text-[11px]">Pembeli berhak menerima unit kendaraan <strong>{{ $inquiry->car_model }}</strong> sesuai spesifikasi kustomisasi yang telah disepakati. Pembeli berkewajiban melakukan pelunasan pembayaran sesuai skema penawaran resmi.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase font-mono text-[11px] mb-1">PASAL 2 — GARANSI RESMI &amp; WHITE-GLOVE SERVICE</h4>
+                    <p class="text-neutral-400 text-[11px]">PT Apex Automotive Indonesia memberikan Garansi Manufactory 7 Tahun, Bebas Biaya Servis Berkala 5 Tahun, dan Layanan Emergency Towing Concierge 24/7 di seluruh wilayah Indonesia.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase font-mono text-[11px] mb-1">PASAL 3 — KETENTUAN SERAH TERIMA VEHICLE UNVEILING</h4>
+                    <p class="text-neutral-400 text-[11px]">Serah terima unit dilakukan menggunakan pengangkut tertutup (Enclosed Flatbed Towing) dengan seremoni pembukaan kain penutup beludru merah di lokasi tujuan yang ditentukan pembeli.</p>
+                </div>
+            </div>
+
+            <!-- Signature Area -->
+            <div class="border-t border-white/10 pt-3 shrink-0">
+                <form method="POST" action="{{ route('portal.contract.sign', $inquiry) }}" id="esignForm" onsubmit="saveCanvasSignature()">
+                    @csrf
+                    <p class="text-[11px] font-mono text-white font-bold mb-2 uppercase flex items-center justify-between">
+                        <span><i class="fa-solid fa-signature text-red-500 mr-1"></i> Tanda Tangan Digital Pembeli:</span>
+                        <span class="text-[9px] text-neutral-500 font-normal">Tarik garis tanda tangan di bawah ini</span>
+                    </p>
+                    <div class="border border-white/20 bg-neutral-950 rounded-sm relative" style="height: 90px;">
+                        <canvas id="signatureCanvas" class="w-full h-full cursor-crosshair"></canvas>
+                        <button type="button" onclick="clearCanvas()" class="absolute top-2 right-2 text-[9px] font-mono bg-white/10 hover:bg-white/20 px-2 py-1 text-neutral-300 rounded-sm">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                    <input type="hidden" name="buyer_signature_svg" id="signatureInput">
+
+                    <div class="flex items-center justify-between mt-4">
+                        <label class="flex items-center space-x-2 text-[10px] text-neutral-300 font-sans cursor-pointer">
+                            <input type="checkbox" required class="accent-red-600">
+                            <span>Saya menyetujui seluruh pasal &amp; ketentuan di atas.</span>
+                        </label>
+                        <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-stamp"></i>
+                            <span>Bubuhi E-Sign &amp; Meterai</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="consultation-layout">
         {{-- Sidebar: Inquiry details --}}
         <aside class="sidebar">
