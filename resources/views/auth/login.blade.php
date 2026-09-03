@@ -44,7 +44,7 @@
         .fade-up-4 { animation-delay: 0.35s; }
 
         .glass-form {
-            background: rgba(10, 10, 14, 0.82);
+            background: rgba(10, 10, 14, 0.88);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             border: 1px solid rgba(255,255,255,0.09);
@@ -54,7 +54,7 @@
             border: 1px solid rgba(255,255,255,0.12);
             color: white;
             width: 100%;
-            padding: 0.85rem 1rem;
+            padding: 0.85rem 1rem 0.85rem 2.75rem;
             font-family: 'Outfit', sans-serif;
             font-size: 0.875rem;
             outline: none;
@@ -90,18 +90,26 @@
         .noise-overlay {
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
         }
+
+        /* Red accent line on left edge of form */
+        .form-accent::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: linear-gradient(to bottom, transparent, #e50914 30%, #e50914 70%, transparent);
+        }
     </style>
 </head>
-<body class="bg-black text-white font-sans min-h-screen overflow-hidden">
+<body class="bg-black text-white font-sans min-h-screen overflow-x-hidden">
 
     <!-- FULL-SCREEN CINEMATIC BACKGROUND -->
-    <div class="fixed inset-0 z-0">
+    <div class="fixed inset-0 z-0 overflow-hidden">
         <img src="{{ asset('images/carousell/carousell1.png') }}"
              alt="Apex Automotive Showroom"
              class="bg-pan w-full h-full object-cover">
-        <!-- Multi-layer dark gradient -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/30"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40"></div>
         <div class="absolute inset-0 noise-overlay"></div>
     </div>
 
@@ -111,17 +119,17 @@
         <span>KEMBALI KE SHOWROOM</span>
     </a>
 
-    <!-- MAIN LAYOUT: LEFT BRANDING + RIGHT FORM -->
-    <div class="relative z-10 min-h-screen flex items-center justify-end pr-0 lg:pr-16 xl:pr-24">
+    <!-- MAIN LAYOUT: LEFT BRANDING + RIGHT FORM (2-column grid) -->
+    <div class="relative z-10 min-h-screen grid lg:grid-cols-2">
 
-        <!-- LEFT: Branding visible on large screens -->
-        <div class="hidden lg:flex flex-col justify-center flex-1 pl-16 xl:pl-24 space-y-6">
-            <div class="space-y-3 fade-up fade-up-1">
+        <!-- LEFT: Branding (large screens only) -->
+        <div class="hidden lg:flex flex-col justify-center pl-16 xl:pl-24 pr-8 space-y-8">
+            <div class="space-y-4 fade-up fade-up-1">
                 <div class="flex items-center space-x-3">
                     <span class="h-px w-8 bg-red-600"></span>
                     <span class="text-xs font-mono tracking-[0.35em] text-red-500 uppercase font-bold">VIP Buyer Portal</span>
                 </div>
-                <h1 class="text-4xl xl:text-6xl font-serif font-black uppercase leading-none text-white drop-shadow-2xl">
+                <h1 class="text-5xl xl:text-7xl font-serif font-black uppercase leading-none text-white drop-shadow-2xl">
                     The Finest<br>Hypercars.<br>
                     <span class="text-red-600">Reserved<br>for You.</span>
                 </h1>
@@ -129,7 +137,7 @@
             <p class="text-sm text-neutral-400 max-w-xs font-light leading-relaxed fade-up fade-up-2">
                 Masuk ke akun VIP Apex Automotive Anda untuk mengakses konfigurasi eksklusif, mengajukan SPK, dan menjadwalkan serah terima kendaraan impian Anda.
             </p>
-            <div class="flex items-center space-x-6 pt-4 fade-up fade-up-3">
+            <div class="flex items-center space-x-8 fade-up fade-up-3">
                 <div class="text-center">
                     <div class="text-2xl font-serif font-black text-white">10+</div>
                     <div class="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">Brand Eksklusif</div>
@@ -148,22 +156,22 @@
         </div>
 
         <!-- RIGHT: Login Form Panel -->
-        <div class="w-full lg:w-auto lg:min-w-[420px] xl:min-w-[460px] min-h-screen lg:min-h-0 flex items-center justify-center p-6 lg:p-0">
-            <div class="glass-form w-full max-w-md p-8 sm:p-10 space-y-8 shadow-2xl">
+        <div class="flex items-center justify-center p-6 lg:p-12 min-h-screen lg:min-h-0">
+            <div class="glass-form form-accent relative w-full max-w-[420px] p-8 sm:p-10 space-y-7 shadow-2xl">
 
-                <!-- LOGO -->
-                <div class="space-y-1 fade-up fade-up-1">
+                <!-- LOGO + HEADING -->
+                <div class="fade-up fade-up-1">
                     <div class="flex items-center space-x-3 mb-6">
-                        <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-9 w-auto object-contain">
+                        <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-8 w-8 object-contain flex-shrink-0">
                         <div>
-                            <div class="font-serif text-base font-black tracking-widest text-white uppercase">APEX</div>
-                            <div class="text-[9px] font-mono tracking-[0.3em] text-neutral-400 -mt-0.5 uppercase">Automotive</div>
+                            <div class="font-serif text-sm font-black tracking-widest text-white uppercase leading-none">APEX</div>
+                            <div class="text-[9px] font-mono tracking-[0.3em] text-neutral-400 uppercase">Automotive</div>
                         </div>
                     </div>
                     <h2 class="text-2xl font-serif font-black text-white uppercase tracking-wide leading-tight">
                         Masuk ke Akun<br>VIP Anda
                     </h2>
-                    <p class="text-xs text-neutral-400 font-light pt-1">
+                    <p class="text-xs text-neutral-400 font-light pt-1.5">
                         Kami akan mengirimkan kode OTP ke email Anda. Tanpa password diperlukan.
                     </p>
                 </div>
@@ -195,7 +203,7 @@
                                 value="{{ old('email') }}"
                                 placeholder="email@example.com"
                                 autocomplete="email"
-                                class="input-apex pl-10"
+                                class="input-apex"
                                 required
                             >
                         </div>
@@ -213,7 +221,7 @@
                 <!-- DIVIDER -->
                 <div class="flex items-center space-x-3 fade-up fade-up-3">
                     <div class="flex-1 h-px bg-white/10"></div>
-                    <span class="text-[10px] font-mono text-neutral-600 uppercase tracking-widest">Keamanan & Privasi</span>
+                    <span class="text-[10px] font-mono text-neutral-600 uppercase tracking-widest">Keamanan &amp; Privasi</span>
                     <div class="flex-1 h-px bg-white/10"></div>
                 </div>
 
@@ -242,7 +250,7 @@
                 <!-- FOOTER NOTE -->
                 <p class="text-[10px] font-mono text-neutral-600 text-center fade-up fade-up-4">
                     Dengan masuk, Anda menyetujui
-                    <span class="text-neutral-400 underline cursor-pointer">Syarat & Ketentuan</span>
+                    <span class="text-neutral-400 underline cursor-pointer">Syarat &amp; Ketentuan</span>
                     serta
                     <span class="text-neutral-400 underline cursor-pointer">Kebijakan Privasi</span>
                     PT Apex Automotive Indonesia.
