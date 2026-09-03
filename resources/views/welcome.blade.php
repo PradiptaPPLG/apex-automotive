@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Jakarta. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, and Koenigsegg.">
+    <meta name="description" content="Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Jakarta. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, Koenigsegg, Bugatti, Chevrolet Corvette, Pagani, Zenvo, and Jeep.">
     <title>APEX AUTOMOTIVE | Official Luxury Showroom & Hypercar Dealer</title>
 
     <!-- Google Fonts -->
@@ -231,7 +231,7 @@
 
     <main class="flex-grow">
         <!-- ==========================================
-             HERO CAROUSEL SECTION
+             HERO CAROUSEL SECTION (5 DYNAMIC SLIDES ACCURATELY NAMED)
              ========================================== -->
         <section id="hero-carousel" class="relative w-full h-[85vh] min-h-[550px] max-h-[900px] overflow-hidden bg-black">
             
@@ -274,10 +274,10 @@
                             <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">SUPERVELOCE JOTA EDITION</span>
                         </div>
                         <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-white uppercase leading-none drop-shadow-2xl">
-                            LAMBORGHINI AVENTADOR SVJ
+                            LAMBORGHINI REVUELTO V12
                         </h1>
                         <p class="text-base sm:text-lg text-neutral-300 font-light max-w-xl">
-                            770 HP naturally aspirated V12 beast with active aerodynamics ALA 2.0. Limited production masterpiece.
+                            1,015 HP naturally aspirated V12 hybrid monster with active aerodynamics ALA 2.0.
                         </p>
                         <div class="pt-4 flex flex-wrap gap-4 items-center">
                             <button onclick="openCarInspector('lamborghini_revuelto')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
@@ -302,13 +302,69 @@
                             <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">THE ULTIMATE HYPERCAR</span>
                         </div>
                         <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-white uppercase leading-none drop-shadow-2xl">
-                            MCLAREN SENNA
+                            MCLAREN SENNA GTR
                         </h1>
                         <p class="text-base sm:text-lg text-neutral-300 font-light max-w-xl">
-                            Unforgiving track focus. 800KG downforce, carbon monocage III, and pure unadulterated racing DNA.
+                            Unforgiving track focus. 800KG downforce, carbon monocage III, and pure racing DNA.
                         </p>
                         <div class="pt-4 flex flex-wrap gap-4 items-center">
                             <button onclick="openCarInspector('mclaren_senna')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
+                                EXPLORE MODEL <i class="fa-solid fa-arrow-right ml-3"></i>
+                            </button>
+                            <button onclick="toggleModal('inquireModal')" class="px-8 py-3.5 border border-white/30 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 backdrop-blur-sm">
+                                REQUEST QUOTE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: FERRARI SF90 XX STRADALE (F90XX) -->
+            <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="3">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
+                <img src="{{ asset('images/carousell/carousell4.png') }}" alt="Ferrari SF90 XX Stradale" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
+                    <div class="space-y-4 max-w-3xl">
+                        <div class="flex items-center space-x-3">
+                            <span class="red-divider-line"></span>
+                            <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">XX PROGRAMME TRACK HYBRID</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-white uppercase leading-none drop-shadow-2xl">
+                            FERRARI SF90 XX STRADALE
+                        </h1>
+                        <p class="text-base sm:text-lg text-neutral-300 font-light max-w-xl">
+                            1,030 HP twin-turbo V12/V8 hybrid hypercar with fixed rear wing and racing telemetry.
+                        </p>
+                        <div class="pt-4 flex flex-wrap gap-4 items-center">
+                            <button onclick="openCarDetails('Ferrari SF90 XX')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
+                                EXPLORE MODEL <i class="fa-solid fa-arrow-right ml-3"></i>
+                            </button>
+                            <button onclick="toggleModal('inquireModal')" class="px-8 py-3.5 border border-white/30 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 backdrop-blur-sm">
+                                REQUEST QUOTE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: JEEP GLADIATOR RUBICON -->
+            <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="4">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
+                <img src="{{ asset('images/carousell/carousell5.png') }}" alt="Jeep Gladiator Rubicon" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
+                    <div class="space-y-4 max-w-3xl">
+                        <div class="flex items-center space-x-3">
+                            <span class="red-divider-line"></span>
+                            <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">EXTREME OFF-ROAD RUBICON</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-white uppercase leading-none drop-shadow-2xl">
+                            JEEP GLADIATOR RUBICON
+                        </h1>
+                        <p class="text-base sm:text-lg text-neutral-300 font-light max-w-xl">
+                            3.6L Pentastar V6 with Tru-Lok lockers, Fox performance shocks, and heavy-duty steel bumpers.
+                        </p>
+                        <div class="pt-4 flex flex-wrap gap-4 items-center">
+                            <button onclick="openCarDetails('Jeep Gladiator Rubicon')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
                                 EXPLORE MODEL <i class="fa-solid fa-arrow-right ml-3"></i>
                             </button>
                             <button onclick="toggleModal('inquireModal')" class="px-8 py-3.5 border border-white/30 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 backdrop-blur-sm">
@@ -327,8 +383,10 @@
                         <button onclick="setSlide(0)" class="w-10 h-1 bg-red-600 transition-all rounded-full dot-indicator" aria-label="Slide 1"></button>
                         <button onclick="setSlide(1)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 2"></button>
                         <button onclick="setSlide(2)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 3"></button>
+                        <button onclick="setSlide(3)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 4"></button>
+                        <button onclick="setSlide(4)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 5"></button>
                     </div>
-                    <span class="text-xs font-mono text-neutral-400 pl-2" id="slide-counter">01 / 03</span>
+                    <span class="text-xs font-mono text-neutral-400 pl-2" id="slide-counter">01 / 05</span>
                 </div>
 
                 <!-- PREV / NEXT BUTTONS -->
@@ -381,6 +439,10 @@
                                 <option value="Porsche">PORSCHE</option>
                                 <option value="Audi">AUDI</option>
                                 <option value="Koenigsegg">KOENIGSEGG</option>
+                                <option value="Bugatti">BUGATTI</option>
+                                <option value="Chevrolet">CHEVROLET CORVETTE</option>
+                                <option value="Pagani">PAGANI</option>
+                                <option value="Zenvo">ZENVO</option>
                             </select>
                         </div>
 
@@ -415,10 +477,10 @@
                     </form>
                 </div>
 
-                <!-- CAR CATALOG GRID (CLEAN LUXURY GRID - CLICK ANY CAR TO INSPECT & TOGGLE COLORS) -->
+                <!-- CAR CATALOG GRID (CLEAN LUXURY GRID - CLICK ANY CAR TO INSPECT & TOGGLE COLORS/BODYKITS) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="carCatalog">
                     
-                    <!-- CAR CARD 1: BMW M4 COMPETITION (BRAND NEW #1 - 10% DISCOUNT WITH PRICE DROP ANIMATION) -->
+                    <!-- CAR CARD 1: BMW M4 COMPETITION -->
                     <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="BMW" data-price="7650" data-condition="NEW" onclick="openCarInspector('bmw_m4')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
                             <img src="{{ asset('images/brand/bmwm4competition_sao_paulo_yellow.png') }}" alt="BMW M4 Competition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -431,7 +493,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
-                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT & CUSTOMIZE COLORS
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
                                 </span>
                             </div>
                         </div>
@@ -472,7 +534,7 @@
                     </div>
 
 
-                    <!-- CAR CARD 2: LAMBORGHINI REVUELTO (BRAND NEW #2 - 7% DISCOUNT WITH PRICE DROP ANIMATION) -->
+                    <!-- CAR CARD 2: LAMBORGHINI REVUELTO -->
                     <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Lamborghini" data-price="20460" data-condition="NEW" onclick="openCarInspector('lamborghini_revuelto')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
                             <img src="{{ asset('images/brand/lamborghini_revuelto_arancio_apodis.png') }}" alt="Lamborghini Revuelto" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -485,7 +547,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
-                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT & CUSTOMIZE COLORS
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
                                 </span>
                             </div>
                         </div>
@@ -538,7 +600,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
-                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT & CUSTOMIZE COLORS
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
                                 </span>
                             </div>
                         </div>
@@ -585,7 +647,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
-                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT & CUSTOMIZE COLORS
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
                                 </span>
                             </div>
                         </div>
@@ -632,7 +694,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
-                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT & CUSTOMIZE COLORS
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
                                 </span>
                             </div>
                         </div>
@@ -679,7 +741,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
-                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT & CUSTOMIZE COLORS
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
                                 </span>
                             </div>
                         </div>
@@ -704,6 +766,194 @@
 
                             <div class="grid grid-cols-2 gap-2 pt-2">
                                 <button onclick="event.stopPropagation(); openCarInspector('koenigsegg_jesko');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE & INSPECT
+                                </button>
+                                <button onclick="event.stopPropagation(); toggleModal('inquireModal');" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 7: BUGATTI CHIRON PUR SPORT (NEW CAR) -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Bugatti" data-price="52000" data-condition="NEW" onclick="openCarInspector('bugatti_chiron')">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/buggati_chiron_le_mans_blue.png') }}" alt="Bugatti Chiron" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                ULTIMATE HYPERCAR
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • BUGATTI</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    CHIRON PUR SPORT W16
+                                </h4>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 52,000,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-fire mr-1 text-red-600"></i> 1,500 HP W16</div>
+                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 0-100: 2.4S</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="event.stopPropagation(); openCarInspector('bugatti_chiron');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE & INSPECT
+                                </button>
+                                <button onclick="event.stopPropagation(); toggleModal('inquireModal');" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 8: CHEVROLET CORVETTE C8 Z06 (NEW CAR) -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Chevrolet" data-price="6800" data-condition="NEW" onclick="openCarInspector('chevrolet_corvette')">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/chevrolet_corvette_c8_torch_red.png') }}" alt="Chevrolet Corvette C8" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                BRAND NEW
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • CHEVROLET</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    CORVETTE C8 Z06 GT3
+                                </h4>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 6,800,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 670 HP V8</div>
+                                <div><i class="fa-solid fa-gears mr-1 text-red-600"></i> 8,600 RPM</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="event.stopPropagation(); openCarInspector('chevrolet_corvette');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE & INSPECT
+                                </button>
+                                <button onclick="event.stopPropagation(); toggleModal('inquireModal');" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 9: PAGANI HUAYRA BC (NEW CAR) -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Pagani" data-price="48000" data-condition="CERTIFIED" onclick="openCarInspector('pagani_huayra')">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/pagani_huayra_bc.png') }}" alt="Pagani Huayra BC" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                CERTIFIED
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • PAGANI</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    HUAYRA BC BENNY CAIOLA
+                                </h4>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 48,000,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-fire mr-1 text-red-600"></i> 800 HP AMG V12</div>
+                                <div><i class="fa-solid fa-gem mr-1 text-red-600"></i> CARBO-TRIAX</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="event.stopPropagation(); openCarInspector('pagani_huayra');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE & INSPECT
+                                </button>
+                                <button onclick="event.stopPropagation(); toggleModal('inquireModal');" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 10: ZENVO TSR-S (NEW CAR) -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Zenvo" data-price="38000" data-condition="NEW" onclick="openCarInspector('zenvo_tsr')">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/zenvo_tsr_s_viola_parsifae.png') }}" alt="Zenvo TSR-S" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                HYPERCAR SPECIAL
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • ZENVO</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    TSR-S CENTRIPETAL WING
+                                </h4>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 38,000,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 1,177 HP V8</div>
+                                <div><i class="fa-solid fa-wind mr-1 text-red-600"></i> ACTIVE AERO</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="event.stopPropagation(); openCarInspector('zenvo_tsr');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     EXPLORE & INSPECT
                                 </button>
                                 <button onclick="event.stopPropagation(); toggleModal('inquireModal');" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
@@ -976,12 +1226,14 @@
                     <h4 class="text-white text-xs font-bold uppercase tracking-widest border-b border-white/10 pb-2">NEW SHOWROOM</h4>
                     <ul class="space-y-2 text-[11px] text-neutral-400">
                         <li><a href="#" class="hover:text-white transition-colors">BMW Motorsport Series</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Lamborghini Aventador SVJ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Lamborghini Revuelto V12</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">McLaren Senna Hypercar</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Ferrari SF90 & 296 GTS</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Ferrari SF90 XX Stradale</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Jeep Gladiator Rubicon</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Porsche 911 GT3 RS</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Audi R8 V10 Performance</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Koenigsegg Jesko Absolut</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Bugatti Chiron Pur Sport</a></li>
                     </ul>
                 </div>
 
@@ -1025,10 +1277,10 @@
 
 
     <!-- ==========================================
-         INTERACTIVE CAR INSPECTOR & COLOR CONFIGURATOR MODAL
+         INTERACTIVE CAR INSPECTOR & COLOR/BODYKIT CONFIGURATOR MODAL
          ========================================== -->
     <div id="carInspectorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 sm:p-6 transition-all duration-300">
-        <div class="glass-card max-w-5xl w-full p-6 sm:p-8 border border-neutral-300 dark:border-white/20 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div class="glass-card max-w-5xl w-full p-6 sm:p-8 border border-neutral-300 dark:border-white/20 shadow-2xl relative max-h-[92vh] overflow-y-auto">
             
             <!-- CLOSE BUTTON -->
             <button onclick="toggleModal('carInspectorModal')" class="absolute top-5 right-5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white text-xl z-20">
@@ -1054,16 +1306,22 @@
                             <span id="inspectYear">2025</span>
                         </div>
 
-                        <!-- ACTIVE COLOR NAME BADGE BOTTOM LEFT -->
-                        <div class="absolute bottom-4 left-4 bg-black/85 backdrop-blur-md text-white text-xs font-mono px-3 py-1.5 border border-white/20 uppercase tracking-widest flex items-center space-x-2">
-                            <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                            <span>COLOR: <strong id="inspectColorBadge" class="text-red-500 font-extrabold">--</strong></span>
+                        <!-- ACTIVE COLOR & BODYKIT BADGE BOTTOM LEFT -->
+                        <div class="absolute bottom-4 left-4 bg-black/85 backdrop-blur-md text-white text-xs font-mono px-3 py-2 border border-white/20 uppercase tracking-widest space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                                <span>COLOR: <strong id="inspectColorBadge" class="text-red-500 font-extrabold">--</strong></span>
+                            </div>
+                            <div id="inspectBodykitBadgeRow" class="text-[10px] text-amber-400 font-bold border-t border-white/10 pt-1 flex items-center">
+                                <i class="fa-solid fa-screwdriver-wrench mr-1.5 text-xs text-red-500"></i>
+                                <span id="inspectBodykitBadge">STANDARD FACTORY SPEC</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: CAR SPECS & INTERACTIVE COLOR TOGGLES -->
-                <div class="lg:col-span-5 space-y-6 text-neutral-900 dark:text-white">
+                <!-- RIGHT COLUMN: CAR SPECS & INTERACTIVE COLOR/BODYKIT TOGGLES -->
+                <div class="lg:col-span-5 space-y-5 text-neutral-900 dark:text-white">
                     
                     <!-- BRAND & TITLE -->
                     <div class="space-y-1">
@@ -1072,7 +1330,7 @@
                     </div>
 
                     <!-- PRICE TAG WITH STRIKETHROUGH ORIGINAL PRICE & ANIMATED COUNTDOWN -->
-                    <div class="bg-neutral-100 dark:bg-neutral-900/80 p-4 border border-neutral-200 dark:border-white/10 space-y-1">
+                    <div class="bg-neutral-100 dark:bg-neutral-900/80 p-3.5 border border-neutral-200 dark:border-white/10 space-y-1">
                         <div id="inspectOriginalPriceRow" class="hidden items-center justify-between text-xs font-mono">
                             <span class="text-neutral-500">ORIGINAL PRICE: <span id="inspectOriginalPrice" class="line-through font-semibold text-neutral-400">IDR --</span></span>
                             <span id="inspectSaveBadge" class="text-[9px] font-extrabold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">SAVE --</span>
@@ -1085,16 +1343,29 @@
                         </div>
                     </div>
 
-                    <!-- INTERACTIVE EXTERIOR COLOR CONFIGURATOR (ROUND COLOR DOTS) -->
-                    <div class="space-y-2.5 pt-1 border-t border-neutral-200 dark:border-white/10">
+                    <!-- INTERACTIVE EXTERIOR COLOR CONFIGURATOR (MUTUALLY EXCLUSIVE WITH BODYKITS) -->
+                    <div class="space-y-2 pt-1 border-t border-neutral-200 dark:border-white/10">
                         <div class="flex items-center justify-between text-xs font-mono">
-                            <span class="font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">SELECT EXTERIOR FINISH:</span>
+                            <span class="font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">EXTERIOR PAINT FINISH:</span>
                             <span id="inspectColorCount" class="text-neutral-500 text-[11px]">4 VARIANTS</span>
                         </div>
 
-                        <!-- ROUND COLOR DOTS CONTAINER -->
+                        <!-- ACCURATE COLOR DOTS CONTAINER -->
                         <div id="inspectColorDotsContainer" class="flex flex-wrap items-center gap-3 py-1">
                             <!-- Dynamic round color buttons injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- INTERACTIVE BODYKITS / AERO STAGE CONFIGURATOR (STRICTLY ONLY FILES STARTING WITH bodykit_) -->
+                    <div id="inspectBodykitSection" class="space-y-2 pt-2 border-t border-neutral-200 dark:border-white/10">
+                        <div class="flex items-center justify-between text-xs font-mono">
+                            <span class="font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">BODYKIT & AERO STAGE:</span>
+                            <span id="inspectBodykitCount" class="text-neutral-500 text-[11px]">1 KIT</span>
+                        </div>
+
+                        <!-- NUMBERED BODYKIT BUTTONS CONTAINER (KIT 01, KIT 02, etc.) -->
+                        <div id="inspectBodykitButtonsContainer" class="flex flex-wrap items-center gap-2 py-1">
+                            <!-- Dynamic numbered buttons injected by JS -->
                         </div>
                     </div>
 
@@ -1107,9 +1378,9 @@
                     </div>
 
                     <!-- ACTION BUTTONS -->
-                    <div class="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button onclick="bookCarWithSelectedColor()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center">
-                            <i class="fa-solid fa-calendar-check mr-2"></i> BOOK THIS COLOR
+                    <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="bookCarWithSelectedConfig()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center">
+                            <i class="fa-solid fa-calendar-check mr-2"></i> BOOK THIS SPEC
                         </button>
                         <button onclick="toggleModal('carInspectorModal'); toggleModal('inquireModal');" class="py-3 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 font-bold text-xs tracking-widest uppercase transition-colors flex items-center justify-center">
                             REQUEST QUOTE
@@ -1158,9 +1429,15 @@
                             <option value="BMW M4 Competition">BMW M4 Competition</option>
                             <option value="Lamborghini Revuelto">Lamborghini Revuelto V12</option>
                             <option value="McLaren Senna GTR">McLaren Senna GTR</option>
+                            <option value="Ferrari SF90 XX Stradale">Ferrari SF90 XX Stradale</option>
+                            <option value="Jeep Gladiator Rubicon">Jeep Gladiator Rubicon</option>
                             <option value="Porsche 911 GT3 RS">Porsche 911 GT3 RS</option>
                             <option value="Audi R8 V10">Audi R8 V10 Performance</option>
                             <option value="Koenigsegg Jesko Absolut">Koenigsegg Jesko Absolut</option>
+                            <option value="Bugatti Chiron">Bugatti Chiron Pur Sport</option>
+                            <option value="Chevrolet Corvette C8">Chevrolet Corvette C8 Z06</option>
+                            <option value="Pagani Huayra BC">Pagani Huayra BC</option>
+                            <option value="Zenvo TSR-S">Zenvo TSR-S</option>
                         </select>
                     </div>
                 </div>
@@ -1182,7 +1459,7 @@
          JAVASCRIPT CONTROLLER
          ========================================== -->
     <script>
-        // 0. CAR DATA DICTIONARY WITH DISCOUNT PRICES & 23 BRAND IMAGE VARIANTS
+        // 0. COMPREHENSIVE CAR DATABASE (STRICT SEPARATION: ONLY FILES WITH bodykit_ ARE BODYKITS)
         const CAR_DATABASE = {
             'bmw_m4': {
                 brand: 'BMW MOTORSPORT',
@@ -1201,9 +1478,12 @@
                 ],
                 colors: [
                     { name: 'SAO PAULO YELLOW', hex: '#d6e531', img: "{{ asset('images/brand/bmwm4competition_sao_paulo_yellow.png') }}" },
-                    { name: 'VOODOO BLUE', hex: '#1e56a0', img: "{{ asset('images/brand/bmwm4competition_voodoo_blue.png') }}" },
-                    { name: 'ALPINE WHITE', hex: '#f5f5f7', img: "{{ asset('images/brand/bmwm4competition_alpine_white.png') }}" },
-                    { name: 'BLACK SAPPHIRE METALLIC', hex: '#1c1c1e', img: "{{ asset('images/brand/bmwm4competition_black_shapphire_metallic.png') }}" }
+                    { name: 'VOODOO BLUE', hex: '#0055b8', img: "{{ asset('images/brand/bmwm4competition_voodoo_blue.png') }}" },
+                    { name: 'ALPINE WHITE', hex: '#f0f4f8', img: "{{ asset('images/brand/bmwm4competition_alpine_white.png') }}" },
+                    { name: 'BLACK SAPPHIRE METALLIC', hex: '#0d0d11', img: "{{ asset('images/brand/bmwm4competition_black_shapphire_metallic.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'M PERFORMANCE CARBON AEROKIT', img: "{{ asset('images/brand/bodykit_bmw_m4_competition.png') }}" }
                 ]
             },
             'lamborghini_revuelto': {
@@ -1222,10 +1502,13 @@
                     { label: 'GEARBOX', val: '8-Speed Dual Clutch' }
                 ],
                 colors: [
-                    { name: 'ARANCIO APODIS', hex: '#ff5722', img: "{{ asset('images/brand/lamborghini_revuelto_arancio_apodis.png') }}" },
-                    { name: 'VERDE CITRA', hex: '#76ff03', img: "{{ asset('images/brand/lamborghini_revuelto_verde_citra.png') }}" },
-                    { name: 'BRONZO ZANTE', hex: '#8d6e63', img: "{{ asset('images/brand/lamborghini_revuelto_bronzo_zante.png') }}" },
-                    { name: 'BIANCO MONOCERUS', hex: '#ffffff', img: "{{ asset('images/brand/lamborghini_revuelto_bianco_monocerus.png') }}" }
+                    { name: 'ARANCIO APODIS', hex: '#ff4e00', img: "{{ asset('images/brand/lamborghini_revuelto_arancio_apodis.png') }}" },
+                    { name: 'VERDE CITRA', hex: '#84ff00', img: "{{ asset('images/brand/lamborghini_revuelto_verde_citra.png') }}" },
+                    { name: 'BRONZO ZANTE', hex: '#9e7957', img: "{{ asset('images/brand/lamborghini_revuelto_bronzo_zante.png') }}" },
+                    { name: 'BIANCO MONOCERUS', hex: '#f8f9fa', img: "{{ asset('images/brand/lamborghini_revuelto_bianco_monocerus.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'SUPERVELOCE STAGE 2 AERO', img: "{{ asset('images/brand/bodykit_lamborghini_revuelto_stage_2.png') }}" }
                 ]
             },
             'mclaren_senna': {
@@ -1244,9 +1527,14 @@
                     { label: 'ACCELERATION', val: '0-100 KM/H in 2.8s' }
                 ],
                 colors: [
-                    { name: 'VOLCANO YELLOW', hex: '#ffc107', img: "{{ asset('images/brand/mclaren_senna_gtr_volcano_yellow.png') }}" },
-                    { name: 'PAPAYA SHARK', hex: '#ff9800', img: "{{ asset('images/brand/mclaren_senna_gtr_papaya_shark.png') }}" },
-                    { name: 'SILICA WHITE', hex: '#f5f5f7', img: "{{ asset('images/brand/mclaren_senna_gtr_silica_white.png') }}" }
+                    { name: 'VOLCANO YELLOW', hex: '#ffd000', img: "{{ asset('images/brand/mclaren_senna_gtr_volcano_yellow.png') }}" },
+                    { name: 'PAPAYA SHARK', hex: '#ff8800', img: "{{ asset('images/brand/mclaren_senna_gtr_papaya_shark.png') }}" },
+                    { name: 'SILICA WHITE', hex: '#f4f6f9', img: "{{ asset('images/brand/mclaren_senna_gtr_silica_white.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'STANDARD GTR TRACK SPEC', img: "{{ asset('images/brand/bodykit_mclaren_senna_gtr.png') }}" },
+                    { num: 'KIT 02', name: 'GTR CHASSIS #12 LIVERY', img: "{{ asset('images/brand/bodykit_mclaren_senna_gtr_chassis_12.png') }}" },
+                    { num: 'KIT 03', name: 'HARRODS MOTORSPORT EDITION', img: "{{ asset('images/brand/bodykit_mclaren_senna_gtr_harrods.png') }}" }
                 ]
             },
             'porsche_911': {
@@ -1265,11 +1553,16 @@
                     { label: 'TRANSMISSION', val: '7-Speed PDK Dual-Clutch' }
                 ],
                 colors: [
-                    { name: 'RUBYSTONE RED', hex: '#d81b60', img: "{{ asset('images/brand/porsche_rubystone_red.png') }}" },
-                    { name: 'RACING YELLOW', hex: '#ffeb3b', img: "{{ asset('images/brand/porsche_racing_yellow.png') }}" },
-                    { name: 'NATO OLIVE GREEN', hex: '#4b5320', img: "{{ asset('images/brand/porsche_nato_olive_green.png') }}" },
-                    { name: 'ARCTIC GREY', hex: '#78909c', img: "{{ asset('images/brand/porsche_artic_grey.png') }}" },
+                    { name: 'RUBYSTONE RED', hex: '#c2185b', img: "{{ asset('images/brand/porsche_rubystone_red.png') }}" },
+                    { name: 'RACING YELLOW', hex: '#ffea00', img: "{{ asset('images/brand/porsche_racing_yellow.png') }}" },
+                    { name: 'NATO OLIVE GREEN', hex: '#3b4728', img: "{{ asset('images/brand/porsche_nato_olive_green.png') }}" },
+                    { name: 'ARCTIC GREY', hex: '#607d8b', img: "{{ asset('images/brand/porsche_artic_grey.png') }}" },
                     { name: 'CARRARA WHITE', hex: '#ffffff', img: "{{ asset('images/brand/porsche_carrara_white_metallic.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'WEISSACH PACKAGE RS AERO', img: "{{ asset('images/brand/bodykit_porsche_911_gt3_rs_992.png') }}" },
+                    { num: 'KIT 02', name: 'GT3 R 992 MOTORSPORT SPEC', img: "{{ asset('images/brand/bodykit_porsche_911_gt3_r_992.png') }}" },
+                    { num: 'KIT 03', name: 'GT3 R BLACK EDITION CARBON', img: "{{ asset('images/brand/bodykit_porsche_911_gt3_r_992_black.png') }}" }
                 ]
             },
             'audi_r8': {
@@ -1288,11 +1581,15 @@
                     { label: 'TOP SPEED', val: '331 KM/H' }
                 ],
                 colors: [
-                    { name: 'TANGO RED METALLIC', hex: '#d32f2f', img: "{{ asset('images/brand/audi_r8_tango_red_metallic.png') }}" },
-                    { name: 'VEGAS YELLOW', hex: '#fbc02d', img: "{{ asset('images/brand/audi_r8_vegas_yellow.png') }}" },
-                    { name: 'ARA BLUE CRYSTAL', hex: '#0288d1', img: "{{ asset('images/brand/audi_r8_ara_blue_crystal_effect.png') }}" },
-                    { name: 'MYTHOS BLACK METALLIC', hex: '#212121', img: "{{ asset('images/brand/audi_r8_mythos_black_mettalic.png') }}" },
-                    { name: 'IBIS WHITE', hex: '#fafafa', img: "{{ asset('images/brand/audi_r8_ibis_white.png') }}" }
+                    { name: 'TANGO RED METALLIC', hex: '#c62828', img: "{{ asset('images/brand/audi_r8_tango_red_metallic.png') }}" },
+                    { name: 'VEGAS YELLOW', hex: '#fdd835', img: "{{ asset('images/brand/audi_r8_vegas_yellow.png') }}" },
+                    { name: 'ARA BLUE CRYSTAL', hex: '#0277bd', img: "{{ asset('images/brand/audi_r8_ara_blue_crystal_effect.png') }}" },
+                    { name: 'MYTHOS BLACK METALLIC', hex: '#121212', img: "{{ asset('images/brand/audi_r8_mythos_black_mettalic.png') }}" },
+                    { name: 'IBIS WHITE', hex: '#f5f5f5', img: "{{ asset('images/brand/audi_r8_ibis_white.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'R8 GT4 LMS MOTORSPORT KIT', img: "{{ asset('images/brand/bodykit_audi_r8_gt4.png') }}" },
+                    { num: 'KIT 02', name: 'LIBERTY WALK WIDEBODY KIT', img: "{{ asset('images/brand/bodykit_audi_r8_liberty_walk.png') }}" }
                 ]
             },
             'koenigsegg_jesko': {
@@ -1312,13 +1609,114 @@
                 ],
                 colors: [
                     { name: 'CRYSTAL WHITE', hex: '#ffffff', img: "{{ asset('images/brand/koeningseg_jesko_absolut_crystal_white.png') }}" },
-                    { name: 'K2 CARBON', hex: '#2c3539', img: "{{ asset('images/brand/koeningseg_jesko_absolut_k2_carbon.png') }}" }
+                    { name: 'K2 CARBON', hex: '#1f262a', img: "{{ asset('images/brand/koeningseg_jesko_absolut_k2_carbon.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'ABSOLUT HIGH-SPEED AERO', img: "{{ asset('images/brand/bodykit_koenigsegg_jesko_absolut.png') }}" }
                 ]
+            },
+            'bugatti_chiron': {
+                brand: 'BUGATTI',
+                model: 'CHIRON PUR SPORT W16',
+                year: '2025',
+                originalPriceNum: null,
+                finalPriceNum: 52000000000,
+                discountPct: null,
+                condition: 'BRAND NEW',
+                specs: [
+                    { label: 'ENGINE', val: '8.0L Quad-Turbocharged W16' },
+                    { label: 'POWER', val: '1,500 HP / 1,600 Nm' },
+                    { label: 'ACCELERATION', val: '0-100 KM/H in 2.4s' },
+                    { label: 'TOP SPEED', val: '350 KM/H (Pur Sport Limited)' },
+                    { label: 'DRIVETRAIN', val: 'Permanent 4WD' }
+                ],
+                colors: [
+                    { name: 'LE MANS BLUE', hex: '#0a3880', img: "{{ asset('images/brand/buggati_chiron_le_mans_blue.png') }}" },
+                    { name: 'GRIS RAFALE', hex: '#616161', img: "{{ asset('images/brand/buggati_chiron_gris_rafale.png') }}" },
+                    { name: 'NOIRE ELEGANCE', hex: '#111115', img: "{{ asset('images/brand/buggati_chiron_noire_elegance.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'HENNESSEY / PUR SPORT PACKAGE', img: "{{ asset('images/brand/bodykit_buggati_chiron_pur_sport.png') }}" },
+                    { num: 'KIT 02', name: '110 ANS BUGATTI EDITION', img: "{{ asset('images/brand/bodykit_buggati_chiron_sport_110_ans.png') }}" },
+                    { num: 'KIT 03', name: 'BOLIDE EXTREME TRACK CONCEPT', img: "{{ asset('images/brand/bodykit_buggati_chiron_bolide.png') }}" }
+                ]
+            },
+            'chevrolet_corvette': {
+                brand: 'CHEVROLET',
+                model: 'CORVETTE C8 Z06 GT3',
+                year: '2025',
+                originalPriceNum: null,
+                finalPriceNum: 6800000000,
+                discountPct: null,
+                condition: 'BRAND NEW',
+                specs: [
+                    { label: 'ENGINE', val: '5.5L Flat-Plane LT6 V8' },
+                    { label: 'POWER', val: '670 HP @ 8,400 RPM' },
+                    { label: 'ACCELERATION', val: '0-100 KM/H in 2.6s' },
+                    { label: 'TRANSMISSION', val: '8-Speed Dual Clutch' },
+                    { label: 'MAX RPM', val: '8,600 RPM Redline' }
+                ],
+                colors: [
+                    { name: 'TORCH RED', hex: '#d50000', img: "{{ asset('images/brand/chevrolet_corvette_c8_torch_red.png') }}" },
+                    { name: 'ACCELERATE YELLOW', hex: '#ffd600', img: "{{ asset('images/brand/chevrolet_corvette_c8_accelerate_yellow.png') }}" },
+                    { name: 'RAPID BLUE', hex: '#0091ea', img: "{{ asset('images/brand/chevrolet_corvette_c8_rapid_blue.png') }}" },
+                    { name: 'ARCTIC WHITE', hex: '#ffffff', img: "{{ asset('images/brand/chevrolet_corvette_c8_arctic_white.png') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'HENNESSEY H700 SUPERCHARGED', img: "{{ asset('images/brand/bodykit_hennessey_h700_corvette_c8.png') }}" },
+                    { num: 'KIT 02', name: 'C8.R ENDURANCE RACING KIT', img: "{{ asset('images/brand/bodykit_chevrolet_corvette_c8_r.png') }}" },
+                    { num: 'KIT 03', name: 'Z06 GT3.R MOTORSPORT PACKAGE', img: "{{ asset('images/brand/bodykit_chevrolet_corvette_c8_z06_gt3_r.png') }}" }
+                ]
+            },
+            'pagani_huayra': {
+                brand: 'PAGANI',
+                model: 'HUAYRA BC BENNY CAIOLA',
+                year: '2025',
+                originalPriceNum: null,
+                finalPriceNum: 48000000000,
+                discountPct: null,
+                condition: 'APEX CERTIFIED',
+                specs: [
+                    { label: 'ENGINE', val: '6.0L Mercedes-AMG Twin-Turbo V12' },
+                    { label: 'POWER', val: '800 HP / 1,050 Nm' },
+                    { label: 'WEIGHT', val: '1,218 KG Carbo-Triax HP62' },
+                    { label: 'TRANSMISSION', val: '7-Speed Xtrac Transversal' },
+                    { label: 'PRODUCTION', val: '1 of 20 Units Worldwide' }
+                ],
+                colors: [
+                    { name: 'CARBON TITANIUM', hex: '#263238', img: "{{ asset('images/brand/pagani_huayra_bc.png') }}" },
+                    { name: 'RADUNO SPEC', hex: '#37474f', img: "{{ asset('images/brand/pagani_huayra_raduno.png') }}" },
+                    { name: 'ROADSTER BC SPEC', hex: '#eceff1', img: "{{ asset('images/brand/pagani_huayra_roadster_bc.png') }}" }
+                ],
+                bodykits: []
+            },
+            'zenvo_tsr': {
+                brand: 'ZENVO AUTOMOTIVE',
+                model: 'TSR-S CENTRIPETAL WING',
+                year: '2025',
+                originalPriceNum: null,
+                finalPriceNum: 38000000000,
+                discountPct: null,
+                condition: 'HYPERCAR SPECIAL',
+                specs: [
+                    { label: 'ENGINE', val: '5.8L Twin-Centrifugal V8' },
+                    { label: 'POWER', val: '1,177 HP @ 8,500 RPM' },
+                    { label: 'ACCELERATION', val: '0-100 KM/H in 2.8s' },
+                    { label: 'AERODYNAMICS', val: 'Patented Centripetal Rear Wing' },
+                    { label: 'TOP SPEED', val: '325 KM/H (Track Limited)' }
+                ],
+                colors: [
+                    { name: 'VIOLA PARSIFAE', hex: '#7b1fa2', img: "{{ asset('images/brand/zenvo_tsr_s_viola_parsifae.png') }}" },
+                    { name: 'BALTIC BLUE', hex: '#0288d1', img: "{{ asset('images/brand/zenvo_ts1_gt_baltic_blue.png') }}" },
+                    { name: 'CRYSTAL WHITE', hex: '#ffffff', img: "{{ asset('images/brand/zenvo_ts1_gt_crystal_white.png') }}" }
+                ],
+                bodykits: []
             }
         };
 
         let currentInspectedCarKey = null;
         let currentSelectedColorName = null;
+        let currentSelectedBodykitName = null;
 
         // 1. INTRO SCREEN DISMISSAL & PRICE DROPDOWN ANIMATION OBSERVER
         window.addEventListener('DOMContentLoaded', () => {
@@ -1401,7 +1799,7 @@
         }
 
 
-        // 3. CAR INSPECTOR & COLOR CONFIGURATOR MODAL ENGINE
+        // 3. CAR INSPECTOR & COLOR/BODYKIT CONFIGURATOR MODAL ENGINE (STRICT BODYKIT SEPARATION)
         function openCarInspector(carKey) {
             const car = CAR_DATABASE[carKey];
             if (!car) return;
@@ -1464,6 +1862,25 @@
                 </button>
             `).join('');
 
+            // Populate Numbered Bodykit Buttons (ONLY IF STRICT bodykit_ FILES EXIST)
+            const bodykitSection = document.getElementById('inspectBodykitSection');
+            const bodykitContainer = document.getElementById('inspectBodykitButtonsContainer');
+            const bodykitCountEl = document.getElementById('inspectBodykitCount');
+
+            if (car.bodykits && car.bodykits.length > 0) {
+                bodykitSection.classList.remove('hidden');
+                bodykitCountEl.innerText = `${car.bodykits.length} KIT VARIANT${car.bodykits.length > 1 ? 'S' : ''}`;
+                bodykitContainer.innerHTML = car.bodykits.map((b, idx) => `
+                    <button type="button" 
+                            onclick="setInspectorBodykit(${idx})"
+                            class="inspect-bodykit-btn px-3 py-1.5 text-[11px] font-mono font-bold tracking-wider rounded border border-neutral-300 dark:border-white/20 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:border-red-500 transition-all cursor-pointer">
+                        ${b.num}
+                    </button>
+                `).join('');
+            } else {
+                bodykitSection.classList.add('hidden');
+            }
+
             // Default select 1st color
             setInspectorColor(0);
 
@@ -1471,15 +1888,18 @@
             toggleModal('carInspectorModal');
         }
 
+        // SELECTING A COLOR DEACTIVATES BODYKIT MODE
         function setInspectorColor(index) {
             const car = CAR_DATABASE[currentInspectedCarKey];
             if (!car || !car.colors[index]) return;
 
             const selectedColor = car.colors[index];
             currentSelectedColorName = selectedColor.name;
+            currentSelectedBodykitName = null; // Clear Bodykit mode
 
             const img = document.getElementById('inspectCarImg');
-            const badge = document.getElementById('inspectColorBadge');
+            const colorBadge = document.getElementById('inspectColorBadge');
+            const kitBadge = document.getElementById('inspectBodykitBadge');
 
             if (img) {
                 img.style.opacity = '0.2';
@@ -1491,22 +1911,82 @@
                 }, 150);
             }
 
-            if (badge) {
-                badge.innerText = selectedColor.name;
+            if (colorBadge) {
+                colorBadge.innerText = selectedColor.name;
+                colorBadge.classList.remove('opacity-40');
             }
 
-            // Update active ring on inspector color dots
+            if (kitBadge) {
+                kitBadge.innerText = 'FACTORY STOCK SPEC';
+                kitBadge.classList.add('opacity-40');
+            }
+
+            // Highlight active color dot, DEACTIVATE/CLEAR all bodykit buttons
             const dots = document.querySelectorAll('.inspect-color-dot');
             dots.forEach((dot, i) => {
                 if (i === index) {
-                    dot.className = "inspect-color-dot w-7 h-7 rounded-full border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-lg cursor-pointer transition-all focus:outline-none";
+                    dot.className = "inspect-color-dot w-7 h-7 rounded-full border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-lg cursor-pointer transition-all focus:outline-none opacity-100";
                 } else {
-                    dot.className = "inspect-color-dot w-7 h-7 rounded-full border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125 focus:outline-none";
+                    dot.className = "inspect-color-dot w-7 h-7 rounded-full border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125 focus:outline-none opacity-60 hover:opacity-100";
                 }
+            });
+
+            const bodykitBtns = document.querySelectorAll('.inspect-bodykit-btn');
+            bodykitBtns.forEach(btn => {
+                btn.className = "inspect-bodykit-btn px-3 py-1.5 text-[11px] font-mono font-bold tracking-wider rounded border border-neutral-300 dark:border-white/20 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:border-red-500 transition-all cursor-pointer opacity-30 hover:opacity-100";
             });
         }
 
-        function bookCarWithSelectedColor() {
+        // SELECTING A BODYKIT DEACTIVATES COLOR MODE (ONLY LOADS REAL bodykit_ FILES)
+        function setInspectorBodykit(index) {
+            const car = CAR_DATABASE[currentInspectedCarKey];
+            if (!car || !car.bodykits || !car.bodykits[index]) return;
+
+            const selectedKit = car.bodykits[index];
+            currentSelectedBodykitName = selectedKit.name;
+            currentSelectedColorName = null; // Clear Color mode
+
+            const img = document.getElementById('inspectCarImg');
+            const colorBadge = document.getElementById('inspectColorBadge');
+            const kitBadge = document.getElementById('inspectBodykitBadge');
+
+            if (img) {
+                img.style.opacity = '0.2';
+                img.style.transform = 'scale(0.97)';
+                setTimeout(() => {
+                    img.src = selectedKit.img;
+                    img.style.opacity = '1';
+                    img.style.transform = 'scale(1)';
+                }, 150);
+            }
+
+            if (kitBadge) {
+                kitBadge.innerText = `${selectedKit.num}: ${selectedKit.name}`;
+                kitBadge.classList.remove('opacity-40');
+            }
+
+            if (colorBadge) {
+                colorBadge.innerText = 'MODIFIED AERO FINISH';
+                colorBadge.classList.add('opacity-40');
+            }
+
+            // Highlight active bodykit button, DEACTIVATE/CLEAR all color dots
+            const bodykitBtns = document.querySelectorAll('.inspect-bodykit-btn');
+            bodykitBtns.forEach((btn, i) => {
+                if (i === index) {
+                    btn.className = "inspect-bodykit-btn px-3 py-1.5 text-[11px] font-mono font-bold tracking-wider rounded border-2 border-red-600 bg-red-600 text-white shadow-lg transition-all cursor-pointer opacity-100";
+                } else {
+                    btn.className = "inspect-bodykit-btn px-3 py-1.5 text-[11px] font-mono font-bold tracking-wider rounded border border-neutral-300 dark:border-white/20 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:border-red-500 transition-all cursor-pointer opacity-30 hover:opacity-100";
+                }
+            });
+
+            const dots = document.querySelectorAll('.inspect-color-dot');
+            dots.forEach(dot => {
+                dot.className = "inspect-color-dot w-7 h-7 rounded-full border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125 focus:outline-none opacity-30 hover:opacity-100";
+            });
+        }
+
+        function bookCarWithSelectedConfig() {
             const car = CAR_DATABASE[currentInspectedCarKey];
             if (!car) return;
 
@@ -1514,7 +1994,13 @@
             
             const notesField = document.getElementById('modalNotes');
             if (notesField) {
-                notesField.value = `Selected Exterior Color: ${currentSelectedColorName} (${car.brand} ${car.model})`;
+                if (currentSelectedBodykitName) {
+                    notesField.value = `Selected Spec: Bodykit Package (${currentSelectedBodykitName}) for ${car.brand} ${car.model}`;
+                } else if (currentSelectedColorName) {
+                    notesField.value = `Selected Spec: Exterior Paint (${currentSelectedColorName}) for ${car.brand} ${car.model}`;
+                } else {
+                    notesField.value = `Selected Spec: Standard Factory Spec for ${car.brand} ${car.model}`;
+                }
             }
 
             openCarDetails(`${car.brand} ${car.model}`);
@@ -1589,7 +2075,7 @@
         }
 
 
-        // 5. CAROUSEL ENGINE
+        // 5. DYNAMIC CAROUSEL ENGINE (SUPPORTING ALL 5 SLIDES)
         let currentSlide = 0;
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.dot-indicator');
