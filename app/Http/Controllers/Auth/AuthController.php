@@ -154,6 +154,43 @@ class AuthController extends Controller
     }
 
     /**
+     * Redirect user to Google OAuth page.
+     */
+    public function redirectToGoogle(): RedirectResponse
+    {
+        return \Laravel\Socialite\Facades\Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Handle callback from Google OAuth.
+     */
+    public function handleGoogleCallback(): RedirectResponse
+    {
+        try {
+            $googleUser = \Laravel\Socialite\Facades\Socialite::driver('google')->user();
+
+            $user = User::firstOrCreate(
+                ['email' => strtolower(trim($googleUser->getEmail()))],
+                [
+                    'name' => $googleUser->getName() ?: explode('@', $googleUser->getEmail())[0],
+                    'password' => null,
+                ]
+            );
+
+            Auth::login($user, remember: true);
+
+            if (! $user->hasCompletedProfile()) {
+                return redirect()->route('profile.complete')->with('welcome', true);
+            }
+
+            return redirect()->intended('/');
+        } catch (\Exception $e) {
+            Log::error('Google Auth Failed: ' . $e->getMessage());
+            return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan akun Google. Silakan coba lagi.']);
+        }
+    }
+
+    /**
      * Log the user out.
      */
     public function logout(Request $request): RedirectResponse

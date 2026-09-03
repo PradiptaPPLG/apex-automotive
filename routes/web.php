@@ -16,6 +16,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/login/send-otp', [AuthController::class, 'sendOtp'])->name('auth.send-otp');
     Route::get('/login/verify', [AuthController::class, 'showOtpForm'])->name('auth.otp.form');
     Route::post('/login/verify', [AuthController::class, 'verifyOtp'])->name('auth.verify-otp');
+
+    // Google SSO Routes
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
 // Logout (must be authenticated)
