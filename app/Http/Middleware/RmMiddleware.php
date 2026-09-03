@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 class RmMiddleware
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
+     * Only allow Sales RM users to pass through.
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (! auth()->check() || ! auth()->user()->isRm()) {
+            abort(403, 'Akses hanya untuk Sales Relationship Manager.');
+        }
+
         return $next($request);
     }
 }
