@@ -242,9 +242,23 @@
                                 @endif
                             </div>
                             <div class="py-1">
+                                <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                    <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
+                                    <span>Portal VIP &amp; Konsultasi</span>
+                                </a>
+                                @if(auth()->user()->isRm())
+                                    <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors">
+                                        <i class="fa-solid fa-shield-halved w-4 text-center"></i>
+                                        <span>Admin / Sales RM Panel</span>
+                                    </a>
+                                @endif
                                 <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
                                     <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
                                     <span>Profil &amp; Alamat VIP</span>
+                                </a>
+                                <a href="{{ route('faq') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                    <i class="fa-solid fa-circle-question text-red-500 w-4 text-center"></i>
+                                    <span>Bantuan &amp; FAQ</span>
                                 </a>
                                 <div class="border-t border-white/10 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}" class="m-0">
@@ -1539,6 +1553,59 @@
          JAVASCRIPT CONTROLLER
          ========================================== -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('inquireForm');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const btn = document.getElementById('inquireSubmitBtn');
+                    const successDiv = document.getElementById('inquireSuccess');
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>MENGIRIM...</span>';
+
+                    const formData = new FormData(form);
+
+                    try {
+                        const response = await fetch('{{ route('inquire.store') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            successDiv.classList.remove('hidden');
+                            btn.classList.add('hidden');
+                            setTimeout(() => {
+                                toggleModal('inquireModal');
+                                @auth
+                                    window.location.href = "{{ route('portal.dashboard') }}";
+                                @else
+                                    successDiv.classList.add('hidden');
+                                    btn.classList.remove('hidden');
+                                    btn.disabled = false;
+                                    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>SUBMIT REQUEST</span>';
+                                @endauth
+                            }, 1500);
+                        } else {
+                            alert(result.message || 'Gagal mengirim permintaan.');
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>SUBMIT REQUEST</span>';
+                        }
+                    } catch (err) {
+                        alert('Terjadi kesalahan koneksi.');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>SUBMIT REQUEST</span>';
+                    }
+                });
+            }
+        });
+
         // 0. COMPREHENSIVE CAR DATABASE (STRICT SEPARATION: ONLY FILES WITH bodykit_ ARE BODYKITS)
         const CAR_DATABASE = {
             'bmw_m4': {
