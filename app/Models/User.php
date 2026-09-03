@@ -15,6 +15,8 @@ use Illuminate\Notifications\Notifiable;
     'phone', 'nik', 'npwp',
     'address', 'city', 'province',
     'postal_code', 'profile_completed',
+    'ownership_type', 'ktp_file', 'kk_file', 'npwp_file',
+    'nib_file', 'akta_file', 'kyc_status', 'kyc_notes',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable

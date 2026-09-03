@@ -328,7 +328,7 @@
             </div>
 
             <!-- FORM -->
-            <form action="{{ route('profile.save') }}" method="POST" id="profileForm">
+            <form action="{{ route('profile.save') }}" method="POST" id="profileForm" enctype="multipart/form-data">
                 @csrf
 
                 <!-- STEP 1: DATA DIRI -->
@@ -358,17 +358,67 @@
                     </div>
                 </div>
 
-                <!-- STEP 2: LEGALITAS (NIK & NPWP) -->
+                <!-- STEP 2: LEGALITAS (NIK, NPWP, & DOKUMEN KYC) -->
                 <div id="step-section-2" style="display: none;">
+                    <div class="field-group full-width" style="margin-bottom: 20px;">
+                        <label class="field-label">Tipe Kepemilikan STNK / BPKB <span class="req">*</span></label>
+                        <div style="display: flex; gap: 16px; margin-top: 6px;">
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 2px; flex: 1;">
+                                <input type="radio" name="ownership_type" value="individual" {{ old('ownership_type', auth()->user()->ownership_type ?? 'individual') === 'individual' ? 'checked' : '' }} onchange="toggleOwnershipFields(this.value)">
+                                <span><i class="fa-solid fa-user text-red-500 mr-1"></i> Atas Nama Perorangan</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 2px; flex: 1;">
+                                <input type="radio" name="ownership_type" value="company" {{ old('ownership_type', auth()->user()->ownership_type) === 'company' ? 'checked' : '' }} onchange="toggleOwnershipFields(this.value)">
+                                <span><i class="fa-solid fa-building text-red-500 mr-1"></i> Atas Nama PT / Perusahaan</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="form-grid">
                         <div class="field-group full-width">
-                            <label class="field-label">Nomor Induk Kependudukan (NIK) <span class="req">*</span></label>
+                            <label class="field-label">Nomor Induk Kependudukan (NIK Pemilik / Direksi) <span class="req">*</span></label>
                             <input type="text" name="nik" value="{{ old('nik', auth()->user()->nik) }}" maxlength="16" class="input-box" required placeholder="16 Digit Angka KTP">
                         </div>
 
                         <div class="field-group full-width">
                             <label class="field-label">Nomor Pokok Wajib Pajak (NPWP)</label>
-                            <input type="text" name="npwp" value="{{ old('npwp', auth()->user()->npwp) }}" class="input-box" placeholder="Opsional untuk Faktur Pajak">
+                            <input type="text" name="npwp" value="{{ old('npwp', auth()->user()->npwp) }}" class="input-box" placeholder="Opsional / Wajib untuk PT">
+                        </div>
+
+                        {{-- FILE UPLOADS: INDIVIDUAL --}}
+                        <div id="individual-files" class="full-width" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 10px;">
+                            <div class="field-group">
+                                <label class="field-label">Foto KTP / Passport <span class="req">*</span></label>
+                                <input type="file" name="ktp_file" accept="image/*,.pdf" class="input-box" style="padding: 8px 12px; font-size: 12px;">
+                                @if(auth()->user()->ktp_file)
+                                    <p style="font-size: 10px; color: #86efac; font-family: monospace; margin-top: 4px;"><i class="fa-solid fa-file-check"></i> File KTP tersimpan</p>
+                                @endif
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label">Kartu Keluarga (KK)</label>
+                                <input type="file" name="kk_file" accept="image/*,.pdf" class="input-box" style="padding: 8px 12px; font-size: 12px;">
+                                @if(auth()->user()->kk_file)
+                                    <p style="font-size: 10px; color: #86efac; font-family: monospace; margin-top: 4px;"><i class="fa-solid fa-file-check"></i> File KK tersimpan</p>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- FILE UPLOADS: COMPANY --}}
+                        <div id="company-files" class="full-width" style="display: none; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 10px;">
+                            <div class="field-group">
+                                <label class="field-label">NIB Perusahaan <span class="req">*</span></label>
+                                <input type="file" name="nib_file" accept="image/*,.pdf" class="input-box" style="padding: 8px 12px; font-size: 12px;">
+                                @if(auth()->user()->nib_file)
+                                    <p style="font-size: 10px; color: #86efac; font-family: monospace; margin-top: 4px;"><i class="fa-solid fa-file-check"></i> File NIB tersimpan</p>
+                                @endif
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label">Akta Pendirian & SK Menkumham <span class="req">*</span></label>
+                                <input type="file" name="akta_file" accept="image/*,.pdf" class="input-box" style="padding: 8px 12px; font-size: 12px;">
+                                @if(auth()->user()->akta_file)
+                                    <p style="font-size: 10px; color: #86efac; font-family: monospace; margin-top: 4px;"><i class="fa-solid fa-file-check"></i> File Akta tersimpan</p>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
@@ -419,6 +469,24 @@
     </div>
 
     <script>
+        function toggleOwnershipFields(val) {
+            const ind = document.getElementById('individual-files');
+            const comp = document.getElementById('company-files');
+            if (val === 'company') {
+                ind.style.display = 'none';
+                comp.style.display = 'grid';
+            } else {
+                ind.style.display = 'grid';
+                comp.style.display = 'none';
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const checked = document.querySelector('input[name="ownership_type"]:checked');
+            if (checked) toggleOwnershipFields(checked.value);
+        });
+
         function goToStep(step) {
             document.getElementById('step-section-1').style.display = step === 1 ? 'block' : 'none';
             document.getElementById('step-section-2').style.display = step === 2 ? 'block' : 'none';

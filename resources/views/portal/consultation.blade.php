@@ -377,12 +377,35 @@
                     <a href="{{ route('profile.complete') }}" class="text-[9px] font-mono text-amber-400 hover:text-amber-300 underline font-bold">Edit Profil</a>
                 </div>
                 @if(auth()->user()->hasCompletedProfile())
-                    <p class="text-xs text-green-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Tersimpan & Lengkap</p>
+                    <p class="text-xs text-green-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Tersimpan &amp; Lengkap</p>
                     <p class="text-[10px] text-neutral-400 mt-1 font-mono">NIK: {{ auth()->user()->nik ?? '—' }}</p>
                     <p class="text-[10px] text-neutral-400 font-mono truncate">Alamat: {{ auth()->user()->address ?? '—' }}</p>
                 @else
                     <p class="text-xs text-amber-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Belum Lengkap</p>
                     <a href="{{ route('profile.complete') }}" class="mt-1.5 inline-block px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold tracking-wider hover:bg-amber-500/30">ISI DATA LEGALITAS</a>
+                @endif
+            </div>
+
+            {{-- Phase 4: SPA Contract E-Sign Box --}}
+            <div class="p-3.5 bg-neutral-900 border border-red-600/30 rounded-sm">
+                <div class="flex items-center space-x-2 mb-2">
+                    <i class="fa-solid fa-file-signature text-red-500 text-sm"></i>
+                    <span class="text-[10px] font-mono text-red-500 uppercase tracking-widest font-bold">Phase 4: Kontrak Jual Beli (SPA)</span>
+                </div>
+                @if($inquiry->buyer_signed)
+                    <div class="bg-green-500/10 border border-green-500/30 p-2.5 rounded-sm">
+                        <p class="text-xs text-green-400 font-mono font-bold flex items-center gap-1.5"><i class="fa-solid fa-certificate"></i> SPA E-Sign Completed</p>
+                        <p class="text-[10px] text-neutral-400 font-mono mt-1">Ditandatangani pada: {{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</p>
+                        <span class="inline-block mt-2 px-2 py-0.5 bg-green-500/20 text-green-300 text-[9px] font-mono font-bold tracking-wider uppercase border border-green-500/40"><i class="fa-solid fa-stamp mr-1"></i> Terbubuhi e-Meterai Sah</span>
+                    </div>
+                @else
+                    <p class="text-xs text-neutral-300 font-sans leading-relaxed mb-3">
+                        Dokumen Perjanjian Jual Beli (Sales &amp; Purchase Agreement) telah siap ditinjau dan ditandatangani secara digital bermeterai e-Meterai.
+                    </p>
+                    <button onclick="toggleContractModal()" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-mono text-[11px] font-bold tracking-wider uppercase transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>Review &amp; E-Sign SPA</span>
+                    </button>
                 @endif
             </div>
 

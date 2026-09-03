@@ -164,6 +164,10 @@
                                 <i class="fa-solid fa-circle-check"></i> PROFIL VERIFIED
                             </div>
                             <div class="detail-row" style="padding:4px 0;">
+                                <p class="detail-label">Kepemilikan</p>
+                                <p class="detail-value" style="font-size:12px; text-transform:uppercase; font-weight:600;">{{ $inquiry->user->ownership_type === 'company' ? 'PT / Korporasi' : 'Perorangan' }}</p>
+                            </div>
+                            <div class="detail-row" style="padding:4px 0;">
                                 <p class="detail-label">NIK (KTP)</p>
                                 <p class="detail-value" style="font-size:12px;">{{ $inquiry->user->nik ?? '—' }}</p>
                             </div>
@@ -171,9 +175,29 @@
                                 <p class="detail-label">NPWP</p>
                                 <p class="detail-value" style="font-size:12px;">{{ $inquiry->user->npwp ?? '—' }}</p>
                             </div>
-                            <div class="detail-row" style="padding:4px 0; border:none;">
+                            <div class="detail-row" style="padding:4px 0;">
                                 <p class="detail-label">Alamat STNK / Pengiriman</p>
                                 <p class="detail-value" style="font-size:12px;">{{ $inquiry->user->address }}, {{ $inquiry->user->city }}, {{ $inquiry->user->province }} ({{ $inquiry->user->postal_code }})</p>
+                            </div>
+
+                            {{-- FILE LINKS --}}
+                            <div style="margin-top: 8px; pt: 8px; border-t: 1px dashed rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 4px;">
+                                <p class="detail-label" style="color: #dc2626;">File Berkas Dokumen:</p>
+                                @if($inquiry->user->ktp_file)
+                                    <a href="{{ asset('storage/'.$inquiry->user->ktp_file) }}" target="_blank" style="font-size: 11px; font-family: monospace; color: #60a5fa; text-decoration: underline;"><i class="fa-solid fa-file-pdf"></i> Lihat File KTP / Passport</a>
+                                @endif
+                                @if($inquiry->user->kk_file)
+                                    <a href="{{ asset('storage/'.$inquiry->user->kk_file) }}" target="_blank" style="font-size: 11px; font-family: monospace; color: #60a5fa; text-decoration: underline;"><i class="fa-solid fa-file-pdf"></i> Lihat File Kartu Keluarga</a>
+                                @endif
+                                @if($inquiry->user->nib_file)
+                                    <a href="{{ asset('storage/'.$inquiry->user->nib_file) }}" target="_blank" style="font-size: 11px; font-family: monospace; color: #60a5fa; text-decoration: underline;"><i class="fa-solid fa-file-pdf"></i> Lihat File NIB Perusahaan</a>
+                                @endif
+                                @if($inquiry->user->akta_file)
+                                    <a href="{{ asset('storage/'.$inquiry->user->akta_file) }}" target="_blank" style="font-size: 11px; font-family: monospace; color: #60a5fa; text-decoration: underline;"><i class="fa-solid fa-file-pdf"></i> Lihat File Akta Pendirian</a>
+                                @endif
+                                @if(!$inquiry->user->ktp_file && !$inquiry->user->kk_file && !$inquiry->user->nib_file && !$inquiry->user->akta_file)
+                                    <p style="font-size: 10px; color: #9ca3af; font-family: monospace;">Belum ada lampiran file fisik diunggah.</p>
+                                @endif
                             </div>
                         @else
                             <div style="font-size: 11px; color: #fbbf24; font-family: monospace; font-weight: 700;">

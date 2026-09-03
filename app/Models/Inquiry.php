@@ -11,9 +11,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'user_id', 'name', 'email', 'phone',
     'car_model', 'selected_config', 'notes',
     'status', 'assigned_rm_name',
+    'spa_contract_pdf', 'buyer_signed', 'buyer_signed_at',
+    'buyer_signature_svg', 'management_signed', 'management_signed_at',
 ])]
 class Inquiry extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'buyer_signed' => 'boolean',
+            'buyer_signed_at' => 'datetime',
+            'management_signed' => 'boolean',
+            'management_signed_at' => 'datetime',
+        ];
+    }
+
     /**
      * Get all available status codes mapped to display labels.
      *
