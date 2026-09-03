@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/portal/inquiry/{inquiry}', [PortalController::class, 'consultation'])->name('portal.consultation');
     Route::post('/portal/inquiry/{inquiry}/message', [ConsultationController::class, 'store'])->name('portal.message.store');
     Route::get('/portal/inquiry/{inquiry}/poll', [ConsultationController::class, 'poll'])->name('portal.message.poll');
+    Route::post('/portal/inquiry/{inquiry}/sign-contract', [PortalController::class, 'signContract'])->name('portal.contract.sign');
 });
 
 // ──────────────────────────────────────────────
