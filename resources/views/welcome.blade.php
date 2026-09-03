@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Jakarta. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, Koenigsegg, Bugatti, Chevrolet Corvette, Pagani, Zenvo, and Jeep.">
+    <meta name="description" content="Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Cijeungjing. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, Koenigsegg, Bugatti, Chevrolet Corvette, Pagani, Zenvo, and Jeep.">
     <title>APEX AUTOMOTIVE | Official Luxury Showroom & Hypercar Dealer</title>
 
     <!-- Google Fonts -->
@@ -121,7 +121,7 @@
             </div>
             
             <p class="text-[10px] font-mono text-neutral-500 tracking-[0.3em] uppercase mt-2">
-                JAKARTA LUXURY SHOWROOM
+                CIJEUNGJING LUXURY SHOWROOM
             </p>
         </div>
     </div>
@@ -143,7 +143,7 @@
             <div class="flex items-center space-x-8 shrink-0">
                 <span class="flex items-center space-x-2 text-neutral-300">
                     <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="font-bold text-neutral-200">JAKARTA SHOWROOM:</span>
+                    <span class="font-bold text-neutral-200">CIJEUNGJING SHOWROOM:</span>
                     <span class="text-neutral-400">OPEN TODAY UNTIL 20:00 WIB</span>
                 </span>
                 <span class="text-red-500 font-bold">///</span>
@@ -165,7 +165,7 @@
             <div class="flex items-center space-x-8 shrink-0">
                 <span class="flex items-center space-x-2 text-neutral-300">
                     <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="font-bold text-neutral-200">JAKARTA SHOWROOM:</span>
+                    <span class="font-bold text-neutral-200">CIJEUNGJING SHOWROOM:</span>
                     <span class="text-neutral-400">OPEN TODAY UNTIL 20:00 WIB</span>
                 </span>
                 <span class="text-red-500 font-bold">///</span>
@@ -221,20 +221,20 @@
                 </button>
 
                 @auth
-                    {{-- AUTHENTICATED: Show user name + dropdown --}}
-                    <div class="relative group hidden sm:block" id="userDropdownWrapper">
-                        <button class="flex items-center space-x-2 px-3 py-2 border border-neutral-300 dark:border-white/15 bg-neutral-100 dark:bg-white/5 hover:border-red-600 transition-all duration-200 text-xs font-mono font-semibold text-neutral-800 dark:text-neutral-200">
-                            <span class="inline-flex w-6 h-6 items-center justify-center rounded-full bg-red-600 text-white text-[10px] font-extrabold uppercase">
-                                {{ substr(auth()->user()->name, 0, 1) }}
+                    {{-- AUTHENTICATED: Show user profile badge & dropdown --}}
+                    <div class="relative inline-block text-left group" id="userDropdownWrapper">
+                        <button type="button" class="flex items-center space-x-2 px-3 py-2 border border-red-600/40 bg-neutral-900/90 hover:bg-red-600/10 transition-all duration-200 text-xs font-mono font-semibold text-white cursor-pointer rounded-sm shadow-md">
+                            <span class="inline-flex w-6 h-6 items-center justify-center rounded-full bg-red-600 text-white text-[11px] font-extrabold uppercase shrink-0">
+                                {{ strtoupper(substr(auth()->user()->name ?? 'V', 0, 1)) }}
                             </span>
-                            <span class="hidden md:inline max-w-[120px] truncate uppercase tracking-wider">{{ auth()->user()->name }}</span>
-                            <i class="fa-solid fa-chevron-down text-[9px] text-neutral-500 group-hover:text-red-600 transition-colors"></i>
+                            <span class="uppercase tracking-wider max-w-[120px] sm:max-w-[160px] truncate text-[11px] font-bold">{{ auth()->user()->name ?? 'VIP Buyer' }}</span>
+                            <i class="fa-solid fa-chevron-down text-[9px] text-red-500 ml-1"></i>
                         </button>
-                        {{-- Dropdown --}}
-                        <div class="absolute right-0 top-full mt-1 w-52 bg-neutral-900 dark:bg-neutral-950 border border-white/10 shadow-2xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0">
-                            <div class="p-3 border-b border-white/10">
-                                <p class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">VIP Buyer</p>
-                                <p class="text-xs font-semibold text-white truncate mt-0.5">{{ auth()->user()->email }}</p>
+                        {{-- Dropdown Menu --}}
+                        <div class="absolute right-0 top-full mt-1.5 w-64 bg-[#0c0c10] border border-white/15 shadow-2xl z-[100] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 rounded-sm overflow-hidden">
+                            <div class="p-3.5 bg-white/5 border-b border-white/10">
+                                <p class="text-[9px] font-mono text-red-500 uppercase tracking-widest font-bold">AKUN VIP TERVERIFIKASI</p>
+                                <p class="text-xs font-semibold text-white truncate mt-1">{{ auth()->user()->email }}</p>
                                 @if (! auth()->user()->hasCompletedProfile())
                                     <a href="{{ route('profile.complete') }}" class="inline-flex items-center mt-2 text-[10px] font-mono text-amber-400 hover:text-amber-300 font-bold tracking-wider">
                                         <i class="fa-solid fa-triangle-exclamation mr-1"></i> LENGKAPI PROFIL
@@ -242,22 +242,16 @@
                                 @endif
                             </div>
                             <div class="py-1">
-                                @if (auth()->user()->hasCompletedProfile())
-                                    <a href="{{ route('profile.complete') }}" class="flex items-center space-x-2.5 px-4 py-2.5 text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
-                                        <i class="fa-solid fa-user-pen text-red-500 w-4"></i>
-                                        <span>Edit Profil</span>
-                                    </a>
-                                @endif
-                                <button onclick="toggleModal('inquireModal')" class="flex w-full items-center space-x-2.5 px-4 py-2.5 text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
-                                    <i class="fa-solid fa-calendar-check text-red-500 w-4"></i>
-                                    <span>Book Private Viewing</span>
-                                </button>
-                                <div class="border-t border-white/5 my-1"></div>
-                                <form method="POST" action="{{ route('logout') }}">
+                                <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                    <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
+                                    <span>Profil &amp; Alamat VIP</span>
+                                </a>
+                                <div class="border-t border-white/10 my-1"></div>
+                                <form method="POST" action="{{ route('logout') }}" class="m-0">
                                     @csrf
-                                    <button type="submit" class="flex w-full items-center space-x-2.5 px-4 py-2.5 text-[11px] font-mono text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-colors">
-                                        <i class="fa-solid fa-arrow-right-from-bracket w-4"></i>
-                                        <span>KELUAR</span>
+                                    <button type="submit" class="flex w-full items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors cursor-pointer text-left">
+                                        <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i>
+                                        <span>KELUAR / LOGOUT</span>
                                     </button>
                                 </form>
                             </div>
@@ -265,12 +259,9 @@
                     </div>
                 @else
                     {{-- GUEST: Show login button --}}
-                    <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-xs tracking-widest font-bold uppercase border border-red-600 text-red-600 dark:text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300">
+                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs tracking-widest font-bold uppercase border border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300">
                         <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> MASUK / DAFTAR
                     </a>
-                    <button onclick="toggleModal('inquireModal')" class="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-xs tracking-widest font-semibold uppercase bg-red-600 hover:bg-red-700 text-white rounded-none shadow-lg shadow-red-600/25 hover:shadow-red-600/50 transition-all duration-300 transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-calendar-check mr-2"></i> BOOK VIEWING
-                    </button>
                 @endauth
             </div>
         </div>
@@ -1030,7 +1021,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">LIMITED EDITION</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari Roma Spider</h3>
-                            <p class="text-xs text-neutral-300 font-light">La Nuova Dolce Vita in Jakarta</p>
+                            <p class="text-xs text-neutral-300 font-light">La Nuova Dolce Vita in Cijeungjing</p>
                         </div>
                     </div>
 
@@ -1168,14 +1159,14 @@
                 <div class="text-center space-y-2 mb-16 reveal-on-scroll">
                     <div class="flex items-center justify-center space-x-2">
                         <span class="red-divider-line"></span>
-                        <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">JAKARTA HEADQUARTERS</span>
+                        <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">CIJEUNGJING HEADQUARTERS</span>
                         <span class="red-divider-line"></span>
                     </div>
                     <h2 class="text-3xl sm:text-5xl font-serif font-black text-white uppercase tracking-tight">
                         PT Apex Automotive Indonesia
                     </h2>
                     <p class="text-sm font-mono text-red-500 font-bold uppercase tracking-widest">
-                        OFFICIAL LUXURY SHOWROOM & HYPERCAR DEALER IN JAKARTA
+                        OFFICIAL LUXURY SHOWROOM & HYPERCAR DEALER IN CIJEUNGJING
                     </p>
                 </div>
 
@@ -1185,11 +1176,11 @@
                     <div class="space-y-8 glass-card p-8 border border-white/10 reveal-on-scroll">
                         <div class="space-y-4">
                             <h3 class="text-xl font-bold font-serif text-white tracking-wide flex items-center">
-                                <i class="fa-solid fa-location-dot text-red-500 mr-3"></i> APEX AUTOMOTIVE JAKARTA
+                                <i class="fa-solid fa-location-dot text-red-500 mr-3"></i> APEX AUTOMOTIVE CIJEUNGJING
                             </h3>
                             <p class="text-xs text-neutral-300 font-mono leading-relaxed">
-                                Jl. Sultan Iskandar Muda No. 88, Pondok Indah<br>
-                                Jakarta Selatan 12240, Indonesia
+                                Jl. Raya Banjar - Dsn. Kidul RT09 RW 04 Desa Cijeungjing Kecamatan Cijeungjing Kabupaten Ciamis<br>
+                                Jawa Barat, Indonesia
                             </p>
                         </div>
 
@@ -1258,7 +1249,7 @@
                         <span class="font-serif tracking-widest text-lg font-black text-white uppercase">APEX AUTOMOTIVE</span>
                     </div>
                     <p class="text-xs text-neutral-400 font-light max-w-sm leading-relaxed">
-                        Official Jakarta luxury supercar showroom. Authorized partner for high-performance exotics, certified pre-owned supercars, and factory-trained racing maintenance.
+                        Official Cijeungjing luxury supercar showroom. Authorized partner for high-performance exotics, certified pre-owned supercars, and factory-trained racing maintenance.
                     </p>
                     <div class="flex space-x-4 pt-2 text-base text-neutral-400">
                         <a href="#" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>

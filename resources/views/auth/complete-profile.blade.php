@@ -7,403 +7,435 @@
     <meta name="description" content="Lengkapi data diri Anda sebelum melakukan pemesanan kendaraan.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                darkMode: 'class',
-                theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Cinzel', 'serif'] } } }
-            }
-        </script>
-    @endif
-
     <style>
-        .glass-card {
-            background: rgba(14, 14, 18, 0.88);
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; min-height: 100%; font-family: 'Outfit', sans-serif; background-color: #08080a; color: #fff; }
+
+        /* Top Nav */
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(10, 10, 14, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .input-apex {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            width: 100%;
-            padding: 0.8rem 1rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.875rem;
-            outline: none;
-            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-            border-radius: 0;
+
+        .brand-logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
         }
-        .input-apex:focus {
-            border-color: #e50914;
-            background: rgba(229,9,20,0.04);
-            box-shadow: 0 0 0 3px rgba(229,9,20,0.12);
-        }
-        .input-apex::placeholder { color: rgba(255,255,255,0.25); }
-        .input-apex.error { border-color: rgba(239,68,68,0.6); }
+        .brand-logo-img { height: 32px; width: auto; }
+        .brand-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 900; letter-spacing: 3px; color: #fff; line-height: 1; }
+        .brand-subtitle { font-size: 9px; font-family: monospace; letter-spacing: 3px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 2px; }
 
-        .step-indicator { transition: all 0.4s ease; }
-        .step-active { background: #e50914 !important; border-color: #e50914 !important; color: white !important; }
-        .step-done { background: rgba(229,9,20,0.2) !important; border-color: rgba(229,9,20,0.5) !important; color: #e50914 !important; }
-
-        .form-section { display: none; }
-        .form-section.active { display: block; }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .form-section.active { animation: fadeSlideIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-
-        .btn-red {
-            background: linear-gradient(135deg, #e50914, #b80710);
-            color: white;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            padding: 0.85rem 2rem;
-            border: none;
+        /* User Dropdown */
+        .user-menu-wrapper { position: relative; }
+        .user-menu-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            color: #fff;
+            font-size: 12px;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 18px rgba(229,9,20,0.3);
+            border-radius: 2px;
+            transition: all 0.2s ease;
         }
-        .btn-red:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(229,9,20,0.4); }
+        .user-menu-btn:hover { border-color: #e50914; background: rgba(229,9,20,0.08); }
+        .avatar-circle {
+            width: 24px;
+            height: 24px;
+            background: #e50914;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            width: 220px;
+            background: #0f0f14;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-top: 2px solid #e50914;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            display: none;
+            z-index: 100;
+        }
+        .user-menu-wrapper:hover .user-dropdown { display: block; }
+        .dropdown-header { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .dropdown-email { font-size: 11px; font-family: monospace; color: rgba(255,255,255,0.6); overflow: hidden; text-overflow: ellipsis; }
+        .dropdown-btn-logout {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #f87171;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-family: monospace;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .dropdown-btn-logout:hover { background: rgba(239, 68, 68, 0.1); }
+
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title-box { text-align: center; margin-bottom: 36px; }
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #e50914;
+            font-size: 11px;
+            font-family: monospace;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .page-h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+        .page-subtitle { color: rgba(255,255,255,0.5); font-size: 13px; max-width: 460px; margin: 0 auto; line-height: 1.5; }
+
+        /* Form Card */
+        .form-card {
+            background: rgba(14, 14, 18, 0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-left: 3px solid #e50914;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        /* Step Tabs */
+        .step-tabs {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+            font-family: monospace;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .step-item.active { color: #fff; font-weight: 700; }
+        .step-item.active .step-num { background: #e50914; border-color: #e50914; color: #fff; }
+        .step-item.done .step-num { background: rgba(229,9,20,0.2); border-color: #e50914; color: #e50914; }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* Form Inputs */
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .full-width { grid-column: span 2; }
+        
+        .field-group { margin-bottom: 4px; }
+        .field-label {
+            display: block;
+            font-size: 10px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .req { color: #e50914; }
+
+        .input-box {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 13px 16px;
+            font-size: 14px;
+            outline: none;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+        .input-box:focus {
+            border-color: #e50914;
+            background: rgba(229,9,20,0.05);
+            box-shadow: 0 0 0 3px rgba(229,9,20,0.15);
+        }
+        .input-box:disabled { opacity: 0.5; cursor: not-allowed; }
+        textarea.input-box { resize: none; height: 90px; }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .btn-red {
+            background: linear-gradient(135deg, #e50914 0%, #b80710 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(229,9,20,0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-red:hover { opacity: 0.95; transform: translateY(-1px); }
         .btn-outline {
-            background: transparent;
+            background: none;
             border: 1px solid rgba(255,255,255,0.2);
             color: rgba(255,255,255,0.7);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            padding: 0.85rem 2rem;
+            padding: 14px 24px;
+            font-size: 11px;
+            font-family: monospace;
             cursor: pointer;
-            transition: border-color 0.2s, color 0.2s;
+            border-radius: 2px;
+            transition: all 0.2s ease;
         }
-        .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: white; }
+        .btn-outline:hover { border-color: #fff; color: #fff; }
 
-        /* Progress bar */
-        .progress-bar { transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
+        @media (max-width: 640px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .form-card { padding: 24px; }
+            .top-navbar { padding: 14px 20px; }
+        }
     </style>
 </head>
-<body class="bg-[#09090c] text-white font-sans min-h-screen">
+<body>
 
-    <!-- TOP NAV -->
-    <div class="sticky top-0 z-40 bg-[#0a0a0e]/95 backdrop-blur border-b border-white/5 px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <img src="{{ asset('images/logo/logo.png') }}" alt="Apex" class="h-7 w-auto object-contain">
-            <span class="font-serif text-sm font-black tracking-widest uppercase text-white">APEX AUTOMOTIVE</span>
-        </div>
-        <div class="text-[10px] font-mono text-neutral-400 tracking-widest uppercase hidden sm:block">
-            <i class="fa-solid fa-lock text-red-500 mr-1.5"></i>
-            {{ auth()->user()->email }}
-        </div>
-    </div>
-
-    <!-- PROGRESS BAR -->
-    <div class="h-0.5 bg-neutral-900">
-        <div id="progressBar" class="h-full bg-gradient-to-r from-red-700 to-red-500 progress-bar" style="width: 33%"></div>
-    </div>
-
-    <div class="max-w-3xl mx-auto px-4 py-12">
-
-        <!-- SECTION HEADER -->
-        <div class="text-center space-y-2 mb-10">
-            <div class="flex items-center justify-center space-x-2 mb-3">
-                <span class="h-px w-8 bg-red-600"></span>
-                <span class="text-[10px] font-mono tracking-[0.35em] text-red-500 uppercase font-bold">Langkah Pertama</span>
-                <span class="h-px w-8 bg-red-600"></span>
+    <!-- TOP NAVBAR WITH LOGO AND USER DROPDOWN -->
+    <div class="top-navbar">
+        <a href="/" class="brand-logo-group">
+            <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Logo" class="brand-logo-img">
+            <div>
+                <div class="brand-title">APEX</div>
+                <div class="brand-subtitle">Automotive</div>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-serif font-black uppercase tracking-tight">
-                Lengkapi Profil VIP
-            </h1>
-            <p class="text-sm text-neutral-400 font-light max-w-md mx-auto">
-                Data ini diperlukan untuk proses KYC, penerbitan SPK, dan legalitas STNK/BPKB kendaraan Anda.
+        </a>
+
+        <!-- USER PROFILE & LOGOUT DROPDOWN RIGHT CORNER -->
+        <div class="user-menu-wrapper">
+            <div class="user-menu-btn">
+                <div class="avatar-circle">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'V', 0, 1)) }}
+                </div>
+                <span>{{ auth()->user()->name ?? 'VIP Buyer' }}</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: rgba(255,255,255,0.5);"></i>
+            </div>
+            <div class="user-dropdown">
+                <div class="dropdown-header">
+                    <div style="font-size: 9px; font-family: monospace; color: #e50914; text-transform: uppercase; font-weight: 700;">Akun VIP Terverifikasi</div>
+                    <div class="dropdown-email">{{ auth()->user()->email }}</div>
+                </div>
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="dropdown-btn-logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Keluar / Logout</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN FORM CONTAINER -->
+    <div class="container">
+        <div class="page-title-box">
+            <div class="badge-tag">
+                <span>Registrasi Legalitas VIP</span>
+            </div>
+            <h1 class="page-h1">Lengkapi Profil Anda</h1>
+            <p class="page-subtitle">
+                Data ini diperlukan untuk penerbitan SPK, legalitas STNK/BPKB, dan konfirmasi pengiriman kendaraan VIP.
             </p>
         </div>
 
-        <!-- STEP INDICATORS -->
-        <div class="flex items-center justify-center mb-10">
-            <div class="flex items-center space-x-2 sm:space-x-4">
-                <!-- Step 1 -->
-                <div class="flex flex-col items-center space-y-1.5">
-                    <div id="step1-circle" class="step-indicator step-active w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs font-bold font-mono">1</div>
-                    <span class="text-[9px] font-mono text-red-500 tracking-widest uppercase hidden sm:block">Data Diri</span>
+        <div class="form-card">
+            <!-- STEP TABS -->
+            <div class="step-tabs">
+                <div class="step-item active" id="tab-1">
+                    <div class="step-num">1</div>
+                    <span>Data Diri</span>
                 </div>
-                <div class="w-12 sm:w-20 h-px bg-white/10 mx-1"></div>
-                <!-- Step 2 -->
-                <div class="flex flex-col items-center space-y-1.5">
-                    <div id="step2-circle" class="step-indicator w-9 h-9 rounded-full border-2 border-white/20 flex items-center justify-center text-xs font-bold font-mono text-neutral-500">2</div>
-                    <span class="text-[9px] font-mono text-neutral-600 tracking-widest uppercase hidden sm:block">Legalitas</span>
+                <div class="step-item" id="tab-2">
+                    <div class="step-num">2</div>
+                    <span>Legalitas</span>
                 </div>
-                <div class="w-12 sm:w-20 h-px bg-white/10 mx-1"></div>
-                <!-- Step 3 -->
-                <div class="flex flex-col items-center space-y-1.5">
-                    <div id="step3-circle" class="step-indicator w-9 h-9 rounded-full border-2 border-white/20 flex items-center justify-center text-xs font-bold font-mono text-neutral-500">3</div>
-                    <span class="text-[9px] font-mono text-neutral-600 tracking-widest uppercase hidden sm:block">Alamat</span>
+                <div class="step-item" id="tab-3">
+                    <div class="step-num">3</div>
+                    <span>Alamat Pengiriman</span>
                 </div>
             </div>
-        </div>
 
-        <!-- VALIDATION ERRORS (global) -->
-        @if ($errors->any())
-            <div class="bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono p-4 mb-6 space-y-1">
-                @foreach ($errors->all() as $error)
-                    <div class="flex items-start space-x-2">
-                        <i class="fa-solid fa-triangle-exclamation mt-0.5 shrink-0"></i>
-                        <span>{{ $error }}</span>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-
-        <!-- MAIN FORM CARD -->
-        <div class="glass-card p-8 sm:p-10 shadow-2xl">
+            <!-- FORM -->
             <form action="{{ route('profile.save') }}" method="POST" id="profileForm">
                 @csrf
 
-                <!-- ── STEP 1: DATA DIRI ──────────────── -->
-                <div id="section-1" class="form-section active space-y-5">
-                    <div class="flex items-center space-x-2 mb-6">
-                        <i class="fa-solid fa-user-tie text-red-500"></i>
-                        <h3 class="text-sm font-bold font-mono tracking-widest uppercase text-neutral-300">Data Diri Pembeli</h3>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="sm:col-span-2 space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Nama Lengkap <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}"
-                                   placeholder="Sesuai KTP"
-                                   class="input-apex @error('name') error @enderror" required>
-                            @error('name')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
+                <!-- STEP 1: DATA DIRI -->
+                <div id="step-section-1">
+                    <div class="form-grid">
+                        <div class="field-group full-width">
+                            <label class="field-label">Nama Lengkap Sesuai KTP <span class="req">*</span></label>
+                            <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" class="input-box" required placeholder="Contoh: Pradipta Endra">
                         </div>
 
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Nomor HP / WhatsApp <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-3 flex items-center text-neutral-500 text-sm font-mono">+62</span>
-                                <input type="tel" name="phone" value="{{ old('phone') }}"
-                                       placeholder="812 XXXX XXXX"
-                                       class="input-apex pl-12 @error('phone') error @enderror" required>
-                            </div>
-                            @error('phone')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
+                        <div class="field-group">
+                            <label class="field-label">Nomor WhatsApp <span class="req">*</span></label>
+                            <input type="tel" name="phone" value="{{ old('phone') }}" class="input-box" required placeholder="08123456789">
                         </div>
 
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Alamat Email
-                            </label>
-                            <input type="email" value="{{ auth()->user()->email }}"
-                                   class="input-apex opacity-50 cursor-not-allowed" disabled>
-                            <p class="text-[10px] font-mono text-neutral-600">Terverifikasi via OTP</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── STEP 2: LEGALITAS (NIK & NPWP) ──── -->
-                <div id="section-2" class="form-section space-y-5">
-                    <div class="flex items-center space-x-2 mb-6">
-                        <i class="fa-solid fa-id-card text-red-500"></i>
-                        <h3 class="text-sm font-bold font-mono tracking-widest uppercase text-neutral-300">Data Legalitas & Identitas</h3>
-                    </div>
-
-                    <!-- KYC Info -->
-                    <div class="bg-amber-500/8 border border-amber-500/20 p-4 flex items-start space-x-3 mb-2">
-                        <i class="fa-solid fa-circle-info text-amber-400 mt-0.5 shrink-0"></i>
-                        <p class="text-xs text-amber-300/80 font-light leading-relaxed">
-                            Data NIK dan NPWP diperlukan untuk proses KYC (Know Your Customer), penerbitan Faktur Pajak, dan legalitas kepemilikan kendaraan bermotor di Indonesia.
-                        </p>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="sm:col-span-2 space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Nomor Induk Kependudukan (NIK) <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="nik" value="{{ old('nik') }}"
-                                   placeholder="16 digit sesuai KTP"
-                                   maxlength="16"
-                                   inputmode="numeric"
-                                   class="input-apex @error('nik') error @enderror" required>
-                            @error('nik')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
-                        </div>
-
-                        <div class="sm:col-span-2 space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Nomor Pokok Wajib Pajak (NPWP)
-                                <span class="text-neutral-600 font-normal">(Opsional)</span>
-                            </label>
-                            <input type="text" name="npwp" value="{{ old('npwp') }}"
-                                   placeholder="XX.XXX.XXX.X-XXX.XXX"
-                                   class="input-apex @error('npwp') error @enderror">
-                            @error('npwp')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── STEP 3: ALAMAT PENGIRIMAN ──────── -->
-                <div id="section-3" class="form-section space-y-5">
-                    <div class="flex items-center space-x-2 mb-6">
-                        <i class="fa-solid fa-location-dot text-red-500"></i>
-                        <h3 class="text-sm font-bold font-mono tracking-widest uppercase text-neutral-300">Alamat Domisili & Pengiriman</h3>
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                            Alamat Lengkap <span class="text-red-500">*</span>
-                        </label>
-                        <textarea name="address" rows="2"
-                                  placeholder="Nama jalan, nomor, RT/RW, kelurahan, kecamatan"
-                                  class="input-apex resize-none @error('address') error @enderror" required>{{ old('address') }}</textarea>
-                        @error('address')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Kota / Kabupaten <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="city" value="{{ old('city') }}"
-                                   placeholder="Jakarta Selatan"
-                                   class="input-apex @error('city') error @enderror" required>
-                            @error('city')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Provinsi <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="province" value="{{ old('province') }}"
-                                   placeholder="DKI Jakarta"
-                                   class="input-apex @error('province') error @enderror" required>
-                            @error('province')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold block">
-                                Kode Pos <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" name="postal_code" value="{{ old('postal_code') }}"
-                                   placeholder="12240"
-                                   maxlength="6"
-                                   inputmode="numeric"
-                                   class="input-apex @error('postal_code') error @enderror" required>
-                            @error('postal_code')<p class="text-red-500 text-[10px] font-mono">{{ $message }}</p>@enderror
+                        <div class="field-group">
+                            <label class="field-label">Alamat Email Terverifikasi</label>
+                            <input type="email" value="{{ auth()->user()->email }}" class="input-box" disabled>
                         </div>
                     </div>
 
-                    <!-- SUBMIT on final step -->
-                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
-                        <button type="button" onclick="prevStep()" class="btn-outline">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> KEMBALI
+                    <div class="btn-row" style="justify-content: flex-end;">
+                        <button type="button" class="btn-red" onclick="goToStep(2)">
+                            <span>Lanjut Ke Legalitas</span>
+                            <i class="fa-solid fa-arrow-right"></i>
                         </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: LEGALITAS (NIK & NPWP) -->
+                <div id="step-section-2" style="display: none;">
+                    <div class="form-grid">
+                        <div class="field-group full-width">
+                            <label class="field-label">Nomor Induk Kependudukan (NIK) <span class="req">*</span></label>
+                            <input type="text" name="nik" value="{{ old('nik') }}" maxlength="16" class="input-box" required placeholder="16 Digit Angka KTP">
+                        </div>
+
+                        <div class="field-group full-width">
+                            <label class="field-label">Nomor Pokok Wajib Pajak (NPWP)</label>
+                            <input type="text" name="npwp" value="{{ old('npwp') }}" class="input-box" placeholder="Opsional untuk Faktur Pajak">
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="button" class="btn-outline" onclick="goToStep(1)">&larr; Kembali</button>
+                        <button type="button" class="btn-red" onclick="goToStep(3)">
+                            <span>Lanjut Ke Alamat</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: ALAMAT PENGIRIMAN -->
+                <div id="step-section-3" style="display: none;">
+                    <div class="form-grid">
+                        <div class="field-group full-width">
+                            <label class="field-label">Alamat Domisili Lengkap <span class="req">*</span></label>
+                            <textarea name="address" class="input-box" required placeholder="Nama jalan, gedung, nomor rumah, RT/RW">{{ old('address') }}</textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Kota / Kabupaten <span class="req">*</span></label>
+                            <input type="text" name="city" value="{{ old('city') }}" class="input-box" required placeholder="Contoh: Cijeungjing Selatan">
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Provinsi <span class="req">*</span></label>
+                            <input type="text" name="province" value="{{ old('province') }}" class="input-box" required placeholder="Contoh: Jawa Barat">
+                        </div>
+
+                        <div class="field-group full-width">
+                            <label class="field-label">Kode Pos <span class="req">*</span></label>
+                            <input type="text" name="postal_code" value="{{ old('postal_code') }}" maxlength="6" class="input-box" required placeholder="12240">
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="button" class="btn-outline" onclick="goToStep(2)">&larr; Kembali</button>
                         <button type="submit" class="btn-red">
-                            <i class="fa-solid fa-check-double mr-2"></i>
-                            SIMPAN & MULAI ORDER
+                            <i class="fa-solid fa-check"></i>
+                            <span>Simpan & Selesai</span>
                         </button>
                     </div>
-                </div>
-
-                <!-- NAVIGATION (Steps 1 & 2 have next button at bottom) -->
-                <div id="stepNavNext" class="pt-6 flex justify-end border-t border-white/5 mt-6">
-                    <button type="button" onclick="nextStep()" class="btn-red">
-                        LANJUT <i class="fa-solid fa-arrow-right ml-2"></i>
-                    </button>
                 </div>
 
             </form>
         </div>
-
-        <!-- PRIVACY NOTE -->
-        <p class="text-center text-[10px] font-mono text-neutral-600 mt-6">
-            <i class="fa-solid fa-lock mr-1 text-neutral-700"></i>
-            Data Anda dienkripsi dan hanya digunakan untuk keperluan proses pembelian kendaraan & kewajiban perpajakan di Indonesia.
-        </p>
     </div>
 
     <script>
-        let currentStep = 1;
-        const totalSteps = 3;
+        function goToStep(step) {
+            document.getElementById('step-section-1').style.display = step === 1 ? 'block' : 'none';
+            document.getElementById('step-section-2').style.display = step === 2 ? 'block' : 'none';
+            document.getElementById('step-section-3').style.display = step === 3 ? 'block' : 'none';
 
-        const steps = {
-            1: { section: 'section-1', circle: 'step1-circle', progress: '33%' },
-            2: { section: 'section-2', circle: 'step2-circle', progress: '66%' },
-            3: { section: 'section-3', circle: 'step3-circle', progress: '100%' },
-        };
-
-        const stepNavNext = document.getElementById('stepNavNext');
-
-        function showStep(step) {
-            // Hide all sections
-            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
-            // Show target section
-            document.getElementById(steps[step].section).classList.add('active');
-
-            // Update circles
-            for (let i = 1; i <= totalSteps; i++) {
-                const circle = document.getElementById(`step${i}-circle`);
-                circle.className = 'step-indicator w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs font-bold font-mono';
-                if (i < step) {
-                    circle.classList.add('step-done');
-                    circle.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i>';
-                } else if (i === step) {
-                    circle.classList.add('step-active');
-                    circle.textContent = i;
-                } else {
-                    circle.classList.add('border-white/20', 'text-neutral-500');
-                    circle.textContent = i;
+            for (let i = 1; i <= 3; i++) {
+                const tab = document.getElementById('tab-' + i);
+                tab.className = 'step-item';
+                if (i === step) {
+                    tab.classList.add('active');
+                } else if (i < step) {
+                    tab.classList.add('done');
                 }
             }
-
-            // Update progress bar
-            document.getElementById('progressBar').style.width = steps[step].progress;
-
-            // Hide "next" nav on last step (it has its own submit row)
-            stepNavNext.style.display = step === totalSteps ? 'none' : 'flex';
-
-            currentStep = step;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        function nextStep() {
-            if (currentStep < totalSteps) {
-                showStep(currentStep + 1);
-            }
-        }
-
-        function prevStep() {
-            if (currentStep > 1) {
-                showStep(currentStep - 1);
-            }
-        }
-
-        // If there are validation errors, show the correct step based on error fields
-        @if ($errors->any())
-            @if ($errors->hasAny(['name', 'phone']))
-                showStep(1);
-            @elseif ($errors->hasAny(['nik', 'npwp']))
-                showStep(2);
-            @else
-                showStep(3);
-            @endif
-        @endif
-
-        // Initialize
-        showStep(1);
     </script>
+
 </body>
 </html>
+
