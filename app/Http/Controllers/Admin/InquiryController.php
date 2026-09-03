@@ -68,28 +68,41 @@ class InquiryController extends Controller
     public function sendMessage(Request $request, Inquiry $inquiry): JsonResponse
     {
         $request->validate([
-            'message' => ['required', 'string', 'max:3000'],
+            'message'    => ['nullable', 'string', 'max:3000'],
+            'attachment' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
         ]);
 
+        if (! $request->filled('message') && ! $request->hasFile('attachment')) {
+            return response()->json(['message' => 'Pesan atau lampiran berkas harus diisi.'], 422);
+        }
+
+        $attachmentPath = null;
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('chat_attachments', 'public');
+        }
+
         $message = ConsultationMessage::create([
-            'inquiry_id' => $inquiry->id,
+            'inquiry_id'  => $inquiry->id,
             'sender_type' => 'rm',
             'sender_name' => auth()->user()->name,
-            'message' => $request->input('message'),
-            'is_read' => false,
+            'message'     => $request->input('message') ?? '',
+            'attachment'  => $attachmentPath,
+            'is_read'     => false,
         ]);
 
         // Activate consultation status if needed
         if ($inquiry->status === 'inquiry_received') {
             $inquiry->update([
-                'status' => 'consultation_active',
+                'status'           => 'consultation_active',
                 'assigned_rm_name' => auth()->user()->name,
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => $message,
+            'message' => array_merge($message->toArray(), [
+                'attachment_url' => $message->attachment ? asset('storage/' . $message->attachment) : null,
+            ]),
         ]);
     }
 
@@ -103,7 +116,12 @@ class InquiryController extends Controller
         $messages = ConsultationMessage::where('inquiry_id', $inquiry->id)
             ->where('id', '>', $afterId)
             ->orderBy('created_at')
-            ->get(['id', 'sender_type', 'sender_name', 'message', 'created_at']);
+            ->get(['id', 'sender_type', 'sender_name', 'message', 'attachment', 'created_at'])
+            ->map(function ($msg) {
+                $msg->attachment_url = $msg->attachment ? asset('storage/' . $msg->attachment) : null;
+
+                return $msg;
+            });
 
         ConsultationMessage::where('inquiry_id', $inquiry->id)
             ->where('sender_type', 'buyer')
