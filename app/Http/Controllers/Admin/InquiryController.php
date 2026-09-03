@@ -50,11 +50,11 @@ class InquiryController extends Controller
     public function updateStatus(Request $request, Inquiry $inquiry): RedirectResponse
     {
         $request->validate([
-            'status' => ['required', 'string', 'in:' . implode(',', array_keys(Inquiry::statusLabels()))],
+            'status' => ['required', 'string', 'in:'.implode(',', array_keys(Inquiry::statusLabels()))],
         ]);
 
         $inquiry->update([
-            'status'           => $request->input('status'),
+            'status' => $request->input('status'),
             'assigned_rm_name' => auth()->user()->name,
         ]);
 
@@ -72,17 +72,17 @@ class InquiryController extends Controller
         ]);
 
         $message = ConsultationMessage::create([
-            'inquiry_id'  => $inquiry->id,
+            'inquiry_id' => $inquiry->id,
             'sender_type' => 'rm',
             'sender_name' => auth()->user()->name,
-            'message'     => $request->input('message'),
-            'is_read'     => false,
+            'message' => $request->input('message'),
+            'is_read' => false,
         ]);
 
         // Activate consultation status if needed
         if ($inquiry->status === 'inquiry_received') {
             $inquiry->update([
-                'status'           => 'consultation_active',
+                'status' => 'consultation_active',
                 'assigned_rm_name' => auth()->user()->name,
             ]);
         }
@@ -113,5 +113,15 @@ class InquiryController extends Controller
         return response()->json([
             'messages' => $messages,
         ]);
+    }
+
+    /**
+     * View / Download official SPA contract document (RM side).
+     */
+    public function downloadContract(Inquiry $inquiry)
+    {
+        abort_if(! $inquiry->buyer_signed, 404, 'Dokumen kontrak belum ditandatangani pembeli.');
+
+        return view('portal.contract_document', compact('inquiry'));
     }
 }

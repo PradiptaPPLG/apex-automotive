@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/portal/inquiry/{inquiry}/message', [ConsultationController::class, 'store'])->name('portal.message.store');
     Route::get('/portal/inquiry/{inquiry}/poll', [ConsultationController::class, 'poll'])->name('portal.message.poll');
     Route::post('/portal/inquiry/{inquiry}/sign-contract', [PortalController::class, 'signContract'])->name('portal.contract.sign');
+    Route::get('/portal/inquiry/{inquiry}/download-contract', [PortalController::class, 'downloadContract'])->name('portal.contract.download');
 });
 
 // ──────────────────────────────────────────────
@@ -63,4 +64,5 @@ Route::middleware(['auth', 'rm'])->prefix('admin')->name('admin.')->group(functi
     Route::patch('/inquiries/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiries.status');
     Route::post('/inquiries/{inquiry}/message', [AdminInquiryController::class, 'sendMessage'])->name('inquiries.message');
     Route::get('/inquiries/{inquiry}/poll', [AdminInquiryController::class, 'poll'])->name('inquiries.poll');
+    Route::get('/inquiries/{inquiry}/download-contract', [AdminInquiryController::class, 'downloadContract'])->name('inquiries.contract.download');
 });

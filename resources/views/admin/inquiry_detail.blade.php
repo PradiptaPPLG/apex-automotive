@@ -207,6 +207,18 @@
                     </div>
                 @endif
 
+                @if($inquiry->buyer_signed)
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px; margin-bottom: 16px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #4ade80; font-family: monospace; text-transform: uppercase; margin-bottom: 4px;">
+                            <i class="fa-solid fa-file-signature text-green-400"></i> Kontrak Jual Beli (SPA) E-Sign
+                        </div>
+                        <p style="font-size: 10px; color: #9ca3af; font-family: monospace; margin-bottom: 8px;">Ditandatangani oleh Pembeli: {{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</p>
+                        <a href="{{ route('admin.inquiries.contract.download', $inquiry) }}" target="_blank" style="display: block; text-align: center; padding: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; font-size: 10px; font-family: monospace; font-weight: 700; text-decoration: none; border-radius: 2px;">
+                            <i class="fa-solid fa-print text-red-500 mr-1"></i> CETAK / DOKUMEN RESMI SPA
+                        </a>
+                    </div>
+                @endif
+
                 {{-- Status Update Form --}}
                 <div>
                     <p class="section-label">Update Status</p>

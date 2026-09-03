@@ -71,4 +71,15 @@ class PortalController extends Controller
         return redirect()->route('portal.consultation', $inquiry)
             ->with('success', 'Tanda tangan digital & e-Meterai berhasil dibubuhkan pada dokumen SPA!');
     }
+
+    /**
+     * View / Print / Download official SPA contract document for buyer.
+     */
+    public function downloadContract(Inquiry $inquiry)
+    {
+        abort_if($inquiry->user_id !== auth()->id(), 403);
+        abort_if(! $inquiry->buyer_signed, 404, 'Dokumen kontrak belum ditandatangani.');
+
+        return view('portal.contract_document', compact('inquiry'));
+    }
 }

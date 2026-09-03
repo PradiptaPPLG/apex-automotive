@@ -494,9 +494,13 @@
                         <p style="font-size: 11px; color: #9ca3af; margin-bottom: 10px;">
                             Ditandatangani pada: <span style="color: #e5e7eb;">{{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</span>
                         </p>
-                        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px;">
+                        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; margin-bottom: 12px;">
                             <i class="fa-solid fa-stamp"></i> e-Meterai Sah
                         </div>
+                        <a href="{{ route('portal.contract.download', $inquiry) }}" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
+                            <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i>
+                            <span>Lihat / Cetak Dokumen SPA</span>
+                        </a>
                     </div>
                 @else
                     <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
