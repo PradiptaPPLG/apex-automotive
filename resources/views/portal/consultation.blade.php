@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -188,9 +190,12 @@
             font-size: 14px;
             line-height: 1.55;
             border: 1px solid;
-            white-space: pre-wrap;
             word-break: break-word;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
+        .message-bubble .msg-text { white-space: pre-wrap; }
         .message-group.buyer .message-bubble {
             background: rgba(220, 38, 38, 0.15);
             border-color: rgba(220, 38, 38, 0.3);
@@ -268,6 +273,13 @@
             align-items: center;
         }
         .attach-btn:hover { color: #e5e7eb; border-color: rgba(255,255,255,0.25); }
+        .loc-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #6b7280; padding: 0 14px; cursor: pointer; flex-shrink: 0; align-self: stretch; display: flex; align-items: center; transition: color 0.2s, border-color 0.2s; }
+        .loc-btn:hover { color: #22d3ee; border-color: rgba(34,211,238,0.35); }
+        .location-card { background: rgba(34,211,238,0.05); border: 1px solid rgba(34,211,238,0.2); padding: 8px; display: flex; flex-direction: column; gap: 6px; max-width: 260px; }
+        .loc-map-render { width: 244px; height: 150px; }
+        .loc-open-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-family: 'Space Mono', monospace; color: #22d3ee; text-decoration: none; letter-spacing: 0.05em; }
+        .loc-open-btn:hover { text-decoration: underline; }
+        .loc-label { font-family: 'Space Mono', monospace; font-size: 9px; color: #22d3ee; letter-spacing: 0.12em; text-transform: uppercase; }
         .attachment-preview {
             display: none;
             align-items: center;
@@ -310,12 +322,12 @@
             color: #6b7280;
             font-style: italic;
         }
-        /* Dark scrollbar */
+        /* Dark scrollbar — track black, thumb red */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-        * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+        ::-webkit-scrollbar-track { background: #080810; }
+        ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b91c1c; }
+        * { scrollbar-width: thin; scrollbar-color: #dc2626 #080810; }
     </style>
 </head>
 <body>
@@ -693,6 +705,7 @@
                     </div>
                 @else
                     @foreach($messages as $msg)
+                        @php $isLoc = $msg->message && str_starts_with($msg->message, '__LOCATION__:'); @endphp
                         <div class="message-group {{ $msg->sender_type }}" data-id="{{ $msg->id }}">
                             <span class="message-sender">
                                 @if($msg->sender_type === 'rm')
@@ -700,7 +713,35 @@
                                 @endif
                                 {{ $msg->sender_name }}
                             </span>
-                            <div class="message-bubble">{{ $msg->message }}</div>
+                            <div class="message-bubble">
+                                @if($isLoc)
+                                    @php
+                                        [$lat,$lng] = explode(',', str_replace('__LOCATION__:','',$msg->message));
+                                        $mapId = 'loc-map-'.$msg->id;
+                                    @endphp
+                                    <div class="location-card" data-location="{{ trim($lat) }},{{ trim($lng) }}" data-mapid="{{ $mapId }}">
+                                        <div class="loc-label"><i class="fa-solid fa-location-dot"></i> LOKASI DIKIRIM</div>
+                                        <div id="{{ $mapId }}" class="loc-map-render"></div>
+                                        <a href="https://www.google.com/maps?q={{ trim($lat) }},{{ trim($lng) }}" target="_blank" class="loc-open-btn">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Google Maps
+                                        </a>
+                                    </div>
+                                @else
+                                    @if($msg->message)<span class="msg-text">{{ $msg->message }}</span>@endif
+                                    @if($msg->attachment)
+                                        @php $attachPath = str_replace('\\', '/', $msg->attachment); $ext = strtolower(pathinfo($attachPath, PATHINFO_EXTENSION)); @endphp
+                                        @if(in_array($ext, ['jpg','jpeg','png','webp','gif']))
+                                            <a href="{{ asset('storage/'.$attachPath) }}" target="_blank">
+                                                <img src="{{ asset('storage/'.$attachPath) }}" style="max-width:240px; max-height:180px; border-radius:4px; border:1px solid rgba(255,255,255,0.2); display:block;">
+                                            </a>
+                                        @else
+                                            <a href="{{ asset('storage/'.$attachPath) }}" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:6px 12px; color:#60a5fa; text-decoration:underline; font-size:11px; font-family:monospace;">
+                                                <i class="fa-solid fa-file-pdf"></i> Lihat File Lampiran
+                                            </a>
+                                        @endif
+                                    @endif
+                                @endif
+                            </div>
                             <span class="message-time">{{ $msg->created_at->format('d M, H:i') }}</span>
                         </div>
                     @endforeach
@@ -716,6 +757,9 @@
                     <input type="file" id="fileInput" accept="image/*,application/pdf" style="display: none;" onchange="handleFileSelect(this)">
                     <button type="button" class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Lampirkan Foto / PDF">
                         <i class="fa-solid fa-paperclip" style="font-size: 15px;"></i>
+                    </button>
+                    <button type="button" class="loc-btn" onclick="openLocationModal()" title="Kirim Lokasi">
+                        <i class="fa-solid fa-location-dot" style="font-size: 15px;"></i>
                     </button>
                     <textarea
                         id="messageInput"
@@ -764,31 +808,37 @@
             const group = document.createElement('div');
             group.className = `message-group ${msg.sender_type}`;
             group.dataset.id = msg.id;
-
-            const rmIcon = msg.sender_type === 'rm'
-                ? '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> '
-                : '';
-
+            const rmIcon = msg.sender_type === 'rm' ? '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> ' : '';
             const time = new Date(msg.created_at).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
-
-            let attachmentHtml = '';
-            const fileUrl = msg.attachment_url || (msg.attachment ? `/storage/${msg.attachment}` : null);
-            if (fileUrl) {
-                const isImg = fileUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i);
-                if (isImg) {
-                    attachmentHtml = `<div style="margin-top:6px;"><a href="${fileUrl}" target="_blank"><img src="${fileUrl}" style="max-width:240px; max-height:180px; border-radius:4px; border:1px solid rgba(255,255,255,0.2);"></a></div>`;
-                } else {
-                    attachmentHtml = `<div style="margin-top:6px;"><a href="${fileUrl}" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:2px; color:#60a5fa; text-decoration:underline; font-size:11px; font-family:monospace;"><i class="fa-solid fa-file-pdf"></i> Lihat File Lampiran</a></div>`;
+            let contentHtml = '';
+            if (msg.message && msg.message.startsWith('__LOCATION__:')) {
+                const parts = msg.message.replace('__LOCATION__:', '').split(',');
+                const lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
+                const mapDivId = `loc-map-${msg.id}`;
+                contentHtml = `
+                    <div class="location-card" data-location="${lat},${lng}" data-mapid="${mapDivId}">
+                        <div class="loc-label"><i class="fa-solid fa-location-dot"></i> LOKASI DIKIRIM</div>
+                        <div id="${mapDivId}" class="loc-map-render"></div>
+                        <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" class="loc-open-btn">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Google Maps
+                        </a>
+                    </div>`;
+            } else {
+                const fileUrl = msg.attachment_url || (msg.attachment ? `/storage/${msg.attachment}` : null);
+                let attachHtml = '';
+                if (fileUrl) {
+                    const isImg = fileUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i);
+                    attachHtml = isImg
+                        ? `<a href="${fileUrl}" target="_blank"><img src="${fileUrl}" style="max-width:240px;max-height:180px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);display:block;"></a>`
+                        : `<a href="${fileUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:6px 12px;color:#60a5fa;text-decoration:underline;font-size:11px;font-family:monospace;"><i class="fa-solid fa-file-pdf"></i> Lihat File Lampiran</a>`;
                 }
+                const msgText = msg.message ? `<span class="msg-text">${msg.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</span>` : '';
+                contentHtml = msgText + attachHtml;
             }
-
-            const messageText = msg.message ? msg.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>') : '';
-
             group.innerHTML = `
                 <span class="message-sender">${rmIcon}${msg.sender_name}</span>
-                <div class="message-bubble">${messageText}${attachmentHtml}</div>
-                <span class="message-time">${time}</span>
-            `;
+                <div class="message-bubble">${contentHtml}</div>
+                <span class="message-time">${time}</span>`;
             return group;
         }
 
@@ -813,6 +863,7 @@
                         }
                     });
                     scrollBottom();
+                    setTimeout(initLocationMaps, 120);
                 }
 
                 // Update status badge
@@ -956,8 +1007,128 @@
             }
         }
 
+        // === LOCATION FEATURE ===
+        let locationMap = null, locationMarker = null, selectedLat = null, selectedLng = null;
+        const initializedMaps = new Set();
+
+        function initLocationMaps() {
+            document.querySelectorAll('[data-location]').forEach(el => {
+                const mapId = el.dataset.mapid;
+                if (!mapId || initializedMaps.has(mapId)) return;
+                const mapEl = document.getElementById(mapId);
+                if (!mapEl || mapEl.offsetWidth === 0) return;
+                initializedMaps.add(mapId);
+                const [lat, lng] = el.dataset.location.split(',').map(Number);
+                try {
+                    const m = L.map(mapEl, { zoomControl: false, dragging: false, scrollWheelZoom: false, attributionControl: false });
+                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(m);
+                    m.setView([lat, lng], 16);
+                    L.marker([lat, lng]).addTo(m);
+                } catch(e) {}
+            });
+        }
+
+        function openLocationModal() {
+            document.getElementById('locationModal').style.display = 'flex';
+            if (!locationMap) {
+                setTimeout(() => {
+                    locationMap = L.map('locationPickerMap');
+                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                        attribution: 'Tiles &copy; Esri &mdash; Source: Esri', maxZoom: 19
+                    }).addTo(locationMap);
+                    locationMap.setView([-2.5, 118], 5);
+                    locationMap.on('click', (e) => setLocationPin(e.latlng.lat, e.latlng.lng));
+                }, 150);
+            } else { locationMap.invalidateSize(); }
+        }
+
+        function closeLocationModal() {
+            document.getElementById('locationModal').style.display = 'none';
+        }
+
+        function setLocationPin(lat, lng) {
+            selectedLat = lat; selectedLng = lng;
+            if (locationMarker) { locationMarker.setLatLng([lat, lng]); }
+            else { locationMarker = L.marker([lat, lng]).addTo(locationMap); }
+            locationMap.setView([lat, lng], 17);
+            document.getElementById('locationCoords').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            const btn = document.getElementById('sendLocationBtn');
+            btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+        }
+
+        function locateMe() {
+            const btn = document.getElementById('locateMeBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mencari...';
+            btn.disabled = true;
+            if (!navigator.geolocation) {
+                alert('Browser tidak mendukung GPS.');
+                btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA';
+                btn.disabled = false; return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA';
+                    btn.disabled = false;
+                    setLocationPin(pos.coords.latitude, pos.coords.longitude);
+                },
+                (err) => {
+                    btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA';
+                    btn.disabled = false;
+                    alert('Gagal mendapatkan lokasi: ' + err.message);
+                },
+                { enableHighAccuracy: true, timeout: 15000 }
+            );
+        }
+
+        async function sendLocationMessage() {
+            if (selectedLat === null) return;
+            closeLocationModal();
+            const formData = new FormData();
+            formData.append('message', `__LOCATION__:${selectedLat},${selectedLng}`);
+            try {
+                const res = await fetch(SEND_URL, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const container = document.getElementById('messagesContainer');
+                    const noMsg = container.querySelector('.no-messages');
+                    if (noMsg) noMsg.remove();
+                    container.insertBefore(renderMessage(data.message), document.getElementById('typingIndicator'));
+                    lastId = data.message.id;
+                    scrollBottom();
+                    setTimeout(initLocationMaps, 150);
+                }
+            } catch(e) { alert('Gagal mengirim lokasi.'); }
+        }
+
+        setTimeout(initLocationMaps, 400);
+
         // Poll every 3 seconds
         setInterval(pollMessages, 3000);
     </script>
+    <!-- LOCATION PICKER MODAL -->
+    <div id="locationModal" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.88); align-items:center; justify-content:center;">
+        <div style="background:#0d0d18; border:1px solid rgba(255,255,255,0.1); width:min(620px,95vw); overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.07);">
+                <span style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#e5e7eb;">
+                    <i class="fa-solid fa-location-dot" style="color:#dc2626; margin-right:8px;"></i>KIRIM LOKASI
+                </span>
+                <button onclick="closeLocationModal()" style="background:none; border:none; color:#6b7280; cursor:pointer; font-size:18px; padding:0; line-height:1;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="locationPickerMap" style="height:340px; width:100%;"></div>
+            <div style="padding:12px 20px; display:flex; gap:10px; align-items:center; border-top:1px solid rgba(255,255,255,0.07); background:#0d0d18; flex-wrap:wrap;">
+                <button id="locateMeBtn" onclick="locateMe()" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.18); color:#e5e7eb; padding:10px 16px; cursor:pointer; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; display:flex; align-items:center; gap:8px; flex-shrink:0; transition:border-color 0.2s;">
+                    <i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA
+                </button>
+                <span id="locationCoords" style="flex:1; font-size:11px; color:#6b7280; font-family:'Space Mono',monospace; min-width:120px;">Klik peta atau tekan tombol untuk memilih lokasi</span>
+                <button id="sendLocationBtn" onclick="sendLocationMessage()" disabled style="background:#dc2626; color:white; border:none; padding:10px 20px; cursor:not-allowed; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; display:flex; align-items:center; gap:8px; opacity:0.4; flex-shrink:0; transition:opacity 0.2s;">
+                    <i class="fa-solid fa-paper-plane"></i> KIRIM LOKASI
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

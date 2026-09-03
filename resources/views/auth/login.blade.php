@@ -20,15 +20,10 @@
             z-index: 1;
             overflow: hidden;
         }
-        .bg-img {
+        .bg-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            animation: bgZoom 20s ease-in-out infinite alternate;
-        }
-        @keyframes bgZoom {
-            0% { transform: scale(1.0); }
-            100% { transform: scale(1.08); }
         }
         .bg-overlay {
             position: absolute;
@@ -339,9 +334,11 @@
 </head>
 <body>
 
-    <!-- BACKGROUND IMAGE & OVERLAY -->
+    <!-- BACKGROUND VIDEO & OVERLAY -->
     <div class="bg-container">
-        <img src="{{ asset('images/carousell/carousell1.png') }}" alt="Apex Automotive Showroom" class="bg-img">
+        <video class="bg-video" autoplay muted loop playsinline preload="auto">
+            <source src="{{ asset('intro_login.mp4') }}" type="video/mp4">
+        </video>
         <div class="bg-overlay"></div>
     </div>
 
