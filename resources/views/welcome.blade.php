@@ -208,23 +208,70 @@
                 <a href="#dealer-location" class="hover:text-red-600 dark:hover:text-red-500 transition-colors py-2 border-b-2 border-transparent hover:border-red-600">DEALER LOCATOR</a>
             </nav>
 
-            <!-- RIGHT ACTIONS (LUXURY PILL THEME TOGGLE + BOOK BUTTON) -->
-            <div class="flex items-center space-x-5">
-                
+            <!-- RIGHT ACTIONS (THEME TOGGLE + AUTH BUTTON) -->
+            <div class="flex items-center space-x-4">
+
                 <!-- PREMIUM CAPSULE THEME TOGGLE SWITCH -->
                 <button onclick="triggerPixelWaveTransition()" id="themeToggleBtn" title="Toggle Light / Dark Mode" class="relative flex items-center justify-between w-16 h-8 rounded-full p-1 border border-neutral-300 dark:border-white/20 bg-neutral-200/90 dark:bg-neutral-900/90 shadow-inner cursor-pointer transition-all duration-300 group hover:border-red-500">
                     <span class="w-6 h-6 flex items-center justify-center text-amber-500 text-xs z-0"><i class="fa-solid fa-sun"></i></span>
                     <span class="w-6 h-6 flex items-center justify-center text-indigo-400 text-xs z-0"><i class="fa-solid fa-moon"></i></span>
-                    
-                    <!-- Dynamic Sliding Capsule Knob -->
                     <div id="toggleThumb" class="absolute top-1 left-1 w-6 h-6 rounded-full bg-gradient-to-br from-red-600 to-red-800 text-white shadow-md flex items-center justify-center transition-all duration-300 z-10 group-hover:scale-105">
                         <i class="fa-solid fa-bolt text-[9px]"></i>
                     </div>
                 </button>
 
-                <button onclick="toggleModal('inquireModal')" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-xs tracking-widest font-semibold uppercase bg-red-600 hover:bg-red-700 text-white rounded-none shadow-lg shadow-red-600/25 hover:shadow-red-600/50 transition-all duration-300 transform hover:-translate-y-0.5">
-                    <i class="fa-solid fa-calendar-check mr-2"></i> BOOK PRIVATE VIEWING
-                </button>
+                @auth
+                    {{-- AUTHENTICATED: Show user name + dropdown --}}
+                    <div class="relative group hidden sm:block" id="userDropdownWrapper">
+                        <button class="flex items-center space-x-2 px-3 py-2 border border-neutral-300 dark:border-white/15 bg-neutral-100 dark:bg-white/5 hover:border-red-600 transition-all duration-200 text-xs font-mono font-semibold text-neutral-800 dark:text-neutral-200">
+                            <span class="inline-flex w-6 h-6 items-center justify-center rounded-full bg-red-600 text-white text-[10px] font-extrabold uppercase">
+                                {{ substr(auth()->user()->name, 0, 1) }}
+                            </span>
+                            <span class="hidden md:inline max-w-[120px] truncate uppercase tracking-wider">{{ auth()->user()->name }}</span>
+                            <i class="fa-solid fa-chevron-down text-[9px] text-neutral-500 group-hover:text-red-600 transition-colors"></i>
+                        </button>
+                        {{-- Dropdown --}}
+                        <div class="absolute right-0 top-full mt-1 w-52 bg-neutral-900 dark:bg-neutral-950 border border-white/10 shadow-2xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0">
+                            <div class="p-3 border-b border-white/10">
+                                <p class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">VIP Buyer</p>
+                                <p class="text-xs font-semibold text-white truncate mt-0.5">{{ auth()->user()->email }}</p>
+                                @if (! auth()->user()->hasCompletedProfile())
+                                    <a href="{{ route('profile.complete') }}" class="inline-flex items-center mt-2 text-[10px] font-mono text-amber-400 hover:text-amber-300 font-bold tracking-wider">
+                                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> LENGKAPI PROFIL
+                                    </a>
+                                @endif
+                            </div>
+                            <div class="py-1">
+                                @if (auth()->user()->hasCompletedProfile())
+                                    <a href="{{ route('profile.complete') }}" class="flex items-center space-x-2.5 px-4 py-2.5 text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                                        <i class="fa-solid fa-user-pen text-red-500 w-4"></i>
+                                        <span>Edit Profil</span>
+                                    </a>
+                                @endif
+                                <button onclick="toggleModal('inquireModal')" class="flex w-full items-center space-x-2.5 px-4 py-2.5 text-[11px] font-mono text-neutral-300 hover:text-white hover:bg-white/5 transition-colors">
+                                    <i class="fa-solid fa-calendar-check text-red-500 w-4"></i>
+                                    <span>Book Private Viewing</span>
+                                </button>
+                                <div class="border-t border-white/5 my-1"></div>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="flex w-full items-center space-x-2.5 px-4 py-2.5 text-[11px] font-mono text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-colors">
+                                        <i class="fa-solid fa-arrow-right-from-bracket w-4"></i>
+                                        <span>KELUAR</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    {{-- GUEST: Show login button --}}
+                    <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-xs tracking-widest font-bold uppercase border border-red-600 text-red-600 dark:text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> MASUK / DAFTAR
+                    </a>
+                    <button onclick="toggleModal('inquireModal')" class="hidden lg:inline-flex items-center justify-center px-5 py-2.5 text-xs tracking-widest font-semibold uppercase bg-red-600 hover:bg-red-700 text-white rounded-none shadow-lg shadow-red-600/25 hover:shadow-red-600/50 transition-all duration-300 transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-calendar-check mr-2"></i> BOOK VIEWING
+                    </button>
+                @endauth
             </div>
         </div>
     </header>
