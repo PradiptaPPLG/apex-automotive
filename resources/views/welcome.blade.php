@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Jakarta. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, and Porsche.">
+    <meta name="description" content="Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Jakarta. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, and Koenigsegg.">
     <title>APEX AUTOMOTIVE | Official Luxury Showroom & Hypercar Dealer</title>
 
     <!-- Google Fonts -->
@@ -97,6 +97,9 @@
             .pixel-tile.active {
                 transform: scale(1.06);
                 opacity: 1;
+            }
+            .car-main-img {
+                transition: opacity 0.25s ease, transform 0.5s ease;
             }
         </style>
     @endif
@@ -342,7 +345,7 @@
 
 
         <!-- ==========================================
-             SECTION 1: CERTIFIED SUGGESTIONS (CATALOG & FILTER)
+             SECTION 1: CERTIFIED SUGGESTIONS (CATALOG & COLOR TOGGLES)
              PURE WHITE BACKGROUND IN LIGHT MODE
              ========================================== -->
         <section id="certified-suggestions" class="py-20 bg-white dark:bg-[#0a0a0c] text-neutral-900 dark:text-neutral-100 border-b border-neutral-200 dark:border-white/5 relative transition-colors duration-300">
@@ -371,12 +374,13 @@
                         <div class="space-y-1.5">
                             <label class="block text-[11px] font-mono tracking-widest uppercase text-neutral-700 dark:text-neutral-400 font-semibold">MODEL / MAKE</label>
                             <select id="filterModel" class="w-full bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-white text-xs border border-neutral-300 dark:border-white/15 px-3 py-2.5 focus:border-red-600 focus:outline-none rounded-none font-medium">
-                                <option value="ALL">ALL MODELS</option>
-                                <option value="Ferrari">FERRARI</option>
-                                <option value="Lamborghini">LAMBORGHINI</option>
+                                <option value="ALL">ALL BRANDS</option>
                                 <option value="BMW">BMW MOTORSPORT</option>
+                                <option value="Lamborghini">LAMBORGHINI</option>
                                 <option value="McLaren">MCLAREN</option>
                                 <option value="Porsche">PORSCHE</option>
+                                <option value="Audi">AUDI</option>
+                                <option value="Koenigsegg">KOENIGSEGG</option>
                             </select>
                         </div>
 
@@ -411,151 +415,377 @@
                     </form>
                 </div>
 
-                <!-- CAR CATALOG GRID -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="carCatalog">
+                <!-- CAR CATALOG GRID WITH ROUND COLOR TOGGLES -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="carCatalog">
                     
-                    <!-- CAR CARD 1 -->
-                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Ferrari" data-price="25500" data-condition="PRE-OWNED">
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80" alt="Ferrari SF90 Stradale" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest">
-                                PRE-OWNED
+                    <!-- CAR CARD 1: BMW M4 COMPETITION -->
+                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="BMW" data-price="8500" data-condition="NEW">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/bmwm4competition_sao_paulo_yellow.png') }}" alt="BMW M4 Competition" class="car-main-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                BRAND NEW
                             </div>
-                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-0.5 border border-white/10">
-                                2024
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-1 border border-white/10 uppercase tracking-wider">
+                                COLOR: <span class="car-color-badge text-amber-400 font-bold">SAO PAULO YELLOW</span>
                             </div>
                         </div>
-                        <div class="p-5 space-y-4 bg-white dark:bg-transparent">
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
                             <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • FERRARI</span>
-                                <h4 class="text-base font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    SF90 STRADALE ASSETTO
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • BMW MOTORSPORT</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    M4 COMPETITION COUPE
                                 </h4>
                             </div>
-                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-100 dark:bg-neutral-950/60 px-2">
+
+                            <!-- ROUND COLOR TOGGLE BUTTONS -->
+                            <div class="space-y-1.5 pt-1">
+                                <label class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 block font-semibold">SELECT EXTERIOR COLOR:</label>
+                                <div class="flex items-center space-x-3">
+                                    <!-- SAO PAULO YELLOW -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/bmwm4competition_sao_paulo_yellow.png') }}', 'SAO PAULO YELLOW')" class="color-dot w-6 h-6 rounded-full bg-[#d6e531] border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-md cursor-pointer transition-all hover:scale-125" title="Sao Paulo Yellow"></button>
+
+                                    <!-- VOODOO BLUE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/bmwm4competition_voodoo_blue.png') }}', 'VOODOO BLUE')" class="color-dot w-6 h-6 rounded-full bg-[#1e56a0] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Voodoo Blue"></button>
+
+                                    <!-- ALPINE WHITE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/bmwm4competition_alpine_white.png') }}', 'ALPINE WHITE')" class="color-dot w-6 h-6 rounded-full bg-[#f5f5f7] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Alpine White"></button>
+
+                                    <!-- BLACK SAPPHIRE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/bmwm4competition_black_shapphire_metallic.png') }}', 'BLACK SAPPHIRE METALLIC')" class="color-dot w-6 h-6 rounded-full bg-[#1c1c1e] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Black Sapphire Metallic"></button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
                                 <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
-                                <div class="text-base font-bold font-mono text-red-600 dark:text-red-500">IDR 25,500,000,000</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 8,500,000,000</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
-                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 2,400 KM</div>
-                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 1,000 HP</div>
+                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 510 HP</div>
+                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 0-100: 3.5S</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 pt-2">
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     EXPLORE
                                 </button>
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     INQUIRE
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CAR CARD 2 -->
+
+                    <!-- CAR CARD 2: LAMBORGHINI REVUELTO -->
                     <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Lamborghini" data-price="22000" data-condition="NEW">
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80" alt="Lamborghini Revuelto" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/lamborghini_revuelto_arancio_apodis.png') }}" alt="Lamborghini Revuelto" class="car-main-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute top-3 left-3 bg-neutral-900/90 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest">
                                 BRAND NEW
                             </div>
-                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-0.5 border border-white/10">
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
                                 2025
                             </div>
+                            <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-1 border border-white/10 uppercase tracking-wider">
+                                COLOR: <span class="car-color-badge text-orange-400 font-bold">ARANCIO APODIS</span>
+                            </div>
                         </div>
-                        <div class="p-5 space-y-4 bg-white dark:bg-transparent">
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
                             <div>
                                 <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • LAMBORGHINI</span>
-                                <h4 class="text-base font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
                                     REVUELTO V12 HYBRID
                                 </h4>
                             </div>
-                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-100 dark:bg-neutral-950/60 px-2">
+
+                            <!-- ROUND COLOR TOGGLE BUTTONS -->
+                            <div class="space-y-1.5 pt-1">
+                                <label class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 block font-semibold">SELECT EXTERIOR COLOR:</label>
+                                <div class="flex items-center space-x-3">
+                                    <!-- ARANCIO APODIS (ORANGE) -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/lamborghini_revuelto_arancio_apodis.png') }}', 'ARANCIO APODIS')" class="color-dot w-6 h-6 rounded-full bg-[#ff5722] border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-md cursor-pointer transition-all hover:scale-125" title="Arancio Apodis"></button>
+
+                                    <!-- VERDE CITRA (GREEN) -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/lamborghini_revuelto_verde_citra.png') }}', 'VERDE CITRA')" class="color-dot w-6 h-6 rounded-full bg-[#76ff03] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Verde Citra"></button>
+
+                                    <!-- BRONZO ZANTE (BRONZE) -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/lamborghini_revuelto_bronzo_zante.png') }}', 'BRONZO ZANTE')" class="color-dot w-6 h-6 rounded-full bg-[#8d6e63] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Bronzo Zante"></button>
+
+                                    <!-- BIANCO MONOCERUS (WHITE) -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/lamborghini_revuelto_bianco_monocerus.png') }}', 'BIANCO MONOCERUS')" class="color-dot w-6 h-6 rounded-full bg-[#ffffff] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Bianco Monocerus"></button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
                                 <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
-                                <div class="text-base font-bold font-mono text-red-600 dark:text-red-500">IDR 22,000,000,000</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 22,000,000,000</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
-                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 150 KM</div>
-                                <div><i class="fa-solid fa-fire mr-1 text-red-600"></i> 1,015 HP</div>
+                                <div><i class="fa-solid fa-fire mr-1 text-red-600"></i> 1,015 HP V12</div>
+                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 0-100: 2.5S</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 pt-2">
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     EXPLORE
                                 </button>
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     INQUIRE
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CAR CARD 3 -->
-                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Porsche" data-price="10500" data-condition="CERTIFIED">
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80" alt="Porsche 911 GT3 RS" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest">
+
+                    <!-- CAR CARD 3: MCLAREN SENNA GTR -->
+                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="McLaren" data-price="28000" data-condition="CERTIFIED">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/mclaren_senna_gtr_volcano_yellow.png') }}" alt="McLaren Senna GTR" class="car-main-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
                                 CERTIFIED
                             </div>
-                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-0.5 border border-white/10">
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
                                 2024
                             </div>
+                            <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-1 border border-white/10 uppercase tracking-wider">
+                                COLOR: <span class="car-color-badge text-yellow-400 font-bold">VOLCANO YELLOW</span>
+                            </div>
                         </div>
-                        <div class="p-5 space-y-4 bg-white dark:bg-transparent">
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • MCLAREN</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    SENNA GTR EDITION
+                                </h4>
+                            </div>
+
+                            <!-- ROUND COLOR TOGGLE BUTTONS -->
+                            <div class="space-y-1.5 pt-1">
+                                <label class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 block font-semibold">SELECT EXTERIOR COLOR:</label>
+                                <div class="flex items-center space-x-3">
+                                    <!-- VOLCANO YELLOW -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/mclaren_senna_gtr_volcano_yellow.png') }}', 'VOLCANO YELLOW')" class="color-dot w-6 h-6 rounded-full bg-[#ffc107] border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-md cursor-pointer transition-all hover:scale-125" title="Volcano Yellow"></button>
+
+                                    <!-- PAPAYA SHARK -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/mclaren_senna_gtr_papaya_shark.png') }}', 'PAPAYA SHARK')" class="color-dot w-6 h-6 rounded-full bg-[#ff9800] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Papaya Shark"></button>
+
+                                    <!-- SILICA WHITE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/mclaren_senna_gtr_silica_white.png') }}', 'SILICA WHITE')" class="color-dot w-6 h-6 rounded-full bg-[#f5f5f7] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Silica White"></button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 28,000,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 825 HP V8</div>
+                                <div><i class="fa-solid fa-wind mr-1 text-red-600"></i> 800KG DOWNFORCE</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE
+                                </button>
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 4: PORSCHE 911 GT3 RS -->
+                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Porsche" data-price="11500" data-condition="CERTIFIED">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/porsche_rubystone_red.png') }}" alt="Porsche 911 GT3 RS" class="car-main-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                CERTIFIED
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2024
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-1 border border-white/10 uppercase tracking-wider">
+                                COLOR: <span class="car-color-badge text-pink-400 font-bold">RUBYSTONE RED</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
                             <div>
                                 <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • PORSCHE</span>
-                                <h4 class="text-base font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
                                     911 GT3 RS (992)
                                 </h4>
                             </div>
-                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-100 dark:bg-neutral-950/60 px-2">
+
+                            <!-- ROUND COLOR TOGGLE BUTTONS -->
+                            <div class="space-y-1.5 pt-1">
+                                <label class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 block font-semibold">SELECT EXTERIOR COLOR:</label>
+                                <div class="flex items-center space-x-3">
+                                    <!-- RUBYSTONE RED -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/porsche_rubystone_red.png') }}', 'RUBYSTONE RED')" class="color-dot w-6 h-6 rounded-full bg-[#d81b60] border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-md cursor-pointer transition-all hover:scale-125" title="Rubystone Red"></button>
+
+                                    <!-- RACING YELLOW -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/porsche_racing_yellow.png') }}', 'RACING YELLOW')" class="color-dot w-6 h-6 rounded-full bg-[#ffeb3b] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Racing Yellow"></button>
+
+                                    <!-- NATO OLIVE GREEN -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/porsche_nato_olive_green.png') }}', 'NATO OLIVE GREEN')" class="color-dot w-6 h-6 rounded-full bg-[#4b5320] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Nato Olive Green"></button>
+
+                                    <!-- ARCTIC GREY -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/porsche_artic_grey.png') }}', 'ARCTIC GREY')" class="color-dot w-6 h-6 rounded-full bg-[#78909c] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Arctic Grey"></button>
+
+                                    <!-- CARRARA WHITE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/porsche_carrara_white_metallic.png') }}', 'CARRARA WHITE')" class="color-dot w-6 h-6 rounded-full bg-[#ffffff] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Carrara White"></button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
                                 <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
-                                <div class="text-base font-bold font-mono text-red-600 dark:text-red-500">IDR 10,500,000,000</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 11,500,000,000</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
-                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 1,100 KM</div>
-                                <div><i class="fa-solid fa-gears mr-1 text-red-600"></i> 7-SPEED PDK</div>
+                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 525 HP FLAT-6</div>
+                                <div><i class="fa-solid fa-gears mr-1 text-red-600"></i> 9,000 RPM</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 pt-2">
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     EXPLORE
                                 </button>
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     INQUIRE
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CAR CARD 4 -->
-                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="McLaren" data-price="14800" data-condition="CERTIFIED">
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1621135802920-133df287f89c?auto=format&fit=crop&w=800&q=80" alt="McLaren 750S Spider" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest">
-                                CERTIFIED
+
+                    <!-- CAR CARD 5: AUDI R8 V10 PERFORMANCE -->
+                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Audi" data-price="7800" data-condition="PRE-OWNED">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/audi_r8_tango_red_metallic.png') }}" alt="Audi R8 V10 Performance" class="car-main-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                PRE-OWNED
                             </div>
-                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-0.5 border border-white/10">
-                                2023
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2024
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-1 border border-white/10 uppercase tracking-wider">
+                                COLOR: <span class="car-color-badge text-red-500 font-bold">TANGO RED METALLIC</span>
                             </div>
                         </div>
-                        <div class="p-5 space-y-4 bg-white dark:bg-transparent">
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
                             <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2023 • MCLAREN</span>
-                                <h4 class="text-base font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    750S SPIDER CARBON
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • AUDI</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    R8 V10 PERFORMANCE
                                 </h4>
                             </div>
-                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-100 dark:bg-neutral-950/60 px-2">
+
+                            <!-- ROUND COLOR TOGGLE BUTTONS -->
+                            <div class="space-y-1.5 pt-1">
+                                <label class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 block font-semibold">SELECT EXTERIOR COLOR:</label>
+                                <div class="flex items-center space-x-3">
+                                    <!-- TANGO RED -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/audi_r8_tango_red_metallic.png') }}', 'TANGO RED METALLIC')" class="color-dot w-6 h-6 rounded-full bg-[#d32f2f] border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-md cursor-pointer transition-all hover:scale-125" title="Tango Red"></button>
+
+                                    <!-- VEGAS YELLOW -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/audi_r8_vegas_yellow.png') }}', 'VEGAS YELLOW')" class="color-dot w-6 h-6 rounded-full bg-[#fbc02d] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Vegas Yellow"></button>
+
+                                    <!-- ARA BLUE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/audi_r8_ara_blue_crystal_effect.png') }}', 'ARA BLUE CRYSTAL')" class="color-dot w-6 h-6 rounded-full bg-[#0288d1] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Ara Blue Crystal"></button>
+
+                                    <!-- MYTHOS BLACK -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/audi_r8_mythos_black_mettalic.png') }}', 'MYTHOS BLACK METALLIC')" class="color-dot w-6 h-6 rounded-full bg-[#212121] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Mythos Black"></button>
+
+                                    <!-- IBIS WHITE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/audi_r8_ibis_white.png') }}', 'IBIS WHITE')" class="color-dot w-6 h-6 rounded-full bg-[#fafafa] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="Ibis White"></button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
                                 <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
-                                <div class="text-base font-bold font-mono text-red-600 dark:text-red-500">IDR 14,800,000,000</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 7,800,000,000</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
-                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 3,200 KM</div>
-                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 750 HP V8</div>
+                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 620 HP V10</div>
+                                <div><i class="fa-solid fa-road mr-1 text-red-600"></i> QUATTRO AWD</div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-2 pt-2">
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     EXPLORE
                                 </button>
-                                <button onclick="toggleModal('inquireModal')" class="w-full py-2 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 6: KOENIGSEGG JESKO ABSOLUT -->
+                    <div class="car-card glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Koenigsegg" data-price="45000" data-condition="NEW">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/koeningseg_jesko_absolut_crystal_white.png') }}" alt="Koenigsegg Jesko Absolut" class="car-main-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                HYPERCAR SPECIAL
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md text-neutral-300 text-[10px] font-mono px-2 py-1 border border-white/10 uppercase tracking-wider">
+                                COLOR: <span class="car-color-badge text-indigo-300 font-bold">CRYSTAL WHITE</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • KOENIGSEGG</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    JESKO ABSOLUT
+                                </h4>
+                            </div>
+
+                            <!-- ROUND COLOR TOGGLE BUTTONS -->
+                            <div class="space-y-1.5 pt-1">
+                                <label class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 block font-semibold">SELECT EXTERIOR COLOR:</label>
+                                <div class="flex items-center space-x-3">
+                                    <!-- CRYSTAL WHITE -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/koeningseg_jesko_absolut_crystal_white.png') }}', 'CRYSTAL WHITE')" class="color-dot w-6 h-6 rounded-full bg-[#ffffff] border-2 border-red-500 ring-2 ring-red-500 scale-110 shadow-md cursor-pointer transition-all hover:scale-125" title="Crystal White"></button>
+
+                                    <!-- K2 CARBON -->
+                                    <button type="button" onclick="changeCarColor(this, '{{ asset('images/brand/koeningseg_jesko_absolut_k2_carbon.png') }}', 'K2 CARBON')" class="color-dot w-6 h-6 rounded-full bg-[#2c3539] border-2 border-neutral-300 dark:border-white/30 shadow-md cursor-pointer transition-all hover:scale-125" title="K2 Carbon"></button>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 45,000,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-fire mr-1 text-red-600"></i> 1,600 HP V8</div>
+                                <div><i class="fa-solid fa-gauge-high mr-1 text-red-600"></i> 530+ KM/H</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE
+                                </button>
+                                <button onclick="toggleModal('inquireModal')" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     INQUIRE
                                 </button>
                             </div>
@@ -829,6 +1059,8 @@
                         <li><a href="#" class="hover:text-white transition-colors">McLaren Senna Hypercar</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Ferrari SF90 & 296 GTS</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Porsche 911 GT3 RS</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Audi R8 V10 Performance</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Koenigsegg Jesko Absolut</a></li>
                     </ul>
                 </div>
 
@@ -903,11 +1135,12 @@
                     <div>
                         <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">PREFERRED MODEL</label>
                         <select id="modalCarSelect" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none">
-                            <option value="BMW Motorsport">BMW Motorsport</option>
-                            <option value="Lamborghini Aventador SVJ">Lamborghini Aventador SVJ</option>
-                            <option value="McLaren Senna">McLaren Senna</option>
-                            <option value="Ferrari SF90 Stradale">Ferrari SF90 Stradale</option>
+                            <option value="BMW M4 Competition">BMW M4 Competition</option>
+                            <option value="Lamborghini Revuelto">Lamborghini Revuelto V12</option>
+                            <option value="McLaren Senna GTR">McLaren Senna GTR</option>
                             <option value="Porsche 911 GT3 RS">Porsche 911 GT3 RS</option>
+                            <option value="Audi R8 V10">Audi R8 V10 Performance</option>
+                            <option value="Koenigsegg Jesko Absolut">Koenigsegg Jesko Absolut</option>
                         </select>
                     </div>
                 </div>
@@ -956,7 +1189,43 @@
         }
 
 
-        // 1. PIXEL WAVE DARK/LIGHT MODE TRANSITION (Left to Right Wave)
+        // 1. CAR COLOR SWITCHER FUNCTION (FOR ROUND COLOR DOTS)
+        function changeCarColor(button, imagePath, colorName) {
+            const card = button.closest('.car-card');
+            if (!card) return;
+
+            const mainImg = card.querySelector('.car-main-img');
+            const colorBadge = card.querySelector('.car-color-badge');
+
+            // Smooth image cross-fade
+            if (mainImg) {
+                mainImg.style.opacity = '0.2';
+                mainImg.style.transform = 'scale(0.97)';
+                setTimeout(() => {
+                    mainImg.src = imagePath;
+                    mainImg.style.opacity = '1';
+                    mainImg.style.transform = 'scale(1)';
+                }, 150);
+            }
+
+            // Update Color Name Label
+            if (colorBadge) {
+                colorBadge.innerText = colorName;
+            }
+
+            // Update active ring indicator on round color dots
+            const dots = card.querySelectorAll('.color-dot');
+            dots.forEach(dot => {
+                dot.classList.remove('ring-2', 'ring-red-500', 'scale-110', 'border-red-500');
+                dot.classList.add('border-neutral-300', 'dark:border-white/30');
+            });
+
+            button.classList.remove('border-neutral-300', 'dark:border-white/30');
+            button.classList.add('ring-2', 'ring-red-500', 'scale-110', 'border-red-500');
+        }
+
+
+        // 2. PIXEL WAVE DARK/LIGHT MODE TRANSITION (Left to Right Wave)
         let isTransitioningTheme = false;
 
         function triggerPixelWaveTransition() {
@@ -1024,7 +1293,7 @@
         }
 
 
-        // 2. CAROUSEL ENGINE
+        // 3. CAROUSEL ENGINE
         let currentSlide = 0;
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.dot-indicator');
@@ -1091,7 +1360,7 @@
         startAutoSlide();
 
 
-        // 3. SCROLL ANIMATION OBSERVER
+        // 4. SCROLL ANIMATION OBSERVER
         const observerOptions = {
             threshold: 0.15,
             rootMargin: '0px 0px -50px 0px'
@@ -1110,7 +1379,7 @@
         });
 
 
-        // 4. CATALOG FILTER ENGINE
+        // 5. CATALOG FILTER ENGINE
         function applyFilters() {
             const selectedModel = document.getElementById('filterModel').value;
             const selectedPrice = document.getElementById('filterPrice').value;
@@ -1145,7 +1414,7 @@
         }
 
 
-        // 5. MODAL HANDLER
+        // 6. MODAL HANDLER
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
