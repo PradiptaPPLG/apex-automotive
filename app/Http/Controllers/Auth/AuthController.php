@@ -184,9 +184,10 @@ class AuthController extends Controller
             }
 
             return redirect()->intended('/');
-        } catch (\Exception $e) {
-            Log::error('Google Auth Failed: ' . $e->getMessage());
-            return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan akun Google. Silakan coba lagi.']);
+        } catch (\Throwable $e) {
+            Log::error('Google Auth Failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            Log::error($e->getTraceAsString());
+            return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan akun Google: ' . $e->getMessage()]);
         }
     }
 
