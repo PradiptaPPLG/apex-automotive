@@ -286,7 +286,16 @@
                                         $mapId = 'loc-map-'.$msg->id;
                                     @endphp
                                     <div class="location-card" data-location="{{ trim($lat) }},{{ trim($lng) }}" data-mapid="{{ $mapId }}">
-                                        <div class="loc-label"><i class="fa-solid fa-location-dot"></i> LOKASI DIKIRIM</div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div class="loc-label"><i class="fa-solid fa-location-dot"></i> LOKASI DIKIRIM</div>
+                                            <div class="loc-menu-wrap" style="position:relative;">
+                                                <button type="button" onclick="toggleLocMenu(event, '{{ $msg->id }}')" style="background:none; border:none; color:#9ca3af; cursor:pointer; padding:2px 6px;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                                <div id="loc-dropdown-{{ $msg->id }}" class="loc-dropdown" style="display:none; position:absolute; right:0; top:20px; background:#0d0d18; border:1px solid rgba(255,255,255,0.15); border-radius:4px; z-index:99; width:170px; box-shadow:0 10px 25px rgba(0,0,0,0.8);">
+                                                    <button type="button" onclick="verifyLocationAction('{{ trim($lat) }},{{ trim($lng) }}')" style="width:100%; text-align:left; padding:8px 12px; background:none; border:none; color:#22d3ee; font-size:11px; font-family:'Space Mono',monospace; cursor:pointer; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-circle-check"></i> Verifikasi Lokasi</button>
+                                                    <button type="button" onclick="rejectLocationAction()" style="width:100%; text-align:left; padding:8px 12px; background:none; border:none; color:#ef4444; font-size:11px; font-family:'Space Mono',monospace; cursor:pointer; display:flex; align-items:center; gap:8px; border-top:1px solid rgba(255,255,255,0.05);"><i class="fa-solid fa-circle-xmark"></i> Tolak Lokasi</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div id="{{ $mapId }}" class="loc-map-render"></div>
                                         <a href="https://www.google.com/maps?q={{ trim($lat) }},{{ trim($lng) }}" target="_blank" class="loc-open-btn">
                                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Google Maps

@@ -209,6 +209,10 @@ class AuthController extends Controller
                 return redirect()->route('admin.inquiries.index');
             }
 
+            if ($user->isDelivery()) {
+                return redirect()->route('delivery.portal');
+            }
+
             if (! $user->hasCompletedProfile()) {
                 return redirect()->route('profile.complete')->with('welcome', true);
             }

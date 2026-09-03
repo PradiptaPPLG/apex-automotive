@@ -53,6 +53,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/portal/inquiry/{inquiry}/poll', [ConsultationController::class, 'poll'])->name('portal.message.poll');
     Route::post('/portal/inquiry/{inquiry}/sign-contract', [PortalController::class, 'signContract'])->name('portal.contract.sign');
     Route::get('/portal/inquiry/{inquiry}/download-contract', [PortalController::class, 'downloadContract'])->name('portal.contract.download');
+    Route::get('/portal/inquiry/{inquiry}/tracking', [\App\Http\Controllers\DeliveryController::class, 'trackingPoll'])->name('portal.tracking');
+});
+
+// ──────────────────────────────────────────────
+// DELIVERY DRIVER ROUTES (pradipta.endra4@smp.belajar.id)
+// ──────────────────────────────────────────────
+Route::middleware(['auth', 'delivery'])->prefix('delivery')->name('delivery.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\DeliveryController::class, 'portal'])->name('portal');
+    Route::get('/{delivery}', [\App\Http\Controllers\DeliveryController::class, 'detail'])->name('detail');
+    Route::post('/{delivery}/update-location', [\App\Http\Controllers\DeliveryController::class, 'updateLocation'])->name('update-location');
 });
 
 // ──────────────────────────────────────────────
@@ -65,4 +75,6 @@ Route::middleware(['auth', 'rm'])->prefix('admin')->name('admin.')->group(functi
     Route::post('/inquiries/{inquiry}/message', [AdminInquiryController::class, 'sendMessage'])->name('inquiries.message');
     Route::get('/inquiries/{inquiry}/poll', [AdminInquiryController::class, 'poll'])->name('inquiries.poll');
     Route::get('/inquiries/{inquiry}/download-contract', [AdminInquiryController::class, 'downloadContract'])->name('inquiries.contract.download');
+    Route::post('/inquiries/{inquiry}/verify-location', [AdminInquiryController::class, 'verifyLocation'])->name('inquiries.verify-location');
+    Route::post('/inquiries/{inquiry}/reject-location', [AdminInquiryController::class, 'rejectLocation'])->name('inquiries.reject-location');
 });
