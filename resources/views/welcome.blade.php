@@ -1448,22 +1448,58 @@
                 </div>
                 <h3 class="text-2xl font-serif font-bold text-neutral-900 dark:text-white uppercase">Request VIP Viewing</h3>
                 <p class="text-xs text-neutral-600 dark:text-neutral-400">Our luxury automotive advisor will contact you within 2 business hours.</p>
+                @auth
+                    <div class="flex items-center space-x-2 mt-1 bg-green-500/10 border border-green-500/30 px-3 py-1.5">
+                        <i class="fa-solid fa-circle-check text-green-500 text-[10px]"></i>
+                        <span class="text-[10px] font-mono text-green-400 uppercase tracking-wider font-bold">Data VIP Anda terisi otomatis &mdash; dapat diedit</span>
+                    </div>
+                @endauth
             </div>
 
-            <form onsubmit="event.preventDefault(); alert('Thank you! Your private viewing request has been sent.'); toggleModal('inquireModal');" class="space-y-4 text-xs font-mono">
+            <form id="inquireForm" class="space-y-4 text-xs font-mono">
+                @csrf
+                @auth
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                    <input type="hidden" name="user_email" value="{{ auth()->user()->email }}">
+                @endauth
+                <input type="hidden" id="inquireCarModel" name="car_model" value="">
+                <input type="hidden" id="inquireConfig" name="selected_config" value="">
+
                 <div>
-                    <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">FULL NAME</label>
-                    <input type="text" required placeholder="e.g. Alexander Wright" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none">
+                    <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">
+                        FULL NAME
+                        @auth <span class="text-green-400 ml-1 text-[9px] normal-case font-normal tracking-normal">(dari akun VIP Anda)</span> @endauth
+                    </label>
+                    <input
+                        type="text"
+                        id="inquireName"
+                        name="name"
+                        required
+                        placeholder="e.g. Alexander Wright"
+                        value="{{ auth()->user()->name ?? '' }}"
+                        class="w-full bg-neutral-100 dark:bg-neutral-900 border px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none transition-colors {{ auth()->check() ? 'border-green-500/50 dark:border-green-500/30' : 'border-neutral-300 dark:border-white/15' }}"
+                    >
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">PHONE / WHATSAPP</label>
-                        <input type="tel" required placeholder="+62 812 XXXX XXXX" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none">
+                        <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">
+                            PHONE / WHATSAPP
+                            @auth @if(auth()->user()->phone) <span class="text-green-400 ml-1 text-[9px] normal-case font-normal tracking-normal">(dari akun)</span> @endif @endauth
+                        </label>
+                        <input
+                            type="tel"
+                            id="inquirePhone"
+                            name="phone"
+                            required
+                            placeholder="+62 812 XXXX XXXX"
+                            value="{{ auth()->user()->phone ?? '' }}"
+                            class="w-full bg-neutral-100 dark:bg-neutral-900 border px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none transition-colors {{ (auth()->check() && auth()->user()->phone) ? 'border-green-500/50 dark:border-green-500/30' : 'border-neutral-300 dark:border-white/15' }}"
+                        >
                     </div>
                     <div>
                         <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">PREFERRED MODEL</label>
-                        <select id="modalCarSelect" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none">
+                        <select id="modalCarSelect" name="car_model_display" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none">
                             <option value="BMW M4 Competition">BMW M4 Competition</option>
                             <option value="Lamborghini Revuelto">Lamborghini Revuelto V12</option>
                             <option value="McLaren Senna GTR">McLaren Senna GTR</option>
@@ -1482,11 +1518,17 @@
 
                 <div>
                     <label class="block text-neutral-700 dark:text-neutral-400 font-semibold uppercase mb-1">SPECIAL REQUEST / NOTES</label>
-                    <textarea id="modalNotes" rows="3" placeholder="Tell us about your schedule or trade-in inquiries..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none"></textarea>
+                    <textarea id="modalNotes" name="notes" rows="3" placeholder="Tell us about your schedule or trade-in inquiries..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-white/15 px-3 py-2.5 text-neutral-900 dark:text-white focus:border-red-600 focus:outline-none"></textarea>
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold tracking-widest uppercase transition-all shadow-lg shadow-red-600/30">
-                    SUBMIT REQUEST
+                <div id="inquireSuccess" class="hidden bg-green-500/10 border border-green-500/30 px-4 py-3 text-center">
+                    <i class="fa-solid fa-circle-check text-green-400 mr-2"></i>
+                    <span class="text-green-400 text-xs font-mono">Permintaan VIP Viewing terkirim! Sales RM kami akan menghubungi Anda segera.</span>
+                </div>
+
+                <button type="submit" id="inquireSubmitBtn" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>SUBMIT REQUEST</span>
                 </button>
             </form>
         </div>
