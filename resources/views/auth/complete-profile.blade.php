@@ -362,14 +362,14 @@
                 <div id="step-section-2" style="display: none;">
                     <div class="field-group full-width" style="margin-bottom: 20px;">
                         <label class="field-label">Tipe Kepemilikan STNK / BPKB <span class="req">*</span></label>
-                        <div style="display: flex; gap: 16px; margin-top: 6px;">
-                            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 2px; flex: 1;">
-                                <input type="radio" name="ownership_type" value="individual" {{ old('ownership_type', auth()->user()->ownership_type ?? 'individual') === 'individual' ? 'checked' : '' }} onchange="toggleOwnershipFields(this.value)">
-                                <span><i class="fa-solid fa-user text-red-500 mr-1"></i> Atas Nama Perorangan</span>
+                        <div style="display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-family: monospace; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15); padding: 12px 16px; border-radius: 2px; flex: 1; min-width: 200px;">
+                                <input type="radio" name="ownership_type" value="individual" {{ old('ownership_type', auth()->user()->ownership_type ?? 'individual') === 'individual' ? 'checked' : '' }} onchange="toggleOwnershipFields(this.value)" style="accent-color: #e50914;">
+                                <span><i class="fa-solid fa-user text-red-500 mr-1.5"></i> Atas Nama Perorangan</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 2px; flex: 1;">
-                                <input type="radio" name="ownership_type" value="company" {{ old('ownership_type', auth()->user()->ownership_type) === 'company' ? 'checked' : '' }} onchange="toggleOwnershipFields(this.value)">
-                                <span><i class="fa-solid fa-building text-red-500 mr-1"></i> Atas Nama PT / Perusahaan</span>
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-family: monospace; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.15); padding: 12px 16px; border-radius: 2px; flex: 1; min-width: 200px;">
+                                <input type="radio" name="ownership_type" value="company" {{ old('ownership_type', auth()->user()->ownership_type) === 'company' ? 'checked' : '' }} onchange="toggleOwnershipFields(this.value)" style="accent-color: #e50914;">
+                                <span><i class="fa-solid fa-building text-red-500 mr-1.5"></i> Atas Nama PT / Perusahaan</span>
                             </label>
                         </div>
                     </div>

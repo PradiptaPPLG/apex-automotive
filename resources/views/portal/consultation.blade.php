@@ -335,70 +335,75 @@
     </div>
 
     {{-- Phase 4: E-Sign Contract SPA Modal --}}
-    <div id="contractModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
-        <div class="glass-card max-w-2xl w-full p-6 border border-white/20 shadow-2xl relative bg-[#0c0c12] text-xs font-mono max-h-[90vh] flex flex-col">
-            <button onclick="toggleContractModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-lg cursor-pointer">
+    <div id="contractModal" style="position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(12px); padding: 20px;">
+        <div style="width: 100%; max-width: 640px; background: #0c0c12; border: 1px solid rgba(239, 68, 68, 0.4); padding: 28px; border-radius: 4px; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.9); font-family: 'Inter', sans-serif;">
+            <button onclick="toggleContractModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #9ca3af; font-size: 18px; cursor: pointer;">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="flex items-center space-x-2 mb-2 pb-3 border-b border-white/10 shrink-0">
-                <i class="fa-solid fa-file-signature text-red-500 text-lg"></i>
+
+            <!-- Modal Header -->
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                <div style="width: 42px; height: 42px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 18px; flex-shrink: 0;">
+                    <i class="fa-solid fa-file-signature"></i>
+                </div>
                 <div>
-                    <h3 class="text-sm font-serif font-bold text-white uppercase tracking-wider">Sales &amp; Purchase Agreement (SPA)</h3>
-                    <p class="text-[10px] text-neutral-400 font-mono">No. Kontrak: SPA/APEX/2026/0{{ $inquiry->id }} &nbsp;·&nbsp; Unit: {{ $inquiry->car_model }}</p>
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: #ffffff; text-transform: uppercase; margin: 0; letter-spacing: 1px;">Sales &amp; Purchase Agreement (SPA)</h3>
+                    <p style="font-size: 11px; font-family: monospace; color: #9ca3af; margin-top: 4px;">No: SPA/APEX/2026/0{{ $inquiry->id }} &nbsp;·&nbsp; Unit: {{ $inquiry->car_model }}</p>
                 </div>
             </div>
 
-            <!-- Contract Content Body -->
-            <div class="overflow-y-auto pr-2 space-y-4 my-3 text-neutral-300 font-sans text-xs leading-relaxed shrink" style="max-height: 45vh;">
-                <div class="p-3 bg-red-600/10 border border-red-600/30 rounded-sm">
-                    <p class="text-red-400 font-mono font-bold text-[11px]"><i class="fa-solid fa-shield-halved mr-1"></i> RESMI &amp; MENGIKAT HUKUM</p>
-                    <p class="text-[11px] text-neutral-300 mt-0.5">Dokumen ini diterbitkan oleh PT Apex Automotive Indonesia dan dilindungi meterai elektronik sah (e-Meterai Republik Indonesia).</p>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-white uppercase font-mono text-[11px] mb-1">PASAL 1 — HAK &amp; KEWAJIBAN PEMBELI</h4>
-                    <p class="text-neutral-400 text-[11px]">Pembeli berhak menerima unit kendaraan <strong>{{ $inquiry->car_model }}</strong> sesuai spesifikasi kustomisasi yang telah disepakati. Pembeli berkewajiban melakukan pelunasan pembayaran sesuai skema penawaran resmi.</p>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-white uppercase font-mono text-[11px] mb-1">PASAL 2 — GARANSI RESMI &amp; WHITE-GLOVE SERVICE</h4>
-                    <p class="text-neutral-400 text-[11px]">PT Apex Automotive Indonesia memberikan Garansi Manufactory 7 Tahun, Bebas Biaya Servis Berkala 5 Tahun, dan Layanan Emergency Towing Concierge 24/7 di seluruh wilayah Indonesia.</p>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-white uppercase font-mono text-[11px] mb-1">PASAL 3 — KETENTUAN SERAH TERIMA VEHICLE UNVEILING</h4>
-                    <p class="text-neutral-400 text-[11px]">Serah terima unit dilakukan menggunakan pengangkut tertutup (Enclosed Flatbed Towing) dengan seremoni pembukaan kain penutup beludru merah di lokasi tujuan yang ditentukan pembeli.</p>
-                </div>
-            </div>
-
-            <!-- Signature Area -->
-            <div class="border-t border-white/10 pt-3 shrink-0">
-                <form method="POST" action="{{ route('portal.contract.sign', $inquiry) }}" id="esignForm" onsubmit="saveCanvasSignature()">
-                    @csrf
-                    <p class="text-[11px] font-mono text-white font-bold mb-2 uppercase flex items-center justify-between">
-                        <span><i class="fa-solid fa-signature text-red-500 mr-1"></i> Tanda Tangan Digital Pembeli:</span>
-                        <span class="text-[9px] text-neutral-500 font-normal">Tarik garis tanda tangan di bawah ini</span>
-                    </p>
-                    <div class="border border-white/20 bg-neutral-950 rounded-sm relative" style="height: 90px;">
-                        <canvas id="signatureCanvas" class="w-full h-full cursor-crosshair"></canvas>
-                        <button type="button" onclick="clearCanvas()" class="absolute top-2 right-2 text-[9px] font-mono bg-white/10 hover:bg-white/20 px-2 py-1 text-neutral-300 rounded-sm">
-                            <i class="fa-solid fa-rotate-left"></i> Reset
-                        </button>
+            <!-- Contract Articles Body -->
+            <div style="max-height: 220px; overflow-y: auto; padding: 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 2px; margin-bottom: 20px; line-height: 1.6; font-size: 13px; color: #d1d5db;">
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; margin-bottom: 16px; border-radius: 2px;">
+                    <div style="font-family: monospace; font-size: 11px; font-weight: 700; color: #f87171; text-transform: uppercase; margin-bottom: 4px;">
+                        <i class="fa-solid fa-shield-halved"></i> Dokumen Resmi &amp; Mengikat Hukum
                     </div>
-                    <input type="hidden" name="buyer_signature_svg" id="signatureInput">
+                    <p style="font-size: 12px; color: #e5e7eb; margin: 0;">Dokumen ini diterbitkan oleh PT Apex Automotive Indonesia dan dilindungi meterai elektronik sah (e-Meterai Republik Indonesia).</p>
+                </div>
 
-                    <div class="flex items-center justify-between mt-4">
-                        <label class="flex items-center space-x-2 text-[10px] text-neutral-300 font-sans cursor-pointer">
-                            <input type="checkbox" required class="accent-red-600">
-                            <span>Saya menyetujui seluruh pasal &amp; ketentuan di atas.</span>
-                        </label>
-                        <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg flex items-center space-x-2 cursor-pointer">
-                            <i class="fa-solid fa-stamp"></i>
-                            <span>Bubuhi E-Sign &amp; Meterai</span>
-                        </button>
-                    </div>
-                </form>
+                <div style="margin-bottom: 14px;">
+                    <h4 style="font-family: monospace; font-size: 11px; font-weight: 700; color: #ffffff; text-transform: uppercase; margin: 0 0 4px 0;">PASAL 1 — HAK &amp; KEWAJIBAN PEMBELI</h4>
+                    <p style="margin: 0; color: #9ca3af;">Pembeli berhak menerima unit kendaraan <strong style="color: #ffffff;">{{ $inquiry->car_model }}</strong> sesuai spesifikasi kustomisasi yang telah disepakati. Pembeli berkewajiban melakukan pelunasan pembayaran sesuai skema penawaran resmi.</p>
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                    <h4 style="font-family: monospace; font-size: 11px; font-weight: 700; color: #ffffff; text-transform: uppercase; margin: 0 0 4px 0;">PASAL 2 — GARANSI RESMI &amp; CONCIERGE SERVICE</h4>
+                    <p style="margin: 0; color: #9ca3af;">PT Apex Automotive Indonesia memberikan Garansi Manufactory 7 Tahun, Bebas Biaya Servis Berkala 5 Tahun, dan Layanan Emergency Towing Concierge 24/7 di seluruh Indonesia.</p>
+                </div>
+
+                <div>
+                    <h4 style="font-family: monospace; font-size: 11px; font-weight: 700; color: #ffffff; text-transform: uppercase; margin: 0 0 4px 0;">PASAL 3 — UNVEILING DELIVERY CEREMONY</h4>
+                    <p style="margin: 0; color: #9ca3af;">Serah terima unit dilakukan menggunakan armada Enclosed Flatbed Towing tertutup dengan seremoni penyerahan kunci dan pembukaan kain beludru merah.</p>
+                </div>
             </div>
+
+            <!-- Signature Form -->
+            <form method="POST" action="{{ route('portal.contract.sign', $inquiry) }}" id="esignForm" onsubmit="saveCanvasSignature()">
+                @csrf
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-family: monospace; font-size: 11px; font-weight: 700; color: #ffffff; text-transform: uppercase;"><i class="fa-solid fa-signature" style="color: #ef4444;"></i> Tanda Tangan Digital Pembeli:</span>
+                    <span style="font-size: 10px; font-family: monospace; color: #6b7280;">Tarik garis di box hitam</span>
+                </div>
+
+                <div style="position: relative; height: 100px; width: 100%; background: #000000; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; margin-bottom: 16px;">
+                    <canvas id="signatureCanvas" style="width: 100%; height: 100%; display: block; cursor: crosshair;"></canvas>
+                    <button type="button" onclick="clearCanvas()" style="position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.1); border: none; color: #d1d5db; padding: 4px 10px; font-size: 10px; font-family: monospace; cursor: pointer; border-radius: 2px;">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+                <input type="hidden" name="buyer_signature_svg" id="signatureInput">
+
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #d1d5db; cursor: pointer;">
+                        <input type="checkbox" required style="accent-color: #dc2626; width: 16px; height: 16px;">
+                        <span>Saya menyetujui seluruh pasal &amp; ketentuan di atas.</span>
+                    </label>
+                    <button type="submit" style="padding: 12px 24px; background: #dc2626; color: #ffffff; border: none; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; gap: 8px; shrink: 0; transition: background 0.2s;">
+                        <i class="fa-solid fa-stamp"></i>
+                        <span>Bubuhi E-Sign</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -439,38 +444,65 @@
             </div>
 
             {{-- KYC Status Box --}}
-            <div class="p-3 bg-white/5 border border-white/10 rounded-sm">
-                <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-[9px] font-mono text-red-500 uppercase tracking-widest font-bold">Data Legalitas KYC</span>
-                    <a href="{{ route('profile.complete') }}" class="text-[9px] font-mono text-amber-400 hover:text-amber-300 underline font-bold">Edit Profil</a>
+            <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 4px; margin-top: 6px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-shield-halved" style="color: #ef4444; font-size: 14px;"></i>
+                        <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 1px; text-transform: uppercase;">Legalitas KYC</span>
+                    </div>
+                    <a href="{{ route('profile.complete') }}" style="font-size: 11px; color: #fbbf24; text-decoration: underline; font-weight: 600;">Edit Profil</a>
                 </div>
+
                 @if(auth()->user()->hasCompletedProfile())
-                    <p class="text-xs text-green-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Tersimpan &amp; Lengkap</p>
-                    <p class="text-[10px] text-neutral-400 mt-1 font-mono">NIK: {{ auth()->user()->nik ?? '—' }}</p>
-                    <p class="text-[10px] text-neutral-400 font-mono truncate">Alamat: {{ auth()->user()->address ?? '—' }}</p>
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #4ade80; margin-bottom: 10px;">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Tersimpan &amp; Lengkap</span>
+                    </div>
+                    <div style="font-size: 12px; color: #9ca3af; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; line-height: 1.6;">
+                        <div style="margin-bottom: 4px;">
+                            <strong style="color: #d1d5db;">NIK:</strong> <span style="color: #e5e7eb;">{{ auth()->user()->nik ?? '—' }}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #d1d5db;">Alamat:</strong>
+                            <p style="color: #9ca3af; margin-top: 2px; word-break: break-word;">{{ auth()->user()->address ?? '—' }}</p>
+                        </div>
+                    </div>
                 @else
-                    <p class="text-xs text-amber-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Belum Lengkap</p>
-                    <a href="{{ route('profile.complete') }}" class="mt-1.5 inline-block px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold tracking-wider hover:bg-amber-500/30">ISI DATA LEGALITAS</a>
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fbbf24; margin-bottom: 12px;">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Belum Lengkap</span>
+                    </div>
+                    <a href="{{ route('profile.complete') }}" style="display: block; text-align: center; width: 100%; padding: 10px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.4); color: #fde047; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
+                        ISI DATA LEGALITAS
+                    </a>
                 @endif
             </div>
 
             {{-- Phase 4: SPA Contract E-Sign Box --}}
-            <div class="p-3.5 bg-neutral-900 border border-red-600/30 rounded-sm">
-                <div class="flex items-center space-x-2 mb-2">
-                    <i class="fa-solid fa-file-signature text-red-500 text-sm"></i>
-                    <span class="text-[10px] font-mono text-red-500 uppercase tracking-widest font-bold">Phase 4: Kontrak Jual Beli (SPA)</span>
+            <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(239, 68, 68, 0.3); padding: 16px; border-radius: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-file-signature" style="color: #ef4444; font-size: 14px;"></i>
+                    <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 1px; text-transform: uppercase;">Phase 4: Kontrak Jual Beli</span>
                 </div>
+
                 @if($inquiry->buyer_signed)
-                    <div class="bg-green-500/10 border border-green-500/30 p-2.5 rounded-sm">
-                        <p class="text-xs text-green-400 font-mono font-bold flex items-center gap-1.5"><i class="fa-solid fa-certificate"></i> SPA E-Sign Completed</p>
-                        <p class="text-[10px] text-neutral-400 font-mono mt-1">Ditandatangani pada: {{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</p>
-                        <span class="inline-block mt-2 px-2 py-0.5 bg-green-500/20 text-green-300 text-[9px] font-mono font-bold tracking-wider uppercase border border-green-500/40"><i class="fa-solid fa-stamp mr-1"></i> Terbubuhi e-Meterai Sah</span>
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px;">
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 6px;">
+                            <i class="fa-solid fa-certificate"></i>
+                            <span>SPA E-Sign Completed</span>
+                        </div>
+                        <p style="font-size: 11px; color: #9ca3af; margin-bottom: 10px;">
+                            Ditandatangani pada: <span style="color: #e5e7eb;">{{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</span>
+                        </p>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px;">
+                            <i class="fa-solid fa-stamp"></i> e-Meterai Sah
+                        </div>
                     </div>
                 @else
-                    <p class="text-xs text-neutral-300 font-sans leading-relaxed mb-3">
-                        Dokumen Perjanjian Jual Beli (Sales &amp; Purchase Agreement) telah siap ditinjau dan ditandatangani secara digital bermeterai e-Meterai.
+                    <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
+                        Dokumen Perjanjian Jual Beli (Sales &amp; Purchase Agreement) telah siap ditinjau dan ditandatangani secara digital.
                     </p>
-                    <button onclick="toggleContractModal()" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-mono text-[11px] font-bold tracking-wider uppercase transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer">
+                    <button onclick="toggleContractModal()" style="width: 100%; padding: 12px; background: #dc2626; color: #ffffff; border: none; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
                         <i class="fa-solid fa-pen-nib"></i>
                         <span>Review &amp; E-Sign SPA</span>
                     </button>
