@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('consultation_messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('inquiry_id')->constrained('inquiries')->cascadeOnDelete();
+            $table->string('sender_type'); // 'buyer' | 'rm'
+            $table->string('sender_name');
+            $table->text('message');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
