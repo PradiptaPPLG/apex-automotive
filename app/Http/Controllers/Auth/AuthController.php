@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -44,10 +44,10 @@ class AuthController extends Controller
         $token = (string) random_int(100000, 999999);
 
         EmailOtpToken::create([
-            'email'      => $email,
-            'token'      => $token,
+            'email' => $email,
+            'token' => $token,
             'expires_at' => Carbon::now()->addMinutes(10),
-            'used'       => false,
+            'used' => false,
         ]);
 
         // In production, send a real transactional email here.
@@ -79,11 +79,11 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => ['required', 'email'],
-            'otp'   => ['required', 'digits:6'],
+            'otp' => ['required', 'digits:6'],
         ]);
 
         $email = strtolower(trim($request->email));
-        $otp   = $request->otp;
+        $otp = $request->otp;
 
         /** @var EmailOtpToken|null $record */
         $record = EmailOtpToken::where('email', $email)
@@ -105,7 +105,7 @@ class AuthController extends Controller
         // First-or-create the user
         $user = User::firstOrCreate(
             ['email' => $email],
-            ['name'  => explode('@', $email)[0], 'password' => null]
+            ['name' => explode('@', $email)[0], 'password' => null]
         );
 
         Auth::login($user, remember: true);
@@ -138,13 +138,13 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'        => ['required', 'string', 'max:255'],
-            'phone'       => ['required', 'string', 'max:20'],
-            'nik'         => ['required', 'digits:16'],
-            'npwp'        => ['nullable', 'string', 'max:20'],
-            'address'     => ['required', 'string', 'max:500'],
-            'city'        => ['required', 'string', 'max:100'],
-            'province'    => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:20'],
+            'nik' => ['required', 'digits:16'],
+            'npwp' => ['nullable', 'string', 'max:20'],
+            'address' => ['required', 'string', 'max:500'],
+            'city' => ['required', 'string', 'max:100'],
+            'province' => ['required', 'string', 'max:100'],
             'postal_code' => ['required', 'digits_between:4,6'],
         ]);
 
@@ -158,7 +158,7 @@ class AuthController extends Controller
      */
     public function redirectToGoogle(): RedirectResponse
     {
-        return \Laravel\Socialite\Facades\Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
     /**
@@ -167,7 +167,7 @@ class AuthController extends Controller
     public function handleGoogleCallback(): RedirectResponse
     {
         try {
-            $googleUser = \Laravel\Socialite\Facades\Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')->user();
 
             $user = User::firstOrCreate(
                 ['email' => strtolower(trim($googleUser->getEmail()))],
@@ -179,15 +179,20 @@ class AuthController extends Controller
 
             Auth::login($user, remember: true);
 
+            if ($user->isRm()) {
+                return redirect()->route('admin.inquiries.index');
+            }
+
             if (! $user->hasCompletedProfile()) {
                 return redirect()->route('profile.complete')->with('welcome', true);
             }
 
             return redirect()->intended('/');
         } catch (\Throwable $e) {
-            Log::error('Google Auth Failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            Log::error('Google Auth Failed: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
             Log::error($e->getTraceAsString());
-            return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan akun Google: ' . $e->getMessage()]);
+
+            return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan akun Google: '.$e->getMessage()]);
         }
     }
 
