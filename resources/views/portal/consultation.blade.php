@@ -663,17 +663,28 @@
                 @endif
                 <div class="typing-indicator" id="typingIndicator">Sales RM sedang mengetik…</div>
             </div>
-            <p class="chat-hint">Tekan Enter untuk kirim, Shift+Enter untuk baris baru</p>
-            <div class="chat-input-area">
-                <textarea
-                    id="messageInput"
-                    class="chat-input"
-                    placeholder="Tulis pesan Anda kepada Sales RM…"
-                    rows="2"
-                ></textarea>
-                <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
-                    <i class="fa-solid fa-paper-plane"></i> KIRIM
-                </button>
+            <div class="chat-input-area" style="display: flex; flex-direction: column; gap: 8px;">
+                <div id="attachmentPreview" style="display: none; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 2px; font-size: 11px; font-family: monospace; color: #60a5fa;">
+                    <span id="attachmentFileName"><i class="fa-solid fa-paperclip mr-1"></i> File terlampir</span>
+                    <button type="button" onclick="removeAttachment()" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px;"><i class="fa-solid fa-xmark"></i> Batal</button>
+                </div>
+
+                <div style="display: flex; gap: 8px; align-items: flex-end;">
+                    <input type="file" id="fileInput" accept="image/*,application/pdf" style="display: none;" onchange="handleFileSelect(this)">
+                    <button type="button" onclick="document.getElementById('fileInput').click()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #9ca3af; padding: 12px 14px; cursor: pointer; border-radius: 2px; transition: color 0.2s;" title="Lampirkan Bukti Transfer / Foto / PDF">
+                        <i class="fa-solid fa-paperclip" style="font-size: 16px;"></i>
+                    </button>
+                    <textarea
+                        id="messageInput"
+                        class="chat-input"
+                        placeholder="Tulis pesan Anda atau lampirkan bukti transfer..."
+                        rows="2"
+                        style="flex: 1;"
+                    ></textarea>
+                    <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
+                        <i class="fa-solid fa-paper-plane"></i> KIRIM
+                    </button>
+                </div>
             </div>
         </div>
     </div>
