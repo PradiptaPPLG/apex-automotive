@@ -6,11 +6,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 #[Fillable([
-    'name', 'email', 'password',
+    'name', 'email', 'password', 'role',
     'phone', 'nik', 'npwp',
     'address', 'city', 'province',
     'postal_code', 'profile_completed',
@@ -41,5 +42,21 @@ class User extends Authenticatable
     public function hasCompletedProfile(): bool
     {
         return (bool) $this->profile_completed;
+    }
+
+    /**
+     * Determine whether the user is a Sales RM.
+     */
+    public function isRm(): bool
+    {
+        return $this->role === 'rm';
+    }
+
+    /**
+     * Get all inquiries belonging to this user.
+     */
+    public function inquiries(): HasMany
+    {
+        return $this->hasMany(Inquiry::class);
     }
 }
