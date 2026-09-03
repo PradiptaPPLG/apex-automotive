@@ -341,7 +341,7 @@
 
                         <div class="field-group">
                             <label class="field-label">Nomor WhatsApp <span class="req">*</span></label>
-                            <input type="tel" name="phone" value="{{ old('phone') }}" class="input-box" required placeholder="08123456789">
+                            <input type="tel" name="phone" value="{{ old('phone', auth()->user()->phone) }}" class="input-box" required placeholder="08123456789">
                         </div>
 
                         <div class="field-group">
@@ -363,12 +363,12 @@
                     <div class="form-grid">
                         <div class="field-group full-width">
                             <label class="field-label">Nomor Induk Kependudukan (NIK) <span class="req">*</span></label>
-                            <input type="text" name="nik" value="{{ old('nik') }}" maxlength="16" class="input-box" required placeholder="16 Digit Angka KTP">
+                            <input type="text" name="nik" value="{{ old('nik', auth()->user()->nik) }}" maxlength="16" class="input-box" required placeholder="16 Digit Angka KTP">
                         </div>
 
                         <div class="field-group full-width">
                             <label class="field-label">Nomor Pokok Wajib Pajak (NPWP)</label>
-                            <input type="text" name="npwp" value="{{ old('npwp') }}" class="input-box" placeholder="Opsional untuk Faktur Pajak">
+                            <input type="text" name="npwp" value="{{ old('npwp', auth()->user()->npwp) }}" class="input-box" placeholder="Opsional untuk Faktur Pajak">
                         </div>
                     </div>
 
@@ -386,22 +386,22 @@
                     <div class="form-grid">
                         <div class="field-group full-width">
                             <label class="field-label">Alamat Domisili Lengkap <span class="req">*</span></label>
-                            <textarea name="address" class="input-box" required placeholder="Nama jalan, gedung, nomor rumah, RT/RW">{{ old('address') }}</textarea>
+                            <textarea name="address" class="input-box" required placeholder="Nama jalan, gedung, nomor rumah, RT/RW">{{ old('address', auth()->user()->address) }}</textarea>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">Kota / Kabupaten <span class="req">*</span></label>
-                            <input type="text" name="city" value="{{ old('city') }}" class="input-box" required placeholder="Contoh: Cijeungjing Selatan">
+                            <input type="text" name="city" value="{{ old('city', auth()->user()->city) }}" class="input-box" required placeholder="Contoh: Cijeungjing Selatan">
                         </div>
 
                         <div class="field-group">
                             <label class="field-label">Provinsi <span class="req">*</span></label>
-                            <input type="text" name="province" value="{{ old('province') }}" class="input-box" required placeholder="Contoh: Jawa Barat">
+                            <input type="text" name="province" value="{{ old('province', auth()->user()->province) }}" class="input-box" required placeholder="Contoh: Jawa Barat">
                         </div>
 
                         <div class="field-group full-width">
                             <label class="field-label">Kode Pos <span class="req">*</span></label>
-                            <input type="text" name="postal_code" value="{{ old('postal_code') }}" maxlength="6" class="input-box" required placeholder="12240">
+                            <input type="text" name="postal_code" value="{{ old('postal_code', auth()->user()->postal_code) }}" maxlength="6" class="input-box" required placeholder="12240">
                         </div>
                     </div>
 

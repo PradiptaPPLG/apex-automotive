@@ -283,8 +283,56 @@
         <div class="nav-title">
             Konsultasi VIP &nbsp;·&nbsp; <strong>{{ $inquiry->car_model ?? 'Kendaraan VIP' }}</strong>
         </div>
-        <span class="status-badge {{ $inquiry->statusColor() }}" id="statusBadge">{{ $inquiry->statusLabel() }}</span>
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleHelpModal()" class="text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 w-7 h-7 rounded-full flex items-center justify-center transition-colors text-xs cursor-pointer" title="Petunjuk Alur Purchase & Dokumen">
+                <i class="fa-solid fa-circle-question text-red-500"></i>
+            </button>
+            <span class="status-badge {{ $inquiry->statusColor() }}" id="statusBadge">{{ $inquiry->statusLabel() }}</span>
+        </div>
     </nav>
+
+    {{-- Help & Guidance Modal --}}
+    <div id="helpModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="glass-card max-w-lg w-full p-6 border border-white/20 shadow-2xl relative bg-[#0c0c12]">
+            <button onclick="toggleHelpModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-2 mb-3">
+                <i class="fa-solid fa-compass text-red-500 text-base"></i>
+                <h3 class="text-base font-serif font-bold text-white uppercase tracking-wider">Petunjuk Alur Transaksi (Phase 1–6)</h3>
+            </div>
+            <p class="text-xs text-neutral-400 mb-4 font-sans leading-relaxed">
+                Berikut adalah panduan langkah yang dilakukan Sales RM dan dokumen yang perlu disiapkan oleh Pembeli:
+            </p>
+            <div class="space-y-3 text-xs font-mono max-h-[60vh] overflow-y-auto pr-2">
+                <div class="p-3 bg-white/5 border-l-2 border-yellow-500">
+                    <p class="text-yellow-400 font-bold">1. Phase 1 & 2: Lead & Konsultasi Aktif</p>
+                    <p class="text-neutral-300 text-[11px] mt-1">Sales RM mendiskusikan rincian opsi kustomisasi unit & menyusun draft SPK via chat / pertemuan privat.</p>
+                </div>
+                <div class="p-3 bg-white/5 border-l-2 border-purple-500">
+                    <p class="text-purple-400 font-bold">2. Penerbitan SPK (Surat Pemesanan Kendaraan)</p>
+                    <p class="text-neutral-300 text-[11px] mt-1">Sales RM memperbarui status ke <strong>SPK Issued</strong>. Rincian VIN/Production Slot & estimasi pengiriman terlampir di portal.</p>
+                </div>
+                <div class="p-3 bg-white/5 border-l-2 border-orange-500">
+                    <p class="text-orange-400 font-bold">3. Phase 3: Upload Dokumen Legalitas (KYC)</p>
+                    <p class="text-neutral-300 text-[11px] mt-1">Pembeli mengunggah KTP, KK, NPWP (Perorangan) atau NIB & Akta PT (Korporasi) melalui menu <strong>Profil & Alamat VIP</strong>.</p>
+                </div>
+                <div class="p-3 bg-white/5 border-l-2 border-cyan-500">
+                    <p class="text-cyan-400 font-bold">4. Phase 4 & 5: Kontrak E-Sign & Pembayaran Escrow</p>
+                    <p class="text-neutral-300 text-[11px] mt-1">Pembeli menandatangani E-Sign bermeterai digital & melakukan transfer Booking Fee/DP ke Rekening Escrow Terproteksi.</p>
+                </div>
+                <div class="p-3 bg-white/5 border-l-2 border-red-500">
+                    <p class="text-red-400 font-bold">5. Phase 6: White-Glove Delivery Ceremony</p>
+                    <p class="text-neutral-300 text-[11px] mt-1">Pengiriman unit menggunakan Enclosed Flatbed Tow Truck tertutup dan seremoni penyerahan kunci.</p>
+                </div>
+            </div>
+            <div class="mt-5 text-right">
+                <button onclick="toggleHelpModal()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-wider cursor-pointer">
+                    Saya Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="consultation-layout">
         {{-- Sidebar: Inquiry details --}}
@@ -333,14 +381,6 @@
             <div>
                 <p class="sidebar-section-label">Progress Fase Pembelian</p>
                 @php
-                    $phases = [
-                        ['inquiry_received', 'consultation_active'] => 'Phase 1 — Discovery',
-                        ['consultation_active', 'spk_issued'] => 'Phase 2 — Konsultasi & SPK',
-                        ['kyc_pending', 'kyc_approved'] => 'Phase 3 — KYC & Dokumen',
-                        ['contract_signed'] => 'Phase 4 — Tanda Tangan Kontrak',
-                        ['payment_verified'] => 'Phase 5 — Pembayaran',
-                        ['scheduled_delivery', 'delivered_completed'] => 'Phase 6 — Pengiriman',
-                    ];
                     $statusOrder = ['inquiry_received','consultation_active','spk_issued','kyc_pending','kyc_approved','contract_signed','payment_verified','scheduled_delivery','delivered_completed'];
                     $currentIdx = array_search($inquiry->status, $statusOrder);
                     $phaseStatuses = [
@@ -527,6 +567,11 @@
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
+
+        function toggleHelpModal() {
+            const modal = document.getElementById('helpModal');
+            modal.classList.toggle('hidden');
+        }
 
         // Poll every 3 seconds
         setInterval(pollMessages, 3000);

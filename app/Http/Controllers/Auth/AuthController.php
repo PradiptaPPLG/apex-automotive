@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\EmailOtpToken;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -167,7 +168,15 @@ class AuthController extends Controller
     public function handleGoogleCallback(): RedirectResponse
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $driver = Socialite::driver('google');
+
+            // Fix for local XAMPP Windows cURL SSL certificate verification issue
+            if (app()->environment('local')) {
+                $guzzleClient = new Client(['verify' => false]);
+                $driver->setHttpClient($guzzleClient);
+            }
+
+            $googleUser = $driver->user();
 
             $user = User::firstOrCreate(
                 ['email' => strtolower(trim($googleUser->getEmail()))],
