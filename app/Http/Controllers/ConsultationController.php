@@ -17,14 +17,25 @@ class ConsultationController extends Controller
         abort_if($inquiry->user_id !== auth()->id(), 403);
 
         $request->validate([
-            'message' => ['required', 'string', 'max:3000'],
+            'message'    => ['nullable', 'string', 'max:3000'],
+            'attachment' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
         ]);
+
+        if (! $request->filled('message') && ! $request->hasFile('attachment')) {
+            return response()->json(['message' => 'Pesan atau lampiran berkas harus diisi.'], 422);
+        }
+
+        $attachmentPath = null;
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('chat_attachments', 'public');
+        }
 
         $message = ConsultationMessage::create([
             'inquiry_id'  => $inquiry->id,
             'sender_type' => 'buyer',
             'sender_name' => auth()->user()->name,
-            'message'     => $request->input('message'),
+            'message'     => $request->input('message') ?? '',
+            'attachment'  => $attachmentPath,
             'is_read'     => false,
         ]);
 
@@ -34,8 +45,10 @@ class ConsultationController extends Controller
         }
 
         return response()->json([
-            'success'  => true,
-            'message'  => $message,
+            'success' => true,
+            'message' => array_merge($message->toArray(), [
+                'attachment_url' => $message->attachment ? asset('storage/' . $message->attachment) : null,
+            ]),
         ]);
     }
 
@@ -51,7 +64,12 @@ class ConsultationController extends Controller
         $messages = ConsultationMessage::where('inquiry_id', $inquiry->id)
             ->where('id', '>', $afterId)
             ->orderBy('created_at')
-            ->get(['id', 'sender_type', 'sender_name', 'message', 'created_at']);
+            ->get(['id', 'sender_type', 'sender_name', 'message', 'attachment', 'created_at'])
+            ->map(function ($msg) {
+                $msg->attachment_url = $msg->attachment ? asset('storage/' . $msg->attachment) : null;
+
+                return $msg;
+            });
 
         // Mark RM messages as read
         ConsultationMessage::where('inquiry_id', $inquiry->id)
@@ -60,8 +78,8 @@ class ConsultationController extends Controller
             ->update(['is_read' => true]);
 
         return response()->json([
-            'messages' => $messages,
-            'status'   => $inquiry->fresh()->status,
+            'messages'     => $messages,
+            'status'       => $inquiry->fresh()->status,
             'status_label' => $inquiry->fresh()->statusLabel(),
         ]);
     }
