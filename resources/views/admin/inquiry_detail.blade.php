@@ -155,6 +155,34 @@
                     </div>
                 </div>
 
+                {{-- Buyer KYC Profile for Sales RM --}}
+                @if($inquiry->user)
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 2px;">
+                        <p class="section-label" style="color: #dc2626; margin-bottom: 6px;">Berkas Legalitas KYC Pembeli</p>
+                        @if($inquiry->user->hasCompletedProfile())
+                            <div style="font-size: 11px; color: #86efac; font-family: monospace; font-weight: 700; margin-bottom: 6px;">
+                                <i class="fa-solid fa-circle-check"></i> PROFIL VERIFIED
+                            </div>
+                            <div class="detail-row" style="padding:4px 0;">
+                                <p class="detail-label">NIK (KTP)</p>
+                                <p class="detail-value" style="font-size:12px;">{{ $inquiry->user->nik ?? '—' }}</p>
+                            </div>
+                            <div class="detail-row" style="padding:4px 0;">
+                                <p class="detail-label">NPWP</p>
+                                <p class="detail-value" style="font-size:12px;">{{ $inquiry->user->npwp ?? '—' }}</p>
+                            </div>
+                            <div class="detail-row" style="padding:4px 0; border:none;">
+                                <p class="detail-label">Alamat STNK / Pengiriman</p>
+                                <p class="detail-value" style="font-size:12px;">{{ $inquiry->user->address }}, {{ $inquiry->user->city }}, {{ $inquiry->user->province }} ({{ $inquiry->user->postal_code }})</p>
+                            </div>
+                        @else
+                            <div style="font-size: 11px; color: #fbbf24; font-family: monospace; font-weight: 700;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Belum Lengkap / Pending Upload
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
                 {{-- Status Update Form --}}
                 <div>
                     <p class="section-label">Update Status</p>

@@ -370,6 +370,22 @@
                 </div>
             </div>
 
+            {{-- KYC Status Box --}}
+            <div class="p-3 bg-white/5 border border-white/10 rounded-sm">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[9px] font-mono text-red-500 uppercase tracking-widest font-bold">Data Legalitas KYC</span>
+                    <a href="{{ route('profile.complete') }}" class="text-[9px] font-mono text-amber-400 hover:text-amber-300 underline font-bold">Edit Profil</a>
+                </div>
+                @if(auth()->user()->hasCompletedProfile())
+                    <p class="text-xs text-green-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Tersimpan & Lengkap</p>
+                    <p class="text-[10px] text-neutral-400 mt-1 font-mono">NIK: {{ auth()->user()->nik ?? '—' }}</p>
+                    <p class="text-[10px] text-neutral-400 font-mono truncate">Alamat: {{ auth()->user()->address ?? '—' }}</p>
+                @else
+                    <p class="text-xs text-amber-400 font-mono font-semibold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Belum Lengkap</p>
+                    <a href="{{ route('profile.complete') }}" class="mt-1.5 inline-block px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold tracking-wider hover:bg-amber-500/30">ISI DATA LEGALITAS</a>
+                @endif
+            </div>
+
             @if($inquiry->notes)
                 <div>
                     <p class="sidebar-section-label">Catatan Awal</p>
