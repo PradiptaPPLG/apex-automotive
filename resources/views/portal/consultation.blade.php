@@ -407,6 +407,64 @@
         </div>
     </div>
 
+    {{-- Phase 5: Payment Escrow Modal --}}
+    <div id="paymentModal" style="position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(12px); padding: 20px;">
+        <div style="width: 100%; max-width: 580px; background: #0c0c12; border: 1px solid rgba(59, 130, 246, 0.4); padding: 28px; border-radius: 4px; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.9); font-family: 'Inter', sans-serif;">
+            <button onclick="togglePaymentModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: #9ca3af; font-size: 18px; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                <div style="width: 42px; height: 42px; border-radius: 50%; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); display: flex; align-items: center; justify-content: center; color: #60a5fa; font-size: 18px; flex-shrink: 0;">
+                    <i class="fa-solid fa-vault"></i>
+                </div>
+                <div>
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: #ffffff; text-transform: uppercase; margin: 0; letter-spacing: 1px;">Apex Escrow Financial Settlement</h3>
+                    <p style="font-size: 11px; font-family: monospace; color: #9ca3af; margin-top: 4px;">Instruksi Rekening Terproteksi &nbsp;·&nbsp; Unit: {{ $inquiry->car_model }}</p>
+                </div>
+            </div>
+
+            <!-- Escrow Details -->
+            <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(59, 130, 246, 0.3); padding: 16px; border-radius: 4px; margin-bottom: 20px;">
+                <div style="font-size: 11px; font-family: monospace; font-weight: 700; color: #60a5fa; text-transform: uppercase; margin-bottom: 10px;">
+                    <i class="fa-solid fa-building-columns"></i> Rekening Escrow Resmi Apex Automotive
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.8;">
+                    <div><strong>Bank:</strong> Bank Central Asia (BCA) — Cabang Pondok Indah</div>
+                    <div><strong>Nama Rekening:</strong> PT APEX AUTOMOTIVE INDONESIA (ESCROW ACCOUNT)</div>
+                    <div><strong>Nomor Rekening:</strong> <span style="font-family: monospace; font-size: 14px; font-weight: 700; color: #ffffff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 2px;">8890-1299-8800</span></div>
+                </div>
+            </div>
+
+            <!-- Payment Options -->
+            <div style="margin-bottom: 20px; font-size: 12px; color: #9ca3af; line-height: 1.6;">
+                <p style="margin-bottom: 8px;"><strong style="color: #ffffff;">Metode Pembayaran:</strong></p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 2px;">
+                        <span style="font-weight: 700; color: #ffffff; display: block;">Booking Fee (Lock Slot)</span>
+                        <span style="font-size: 11px; color: #64748b;">Rp 100.000.000</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 2px;">
+                        <span style="font-weight: 700; color: #ffffff; display: block;">Pelunasan OTR / DP</span>
+                        <span style="font-size: 11px; color: #64748b;">Sesuai SPK Rincian Penawaran</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div style="font-size: 11px; color: #9ca3af; background: rgba(255,255,255,0.02); padding: 12px; border-left: 2px solid #2563eb; margin-bottom: 20px;">
+                Setelah melakukan transfer, konfirmasikan bukti transfer kepada Sales RM Anda via thread chat konsultasi di samping ini. Status akan diperbarui ke <strong>PAYMENT_VERIFIED</strong>.
+            </div>
+
+            <div style="text-align: right;">
+                <button onclick="togglePaymentModal()" style="padding: 10px 24px; background: #2563eb; color: #ffffff; border: none; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px;">
+                    Saya Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="consultation-layout">
         {{-- Sidebar: Inquiry details --}}
         <aside class="sidebar">
@@ -510,6 +568,34 @@
                         <i class="fa-solid fa-pen-nib"></i>
                         <span>Review &amp; E-Sign SPA</span>
                     </button>
+                @endif
+            {{-- Phase 5: Financial Settlement (Payment Escrow Box) --}}
+            <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(59, 130, 246, 0.4); padding: 16px; border-radius: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-vault" style="color: #60a5fa; font-size: 14px;"></i>
+                    <span style="font-size: 11px; font-weight: 700; color: #60a5fa; letter-spacing: 1px; text-transform: uppercase;">Phase 5: Pembayaran Escrow</span>
+                </div>
+
+                @if($inquiry->status === 'payment_verified' || $inquiry->status === 'scheduled_delivery' || $inquiry->status === 'delivered_completed')
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px;">
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 4px;">
+                            <i class="fa-solid fa-shield-check"></i>
+                            <span>Pembayaran Terverifikasi Escrow</span>
+                        </div>
+                        <p style="font-size: 11px; color: #9ca3af;">Dana aman tersimpan di Rekening Terproteksi Apex Automotive Indonesia.</p>
+                    </div>
+                @elseif($inquiry->buyer_signed)
+                    <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
+                        Kontrak SPA telah sah. Silakan lakukan pembayaran Booking Fee / Pelunasan ke Rekening Escrow Terproteksi.
+                    </p>
+                    <button onclick="togglePaymentModal()" style="width: 100%; padding: 12px; background: #2563eb; color: #ffffff; border: none; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>Bayar via Escrow Terproteksi</span>
+                    </button>
+                @else
+                    <p style="font-size: 11px; color: #6b7280; font-style: italic;">
+                        Instruksi pembayaran akan aktif setelah Dokumen SPA ditandatangani (Phase 4).
+                    </p>
                 @endif
             </div>
 
@@ -718,9 +804,20 @@
 
         function toggleContractModal() {
             const modal = document.getElementById('contractModal');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) {
+            if (modal.style.display === 'none' || modal.style.display === '') {
+                modal.style.display = 'flex';
                 initSignatureCanvas();
+            } else {
+                modal.style.display = 'none';
+            }
+        }
+
+        function togglePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            if (modal.style.display === 'none' || modal.style.display === '') {
+                modal.style.display = 'flex';
+            } else {
+                modal.style.display = 'none';
             }
         }
 
