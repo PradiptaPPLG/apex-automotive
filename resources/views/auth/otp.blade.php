@@ -127,7 +127,11 @@
             <!-- HEADER -->
             <div class="space-y-2 text-center fade-up fade-up-1">
                 <div class="flex items-center justify-center space-x-3 mb-5">
-                    <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-8 w-auto object-contain">
+                    <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-8 w-8 object-contain shrink-0">
+                    <div class="text-left">
+                        <div class="font-serif text-sm font-black tracking-widest text-white uppercase leading-none">APEX</div>
+                        <div class="text-[9px] font-mono tracking-[0.3em] text-neutral-400 uppercase">Automotive</div>
+                    </div>
                 </div>
 
                 <!-- Lock Icon with pulse ring -->

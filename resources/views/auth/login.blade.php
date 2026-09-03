@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login — APEX AUTOMOTIVE</title>
+    <title>Login VIP — APEX AUTOMOTIVE</title>
     <meta name="description" content="Sign in to your Apex Automotive VIP Buyer account.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -27,236 +27,388 @@
     @endif
 
     <style>
-        @keyframes bgPan {
-            0% { transform: scale(1.08) translateX(0); }
-            100% { transform: scale(1.12) translateX(-2%); }
-        }
-        .bg-pan { animation: bgPan 12s ease-in-out infinite alternate; }
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Outfit', sans-serif; background-color: #050505; color: #fff; overflow-x: hidden; }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .bg-container {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
         }
-        .fade-up { animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .fade-up-1 { animation-delay: 0.05s; }
-        .fade-up-2 { animation-delay: 0.15s; }
-        .fade-up-3 { animation-delay: 0.25s; }
-        .fade-up-4 { animation-delay: 0.35s; }
-
-        .glass-form {
-            background: rgba(10, 10, 14, 0.88);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255,255,255,0.09);
-        }
-        .input-apex {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: white;
+        .bg-img {
             width: 100%;
-            padding: 0.85rem 1rem 0.85rem 2.75rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.875rem;
-            outline: none;
-            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            height: 100%;
+            object-fit: cover;
+            animation: bgZoom 20s ease-in-out infinite alternate;
         }
-        .input-apex:focus {
+        @keyframes bgZoom {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.08); }
+        }
+        .bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.7) 50%, rgba(5,5,5,0.4) 100%);
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 24px;
+            left: 32px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 12px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            transition: color 0.2s ease;
+        }
+        .top-nav:hover { color: #ffffff; }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 60px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .left-content {
+            flex: 1;
+            max-width: 580px;
+            padding-right: 40px;
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #e50914;
+            font-size: 11px;
+            font-family: monospace;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .badge-line {
+            width: 32px;
+            height: 2px;
+            background-color: #e50914;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.05;
+            text-transform: uppercase;
+            margin: 0 0 20px 0;
+            letter-spacing: 1px;
+        }
+        .hero-title span { color: #e50914; }
+
+        .hero-desc {
+            color: rgba(255,255,255,0.65);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 36px;
+            max-width: 440px;
+        }
+
+        .stats-row {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-item { text-align: left; }
+        .stat-val { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 700; color: #fff; }
+        .stat-lbl { font-size: 10px; font-family: monospace; color: rgba(255,255,255,0.4); tracking-widest: 2px; text-transform: uppercase; margin-top: 2px; }
+
+        .right-content {
+            width: 100%;
+            max-width: 440px;
+            flex-shrink: 0;
+        }
+
+        .login-card {
+            background: rgba(12, 12, 16, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-left: 3px solid #e50914;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .brand-logo { height: 32px; width: auto; }
+        .brand-name { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 900; letter-spacing: 3px; color: #fff; line-height: 1; }
+        .brand-sub { font-size: 9px; font-family: monospace; letter-spacing: 3px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 2px; }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 0 6px 0;
+            letter-spacing: 1px;
+        }
+        .card-subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            margin: 0 0 28px 0;
+            line-height: 1.4;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label {
+            display: block;
+            font-size: 10px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-wrapper { position: relative; }
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+        }
+        .custom-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 14px 14px 14px 42px;
+            font-size: 14px;
+            outline: none;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+        .custom-input:focus {
             border-color: #e50914;
             background: rgba(229,9,20,0.05);
             box-shadow: 0 0 0 3px rgba(229,9,20,0.15);
         }
-        .input-apex::placeholder { color: rgba(255,255,255,0.3); }
-        .btn-apex-red {
-            background: linear-gradient(135deg, #e50914 0%, #b80710 100%);
-            color: white;
-            border: none;
+
+        .btn-submit {
             width: 100%;
-            padding: 0.9rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
+            background: linear-gradient(135deg, #e50914 0%, #b80710 100%);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.2em;
+            letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(229,9,20,0.35);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(229,9,20,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-apex-red:hover {
-            opacity: 0.92;
+        .btn-submit:hover {
+            opacity: 0.95;
             transform: translateY(-1px);
-            box-shadow: 0 8px 28px rgba(229,9,20,0.45);
-        }
-        .btn-apex-red:active { transform: translateY(0); }
-        .noise-overlay {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            box-shadow: 0 6px 25px rgba(229,9,20,0.6);
         }
 
-        /* Red accent line on left edge of form */
-        .form-accent::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 3px; height: 100%;
-            background: linear-gradient(to bottom, transparent, #e50914 30%, #e50914 70%, transparent);
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+        .divider-text { font-size: 9px; font-family: monospace; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .feat-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 12px 6px;
+            border-radius: 2px;
+        }
+        .feat-icon { color: #e50914; font-size: 14px; margin-bottom: 6px; }
+        .feat-text { font-size: 9px; font-family: monospace; color: rgba(255,255,255,0.5); line-height: 1.2; }
+
+        .terms-text {
+            font-size: 10px;
+            color: rgba(255,255,255,0.35);
+            text-align: center;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .terms-text a { color: rgba(255,255,255,0.6); text-decoration: underline; }
+
+        @media (max-width: 992px) {
+            .left-content { display: none; }
+            .main-wrapper { justify-content: center; padding: 20px; }
+            .top-nav { top: 16px; left: 16px; }
         }
     </style>
 </head>
-<body class="bg-black text-white font-sans min-h-screen overflow-x-hidden">
+<body>
 
-    <!-- FULL-SCREEN CINEMATIC BACKGROUND -->
-    <div class="fixed inset-0 z-0 overflow-hidden">
-        <img src="{{ asset('images/carousell/carousell1.png') }}"
-             alt="Apex Automotive Showroom"
-             class="bg-pan w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40"></div>
-        <div class="absolute inset-0 noise-overlay"></div>
+    <!-- BACKGROUND IMAGE & OVERLAY -->
+    <div class="bg-container">
+        <img src="{{ asset('images/carousell/carousell1.png') }}" alt="Apex Automotive Showroom" class="bg-img">
+        <div class="bg-overlay"></div>
     </div>
 
     <!-- BACK TO SHOWROOM LINK -->
-    <a href="/" class="fixed top-6 left-6 z-50 flex items-center space-x-2 text-xs font-mono tracking-widest text-white/60 hover:text-white transition-colors group">
-        <i class="fa-solid fa-arrow-left text-red-500 group-hover:-translate-x-1 transition-transform"></i>
+    <a href="/" class="top-nav">
+        <i class="fa-solid fa-arrow-left text-red-500"></i>
         <span>KEMBALI KE SHOWROOM</span>
     </a>
 
-    <!-- MAIN LAYOUT: LEFT BRANDING + RIGHT FORM (2-column grid) -->
-    <div class="relative z-10 min-h-screen grid lg:grid-cols-2">
+    <!-- MAIN SECTION -->
+    <div class="main-wrapper">
 
-        <!-- LEFT: Branding (large screens only) -->
-        <div class="hidden lg:flex flex-col justify-center pl-16 xl:pl-24 pr-8 space-y-8">
-            <div class="space-y-4 fade-up fade-up-1">
-                <div class="flex items-center space-x-3">
-                    <span class="h-px w-8 bg-red-600"></span>
-                    <span class="text-xs font-mono tracking-[0.35em] text-red-500 uppercase font-bold">VIP Buyer Portal</span>
-                </div>
-                <h1 class="text-5xl xl:text-7xl font-serif font-black uppercase leading-none text-white drop-shadow-2xl">
-                    The Finest<br>Hypercars.<br>
-                    <span class="text-red-600">Reserved<br>for You.</span>
-                </h1>
+        <!-- LEFT BRANDING PANEL -->
+        <div class="left-content">
+            <div class="badge-tag">
+                <span class="badge-line"></span>
+                <span>VIP Buyer Portal</span>
             </div>
-            <p class="text-sm text-neutral-400 max-w-xs font-light leading-relaxed fade-up fade-up-2">
+            <h1 class="hero-title">
+                The Finest<br>Hypercars.<br>
+                <span>Reserved<br>for You.</span>
+            </h1>
+            <p class="hero-desc">
                 Masuk ke akun VIP Apex Automotive Anda untuk mengakses konfigurasi eksklusif, mengajukan SPK, dan menjadwalkan serah terima kendaraan impian Anda.
             </p>
-            <div class="flex items-center space-x-8 fade-up fade-up-3">
-                <div class="text-center">
-                    <div class="text-2xl font-serif font-black text-white">10+</div>
-                    <div class="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">Brand Eksklusif</div>
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-val">10+</div>
+                    <div class="stat-lbl">Brand Eksklusif</div>
                 </div>
-                <div class="w-px h-8 bg-white/10"></div>
-                <div class="text-center">
-                    <div class="text-2xl font-serif font-black text-white">Rp 6B+</div>
-                    <div class="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">Harga Mulai</div>
+                <div style="width: 1px; height: 28px; background: rgba(255,255,255,0.1);"></div>
+                <div class="stat-item">
+                    <div class="stat-val">Rp 6B+</div>
+                    <div class="stat-lbl">Harga Mulai</div>
                 </div>
-                <div class="w-px h-8 bg-white/10"></div>
-                <div class="text-center">
-                    <div class="text-2xl font-serif font-black text-white">WGD</div>
-                    <div class="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">White-Glove Delivery</div>
+                <div style="width: 1px; height: 28px; background: rgba(255,255,255,0.1);"></div>
+                <div class="stat-item">
+                    <div class="stat-val">WGD</div>
+                    <div class="stat-lbl">White-Glove</div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT: Login Form Panel -->
-        <div class="flex items-center justify-center p-6 lg:p-12 min-h-screen lg:min-h-0">
-            <div class="glass-form form-accent relative w-full max-w-[420px] p-8 sm:p-10 space-y-7 shadow-2xl">
+        <!-- RIGHT LOGIN FORM PANEL -->
+        <div class="right-content">
+            <div class="login-card">
 
-                <!-- LOGO + HEADING -->
-                <div class="fade-up fade-up-1">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-8 w-8 object-contain flex-shrink-0">
-                        <div>
-                            <div class="font-serif text-sm font-black tracking-widest text-white uppercase leading-none">APEX</div>
-                            <div class="text-[9px] font-mono tracking-[0.3em] text-neutral-400 uppercase">Automotive</div>
-                        </div>
+                <div class="brand-header">
+                    <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Logo" class="brand-logo">
+                    <div>
+                        <div class="brand-name">APEX</div>
+                        <div class="brand-sub">Automotive</div>
                     </div>
-                    <h2 class="text-2xl font-serif font-black text-white uppercase tracking-wide leading-tight">
-                        Masuk ke Akun<br>VIP Anda
-                    </h2>
-                    <p class="text-xs text-neutral-400 font-light pt-1.5">
-                        Kami akan mengirimkan kode OTP ke email Anda. Tanpa password diperlukan.
-                    </p>
                 </div>
 
-                <!-- FLASH INFO MESSAGE -->
+                <h2 class="card-title">Masuk ke Akun VIP</h2>
+                <p class="card-subtitle">Kami akan mengirimkan kode OTP ke email Anda. Tanpa password.</p>
+
                 @if (session('info'))
-                    <div class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono p-3 flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check mt-0.5 shrink-0"></i>
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 11px; font-family: monospace; padding: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-circle-check"></i>
                         <span>{{ session('info') }}</span>
                     </div>
                 @endif
 
-                <!-- EMAIL FORM -->
-                <form action="{{ route('auth.send-otp') }}" method="POST" class="space-y-5 fade-up fade-up-2">
+                <form action="{{ route('auth.send-otp') }}" method="POST">
                     @csrf
-
-                    <div class="space-y-1.5">
-                        <label for="email" class="block text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold">
-                            Alamat Email
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                <i class="fa-regular fa-envelope text-neutral-500 text-sm"></i>
-                            </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Alamat Email</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-envelope input-icon"></i>
                             <input
                                 id="email"
                                 type="email"
                                 name="email"
                                 value="{{ old('email') }}"
                                 placeholder="email@example.com"
-                                autocomplete="email"
-                                class="input-apex"
+                                class="custom-input"
                                 required
+                                autofocus
                             >
                         </div>
                         @error('email')
-                            <p class="text-red-500 text-[11px] font-mono mt-1">{{ $message }}</p>
+                            <p style="color: #ef4444; font-size: 11px; font-family: monospace; margin-top: 6px;">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn-apex-red">
-                        <i class="fa-solid fa-paper-plane mr-2"></i>
-                        KIRIM KODE OTP
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Kirim Kode OTP
                     </button>
                 </form>
 
-                <!-- DIVIDER -->
-                <div class="flex items-center space-x-3 fade-up fade-up-3">
-                    <div class="flex-1 h-px bg-white/10"></div>
-                    <span class="text-[10px] font-mono text-neutral-600 uppercase tracking-widest">Keamanan &amp; Privasi</span>
-                    <div class="flex-1 h-px bg-white/10"></div>
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-text">Keamanan & Privasi</div>
+                    <div class="divider-line"></div>
                 </div>
 
-                <!-- SECURITY BADGES -->
-                <div class="grid grid-cols-3 gap-3 text-center fade-up fade-up-4">
-                    <div class="space-y-1.5">
-                        <div class="w-9 h-9 mx-auto bg-white/5 border border-white/10 flex items-center justify-center">
-                            <i class="fa-solid fa-shield-halved text-red-500 text-sm"></i>
-                        </div>
-                        <p class="text-[10px] font-mono text-neutral-500 leading-tight">Terenkripsi<br>End-to-End</p>
+                <div class="features-grid">
+                    <div class="feat-box">
+                        <i class="fa-solid fa-shield-halved feat-icon"></i>
+                        <div class="feat-text">Terenkripsi<br>End-to-End</div>
                     </div>
-                    <div class="space-y-1.5">
-                        <div class="w-9 h-9 mx-auto bg-white/5 border border-white/10 flex items-center justify-center">
-                            <i class="fa-solid fa-key text-red-500 text-sm"></i>
-                        </div>
-                        <p class="text-[10px] font-mono text-neutral-500 leading-tight">OTP Sekali<br>Pakai</p>
+                    <div class="feat-box">
+                        <i class="fa-solid fa-key feat-icon"></i>
+                        <div class="feat-text">OTP Sekali<br>Pakai</div>
                     </div>
-                    <div class="space-y-1.5">
-                        <div class="w-9 h-9 mx-auto bg-white/5 border border-white/10 flex items-center justify-center">
-                            <i class="fa-solid fa-user-secret text-red-500 text-sm"></i>
-                        </div>
-                        <p class="text-[10px] font-mono text-neutral-500 leading-tight">Zero<br>Password</p>
+                    <div class="feat-box">
+                        <i class="fa-solid fa-user-secret feat-icon"></i>
+                        <div class="feat-text">Zero<br>Password</div>
                     </div>
                 </div>
 
-                <!-- FOOTER NOTE -->
-                <p class="text-[10px] font-mono text-neutral-600 text-center fade-up fade-up-4">
-                    Dengan masuk, Anda menyetujui
-                    <span class="text-neutral-400 underline cursor-pointer">Syarat &amp; Ketentuan</span>
-                    serta
-                    <span class="text-neutral-400 underline cursor-pointer">Kebijakan Privasi</span>
-                    PT Apex Automotive Indonesia.
+                <p class="terms-text">
+                    Dengan masuk, Anda menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi</a> PT Apex Automotive.
                 </p>
+
             </div>
         </div>
+
     </div>
+
 </body>
 </html>
+
