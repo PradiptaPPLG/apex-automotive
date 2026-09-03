@@ -7,219 +7,295 @@
     <meta name="description" content="Masukkan kode OTP yang dikirim ke email Anda.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                darkMode: 'class',
-                theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Cinzel', 'serif'] } } }
-            }
-        </script>
-    @endif
-
     <style>
-        @keyframes bgPan {
-            0% { transform: scale(1.08); }
-            100% { transform: scale(1.12) translateX(-1.5%); }
-        }
-        .bg-pan { animation: bgPan 14s ease-in-out infinite alternate; }
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Outfit', sans-serif; background-color: #050505; color: #fff; overflow-x: hidden; }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .bg-container {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
         }
-        .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .fade-up-1 { animation-delay: 0.05s; }
-        .fade-up-2 { animation-delay: 0.15s; }
-        .fade-up-3 { animation-delay: 0.25s; }
-
-        .glass-form {
-            background: rgba(10, 10, 14, 0.85);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(255,255,255,0.09);
+        .bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: bgZoom 20s ease-in-out infinite alternate;
+        }
+        @keyframes bgZoom {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.08); }
+        }
+        .bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5,5,5,0.78);
         }
 
-        /* OTP Digit Inputs */
-        .otp-digit {
+        .top-nav {
+            position: fixed;
+            top: 24px;
+            left: 32px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 12px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            transition: color 0.2s ease;
+        }
+        .top-nav:hover { color: #ffffff; }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .otp-card {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(12, 12, 16, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-top: 3px solid #e50914;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+
+        .brand-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .brand-logo { height: 32px; width: auto; }
+        .brand-name { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 900; letter-spacing: 3px; color: #fff; line-height: 1; text-align: left; }
+        .brand-sub { font-size: 9px; font-family: monospace; letter-spacing: 3px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 2px; text-align: left; }
+
+        .shield-icon-wrapper {
+            position: relative;
             width: 56px;
-            height: 64px;
-            background: rgba(255,255,255,0.05);
+            height: 56px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(229,9,20,0.1);
+            border: 1px solid rgba(229,9,20,0.3);
+            border-radius: 50%;
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 0 6px 0;
+            letter-spacing: 1px;
+        }
+        .card-subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+        }
+
+        /* OTP Grid */
+        .otp-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .otp-digit {
+            width: 48px;
+            height: 58px;
+            background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.15);
-            color: white;
+            color: #fff;
             font-family: 'Outfit', sans-serif;
-            font-size: 1.75rem;
+            font-size: 24px;
             font-weight: 700;
             text-align: center;
             outline: none;
-            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
+            border-radius: 2px;
+            transition: all 0.2s ease;
             caret-color: #e50914;
         }
         .otp-digit:focus {
             border-color: #e50914;
-            background: rgba(229,9,20,0.07);
-            box-shadow: 0 0 0 3px rgba(229,9,20,0.18);
-            transform: scale(1.05);
+            background: rgba(229,9,20,0.08);
+            box-shadow: 0 0 0 3px rgba(229,9,20,0.15);
         }
         .otp-digit.filled {
-            border-color: rgba(229,9,20,0.6);
-            background: rgba(229,9,20,0.08);
-        }
-        .otp-digit.shake {
-            animation: shake 0.4s ease;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-5px); }
-            40% { transform: translateX(5px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(4px); }
+            border-color: rgba(229,9,20,0.5);
+            background: rgba(229,9,20,0.06);
         }
 
-        .btn-apex-red {
-            background: linear-gradient(135deg, #e50914 0%, #b80710 100%);
-            color: white;
-            border: none;
+        .timer-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 11px;
+            font-family: monospace;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 24px;
+        }
+
+        .btn-submit {
             width: 100%;
-            padding: 0.9rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
+            background: linear-gradient(135deg, #e50914 0%, #b80710 100%);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.2em;
+            letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(229,9,20,0.35);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(229,9,20,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-apex-red:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(229,9,20,0.45); }
-        .btn-apex-red:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-submit:hover:not(:disabled) {
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(229,9,20,0.6);
+        }
+        .btn-submit:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
 
-        /* Countdown ring */
-        @keyframes countdown { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 188.5; } }
-        .countdown-ring { animation: countdown 600s linear forwards; }
+        .resend-box {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+        .btn-resend {
+            background: none;
+            border: none;
+            color: #e50914;
+            font-family: monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 6px;
+        }
+        .btn-resend:hover { color: #ff4d4d; }
     </style>
 </head>
-<body class="bg-black text-white font-sans min-h-screen overflow-hidden">
+<body>
 
-    <!-- FULL-SCREEN CINEMATIC BACKGROUND -->
-    <div class="fixed inset-0 z-0">
-        <img src="{{ asset('images/carousell/carousell2.png') }}"
-             alt="Apex Automotive"
-             class="bg-pan w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/40"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+    <!-- BACKGROUND IMAGE & OVERLAY -->
+    <div class="bg-container">
+        <img src="{{ asset('images/carousell/carousell2.png') }}" alt="Apex Automotive" class="bg-img">
+        <div class="bg-overlay"></div>
     </div>
 
     <!-- BACK LINK -->
-    <a href="{{ route('login') }}" class="fixed top-6 left-6 z-50 flex items-center space-x-2 text-xs font-mono tracking-widest text-white/60 hover:text-white transition-colors group">
-        <i class="fa-solid fa-arrow-left text-red-500 group-hover:-translate-x-1 transition-transform"></i>
+    <a href="{{ route('login') }}" class="top-nav">
+        <i class="fa-solid fa-arrow-left text-red-500"></i>
         <span>GANTI EMAIL</span>
     </a>
 
-    <div class="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <div class="glass-form w-full max-w-md p-8 sm:p-10 space-y-8 shadow-2xl">
+    <!-- MAIN SECTION -->
+    <div class="main-wrapper">
+        <div class="otp-card">
 
-            <!-- HEADER -->
-            <div class="space-y-2 text-center fade-up fade-up-1">
-                <div class="flex items-center justify-center space-x-3 mb-5">
-                    <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-8 w-8 object-contain shrink-0">
-                    <div class="text-left">
-                        <div class="font-serif text-sm font-black tracking-widest text-white uppercase leading-none">APEX</div>
-                        <div class="text-[9px] font-mono tracking-[0.3em] text-neutral-400 uppercase">Automotive</div>
-                    </div>
+            <div class="brand-header">
+                <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Logo" class="brand-logo">
+                <div>
+                    <div class="brand-name">APEX</div>
+                    <div class="brand-sub">Automotive</div>
                 </div>
-
-                <!-- Lock Icon with pulse ring -->
-                <div class="relative inline-flex items-center justify-center w-16 h-16 mx-auto mb-2">
-                    <div class="absolute inset-0 bg-red-600/20 rounded-full animate-ping"></div>
-                    <div class="relative w-14 h-14 bg-red-600/15 border border-red-600/30 rounded-full flex items-center justify-center">
-                        <i class="fa-solid fa-shield-halved text-red-500 text-xl"></i>
-                    </div>
-                </div>
-
-                <h2 class="text-2xl font-serif font-black text-white uppercase tracking-wide">
-                    Verifikasi Identitas
-                </h2>
-                <p class="text-xs text-neutral-400 font-light leading-relaxed">
-                    Kami telah mengirimkan kode 6 digit ke<br>
-                    <strong class="text-white font-semibold">{{ $email }}</strong>
-                </p>
             </div>
 
-            <!-- ERROR MESSAGE -->
+            <div class="shield-icon-wrapper">
+                <i class="fa-solid fa-shield-halved" style="color: #e50914; font-size: 20px;"></i>
+            </div>
+
+            <h2 class="card-title">Verifikasi Identitas</h2>
+            <p class="card-subtitle">
+                Kode 6 digit telah dikirimkan ke<br>
+                <strong style="color: #fff;">{{ $email }}</strong>
+            </p>
+
             @if ($errors->has('otp'))
-                <div class="bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono p-3 flex items-start space-x-2">
-                    <i class="fa-solid fa-triangle-exclamation mt-0.5 shrink-0"></i>
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; font-size: 11px; font-family: monospace; padding: 10px; margin-bottom: 20px; text-align: left; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
                     <span>{{ $errors->first('otp') }}</span>
                 </div>
             @endif
 
-            <!-- OTP ENTRY FORM -->
-            <form action="{{ route('auth.verify-otp') }}" method="POST" id="otpForm" class="space-y-6 fade-up fade-up-2">
+            <form action="{{ route('auth.verify-otp') }}" method="POST" id="otpForm">
                 @csrf
                 <input type="hidden" name="email" value="{{ $email }}">
-                <!-- Hidden combined input that gets submitted -->
                 <input type="hidden" name="otp" id="otpHidden">
 
-                <div class="space-y-3">
-                    <label class="block text-[11px] font-mono tracking-widest uppercase text-neutral-400 font-semibold text-center">
-                        Masukkan Kode OTP
-                    </label>
-
-                    <!-- 6 digit boxes -->
-                    <div class="flex items-center justify-center gap-2 sm:gap-3" id="otpBoxes">
-                        @for ($i = 0; $i < 6; $i++)
-                            <input
-                                type="text"
-                                inputmode="numeric"
-                                maxlength="1"
-                                class="otp-digit @error('otp') shake @enderror"
-                                id="otp-{{ $i }}"
-                                autocomplete="off"
-                                aria-label="Digit {{ $i + 1 }} dari 6"
-                            >
-                        @endfor
-                    </div>
-
-                    <!-- Countdown Timer -->
-                    <div class="flex items-center justify-center space-x-2 pt-1">
-                        <i class="fa-regular fa-clock text-neutral-600 text-xs"></i>
-                        <span class="text-[11px] font-mono text-neutral-500">
-                            Berlaku selama <span id="countdown" class="text-white font-bold">10:00</span>
-                        </span>
-                    </div>
+                <div class="otp-boxes">
+                    @for ($i = 0; $i < 6; $i++)
+                        <input
+                            type="text"
+                            inputmode="numeric"
+                            maxlength="1"
+                            class="otp-digit"
+                            id="otp-{{ $i }}"
+                            autocomplete="off"
+                        >
+                    @endfor
                 </div>
 
-                <button type="submit" id="verifyBtn" class="btn-apex-red" disabled>
-                    <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i>
-                    VERIFIKASI & MASUK
+                <div class="timer-row">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>Berlaku selama <strong id="countdown" style="color: #fff;">10:00</strong></span>
+                </div>
+
+                <button type="submit" id="verifyBtn" class="btn-submit" disabled>
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    Verifikasi & Masuk
                 </button>
             </form>
 
-            <!-- RESEND OTP -->
-            <div class="text-center space-y-2 fade-up fade-up-3">
-                <p class="text-xs text-neutral-500">
-                    Tidak menerima kode?
-                </p>
-                <form action="{{ route('auth.send-otp') }}" method="POST" class="inline">
+            <div class="resend-box">
+                Tidak menerima kode?
+                <form action="{{ route('auth.send-otp') }}" method="POST" style="margin: 0;">
                     @csrf
                     <input type="hidden" name="email" value="{{ $email }}">
-                    <button type="submit"
-                            class="text-xs font-mono font-bold text-red-500 hover:text-red-400 tracking-widest uppercase underline underline-offset-4 transition-colors">
-                        KIRIM ULANG OTP
-                    </button>
+                    <button type="submit" class="btn-resend">Kirim Ulang OTP</button>
                 </form>
             </div>
+
         </div>
     </div>
 
     <script>
-        // ── OTP BOX CONTROLLER ──────────────────────────────────────
         const digits = Array.from(document.querySelectorAll('.otp-digit'));
         const hidden = document.getElementById('otpHidden');
         const verifyBtn = document.getElementById('verifyBtn');
@@ -232,7 +308,6 @@
 
         digits.forEach((el, idx) => {
             el.addEventListener('input', (e) => {
-                // Only allow numbers
                 el.value = el.value.replace(/\D/g, '').slice(-1);
                 if (el.value) {
                     el.classList.add('filled');
@@ -252,7 +327,6 @@
                 }
             });
 
-            // Allow paste of full OTP into first box
             el.addEventListener('paste', (e) => {
                 e.preventDefault();
                 const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
@@ -267,18 +341,16 @@
             });
         });
 
-        // Focus first box on load
         digits[0]?.focus();
 
-        // ── 10-MINUTE COUNTDOWN ────────────────────────────────────
-        let timeLeft = 600; // 10 min in seconds
+        let timeLeft = 600;
         const countdownEl = document.getElementById('countdown');
 
         function updateCountdown() {
             const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
             const sec = String(timeLeft % 60).padStart(2, '0');
             countdownEl.textContent = `${min}:${sec}`;
-            if (timeLeft <= 60) countdownEl.classList.add('text-red-500');
+            if (timeLeft <= 60) countdownEl.style.color = '#ef4444';
             if (timeLeft <= 0) {
                 countdownEl.textContent = 'Kadaluarsa';
                 verifyBtn.disabled = true;
@@ -291,3 +363,4 @@
     </script>
 </body>
 </html>
+
