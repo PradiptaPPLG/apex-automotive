@@ -418,12 +418,13 @@
                 <!-- CAR CATALOG GRID (CLEAN LUXURY GRID - CLICK ANY CAR TO INSPECT & TOGGLE COLORS) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="carCatalog">
                     
-                    <!-- CAR CARD 1: BMW M4 COMPETITION -->
-                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="BMW" data-price="8500" data-condition="NEW" onclick="openCarInspector('bmw_m4')">
+                    <!-- CAR CARD 1: BMW M4 COMPETITION (BRAND NEW #1 - 10% DISCOUNT WITH PRICE DROP ANIMATION) -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="BMW" data-price="7650" data-condition="NEW" onclick="openCarInspector('bmw_m4')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
                             <img src="{{ asset('images/brand/bmwm4competition_sao_paulo_yellow.png') }}" alt="BMW M4 Competition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
-                                BRAND NEW
+                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md flex items-center space-x-1">
+                                <span>BRAND NEW</span>
+                                <span class="bg-black/40 px-1 py-0.2 rounded text-amber-300 text-[9px] font-extrabold">-10% OFF</span>
                             </div>
                             <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
                                 2025
@@ -443,9 +444,15 @@
                                 </h4>
                             </div>
 
-                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
-                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
-                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 8,500,000,000</div>
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3 space-y-0.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-mono text-neutral-500">WAS: <span class="line-through font-semibold text-neutral-400">IDR 8,500,000,000</span></span>
+                                    <span class="text-[9px] font-mono font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">SAVE 10%</span>
+                                </div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500 flex items-center">
+                                    <span class="mr-1">IDR</span>
+                                    <span class="price-count-down tracking-tight" data-from="8500000000" data-to="7650000000">8,500,000,000</span>
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
@@ -465,12 +472,13 @@
                     </div>
 
 
-                    <!-- CAR CARD 2: LAMBORGHINI REVUELTO -->
-                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Lamborghini" data-price="22000" data-condition="NEW" onclick="openCarInspector('lamborghini_revuelto')">
+                    <!-- CAR CARD 2: LAMBORGHINI REVUELTO (BRAND NEW #2 - 7% DISCOUNT WITH PRICE DROP ANIMATION) -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Lamborghini" data-price="20460" data-condition="NEW" onclick="openCarInspector('lamborghini_revuelto')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
                             <img src="{{ asset('images/brand/lamborghini_revuelto_arancio_apodis.png') }}" alt="Lamborghini Revuelto" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-3 left-3 bg-neutral-900/90 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest">
-                                BRAND NEW
+                            <div class="absolute top-3 left-3 bg-neutral-900/90 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest flex items-center space-x-1">
+                                <span>BRAND NEW</span>
+                                <span class="bg-emerald-500/20 text-emerald-300 px-1 py-0.2 rounded text-[9px] font-extrabold">-7% PROMO</span>
                             </div>
                             <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
                                 2025
@@ -490,9 +498,15 @@
                                 </h4>
                             </div>
 
-                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
-                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
-                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 22,000,000,000</div>
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3 space-y-0.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-mono text-neutral-500">WAS: <span class="line-through font-semibold text-neutral-400">IDR 22,000,000,000</span></span>
+                                    <span class="text-[9px] font-mono font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">SAVE 7%</span>
+                                </div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500 flex items-center">
+                                    <span class="mr-1">IDR</span>
+                                    <span class="price-count-down tracking-tight" data-from="22000000000" data-to="20460000000">22,000,000,000</span>
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
@@ -1030,8 +1044,9 @@
                         <img id="inspectCarImg" src="" alt="Car Inspection Preview" class="car-inspect-img w-full h-full object-cover">
                         
                         <!-- BADGE TOP LEFT -->
-                        <div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg">
+                        <div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg flex items-center space-x-1.5">
                             <span id="inspectCondition">BRAND NEW</span>
+                            <span id="inspectDiscountBadge" class="bg-black/50 text-amber-300 px-1.5 py-0.5 rounded text-[9px] font-extrabold hidden">-10% OFF</span>
                         </div>
 
                         <!-- BADGE TOP RIGHT (YEAR) -->
@@ -1056,10 +1071,18 @@
                         <h3 id="inspectTitle" class="text-2xl sm:text-3xl font-serif font-black uppercase tracking-tight leading-tight">MODEL TITLE</h3>
                     </div>
 
-                    <!-- PRICE TAG -->
-                    <div class="bg-neutral-100 dark:bg-neutral-900/80 p-4 border border-neutral-200 dark:border-white/10">
-                        <span class="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 block uppercase">STARTING PRICE</span>
-                        <span id="inspectPrice" class="text-2xl font-bold font-mono text-red-600 dark:text-red-500">IDR --</span>
+                    <!-- PRICE TAG WITH STRIKETHROUGH ORIGINAL PRICE & ANIMATED COUNTDOWN -->
+                    <div class="bg-neutral-100 dark:bg-neutral-900/80 p-4 border border-neutral-200 dark:border-white/10 space-y-1">
+                        <div id="inspectOriginalPriceRow" class="hidden items-center justify-between text-xs font-mono">
+                            <span class="text-neutral-500">ORIGINAL PRICE: <span id="inspectOriginalPrice" class="line-through font-semibold text-neutral-400">IDR --</span></span>
+                            <span id="inspectSaveBadge" class="text-[9px] font-extrabold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">SAVE --</span>
+                        </div>
+
+                        <span class="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 block uppercase">FINAL OFFER PRICE</span>
+                        <div class="text-2xl font-bold font-mono text-red-600 dark:text-red-500 flex items-center">
+                            <span class="mr-1">IDR</span>
+                            <span id="inspectPrice" class="price-count-down tracking-tight" data-from="0" data-to="0">0</span>
+                        </div>
                     </div>
 
                     <!-- INTERACTIVE EXTERIOR COLOR CONFIGURATOR (ROUND COLOR DOTS) -->
@@ -1159,13 +1182,15 @@
          JAVASCRIPT CONTROLLER
          ========================================== -->
     <script>
-        // 0. CAR DATA DICTIONARY WITH ALL 23 BRAND IMAGE VARIANTS
+        // 0. CAR DATA DICTIONARY WITH DISCOUNT PRICES & 23 BRAND IMAGE VARIANTS
         const CAR_DATABASE = {
             'bmw_m4': {
                 brand: 'BMW MOTORSPORT',
                 model: 'M4 COMPETITION COUPE',
                 year: '2025',
-                price: 'IDR 8,500,000,000',
+                originalPriceNum: 8500000000,
+                finalPriceNum: 7650000000,
+                discountPct: '10%',
                 condition: 'BRAND NEW',
                 specs: [
                     { label: 'ENGINE', val: '3.0L Twin-Turbo Inline-6' },
@@ -1185,7 +1210,9 @@
                 brand: 'LAMBORGHINI',
                 model: 'REVUELTO V12 HYBRID',
                 year: '2025',
-                price: 'IDR 22,000,000,000',
+                originalPriceNum: 22000000000,
+                finalPriceNum: 20460000000,
+                discountPct: '7%',
                 condition: 'BRAND NEW',
                 specs: [
                     { label: 'ENGINE', val: '6.5L V12 NA + 3 E-Motors' },
@@ -1205,7 +1232,9 @@
                 brand: 'MCLAREN',
                 model: 'SENNA GTR EDITION',
                 year: '2024',
-                price: 'IDR 28,000,000,000',
+                originalPriceNum: null,
+                finalPriceNum: 28000000000,
+                discountPct: null,
                 condition: 'APEX CERTIFIED',
                 specs: [
                     { label: 'ENGINE', val: '4.0L Twin-Turbo V8' },
@@ -1224,7 +1253,9 @@
                 brand: 'PORSCHE',
                 model: '911 GT3 RS (992)',
                 year: '2024',
-                price: 'IDR 11,500,000,000',
+                originalPriceNum: null,
+                finalPriceNum: 11500000000,
+                discountPct: null,
                 condition: 'APEX CERTIFIED',
                 specs: [
                     { label: 'ENGINE', val: '4.0L Naturally Aspirated Flat-6' },
@@ -1245,7 +1276,9 @@
                 brand: 'AUDI',
                 model: 'R8 V10 PERFORMANCE',
                 year: '2024',
-                price: 'IDR 7,800,000,000',
+                originalPriceNum: null,
+                finalPriceNum: 7800000000,
+                discountPct: null,
                 condition: 'PRE-OWNED',
                 specs: [
                     { label: 'ENGINE', val: '5.2L Naturally Aspirated V10' },
@@ -1266,7 +1299,9 @@
                 brand: 'KOENIGSEGG',
                 model: 'JESKO ABSOLUT',
                 year: '2025',
-                price: 'IDR 45,000,000,000',
+                originalPriceNum: null,
+                finalPriceNum: 45000000000,
+                discountPct: null,
                 condition: 'HYPERCAR SPECIAL',
                 specs: [
                     { label: 'ENGINE', val: '5.0L Twin-Turbo Flat-Plane V8' },
@@ -1285,7 +1320,7 @@
         let currentInspectedCarKey = null;
         let currentSelectedColorName = null;
 
-        // 1. INTRO SCREEN DISMISSAL (2.4 Seconds)
+        // 1. INTRO SCREEN DISMISSAL & PRICE DROPDOWN ANIMATION OBSERVER
         window.addEventListener('DOMContentLoaded', () => {
             const intro = document.getElementById('intro-screen');
             if (intro) {
@@ -1299,6 +1334,9 @@
 
             // Sync toggle button initial state
             updateToggleKnobPosition();
+
+            // Observe price countdown elements for scroll animation
+            initPriceDropObserver();
         });
 
         function updateToggleKnobPosition() {
@@ -1312,7 +1350,58 @@
         }
 
 
-        // 2. CAR INSPECTOR & COLOR CONFIGURATOR MODAL ENGINE
+        // 2. SMOOTH NUMBER PRICE DROP COUNTER ANIMATION ENGINE
+        function animatePriceDrop(el) {
+            if (!el || el.getAttribute('data-animated') === 'true') return;
+            el.setAttribute('data-animated', 'true');
+
+            const fromVal = parseInt(el.getAttribute('data-from'));
+            const toVal = parseInt(el.getAttribute('data-to'));
+
+            if (isNaN(fromVal) || isNaN(toVal) || fromVal === toVal) {
+                el.innerText = toVal.toLocaleString('id-ID');
+                return;
+            }
+
+            const duration = 1800; // ms
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease out exponential curve for realistic price drop feel
+                const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                const currentVal = Math.round(fromVal - (fromVal - toVal) * easeProgress);
+
+                el.innerText = currentVal.toLocaleString('id-ID');
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.innerText = toVal.toLocaleString('id-ID');
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        function initPriceDropObserver() {
+            const priceObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animatePriceDrop(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.price-count-down').forEach(el => {
+                priceObserver.observe(el);
+            });
+        }
+
+
+        // 3. CAR INSPECTOR & COLOR CONFIGURATOR MODAL ENGINE
         function openCarInspector(carKey) {
             const car = CAR_DATABASE[carKey];
             if (!car) return;
@@ -1322,8 +1411,36 @@
             document.getElementById('inspectBrand').innerText = car.brand;
             document.getElementById('inspectTitle').innerText = car.model;
             document.getElementById('inspectYear').innerText = car.year;
-            document.getElementById('inspectPrice').innerText = car.price;
             document.getElementById('inspectCondition').innerText = car.condition;
+
+            // Handle Discount & Strikethrough Price in Modal
+            const origPriceRow = document.getElementById('inspectOriginalPriceRow');
+            const discountBadge = document.getElementById('inspectDiscountBadge');
+
+            if (car.originalPriceNum && car.discountPct) {
+                origPriceRow.classList.remove('hidden');
+                origPriceRow.classList.add('flex');
+                document.getElementById('inspectOriginalPrice').innerText = `IDR ${car.originalPriceNum.toLocaleString('id-ID')}`;
+                document.getElementById('inspectSaveBadge').innerText = `SAVE ${car.discountPct}`;
+                
+                discountBadge.classList.remove('hidden');
+                discountBadge.innerText = `-${car.discountPct} OFF`;
+            } else {
+                origPriceRow.classList.add('hidden');
+                origPriceRow.classList.remove('flex');
+                discountBadge.classList.add('hidden');
+            }
+
+            // Price Drop animation for Modal
+            const modalPriceEl = document.getElementById('inspectPrice');
+            modalPriceEl.removeAttribute('data-animated');
+            const startPrice = car.originalPriceNum || (car.finalPriceNum * 1.05);
+            modalPriceEl.setAttribute('data-from', startPrice.toString());
+            modalPriceEl.setAttribute('data-to', car.finalPriceNum.toString());
+
+            setTimeout(() => {
+                animatePriceDrop(modalPriceEl);
+            }, 150);
 
             // Populate Specs Grid
             const specsGrid = document.getElementById('inspectSpecsGrid');
@@ -1404,7 +1521,7 @@
         }
 
 
-        // 3. PIXEL WAVE DARK/LIGHT MODE TRANSITION (Left to Right Wave)
+        // 4. PIXEL WAVE DARK/LIGHT MODE TRANSITION (Left to Right Wave)
         let isTransitioningTheme = false;
 
         function triggerPixelWaveTransition() {
@@ -1472,7 +1589,7 @@
         }
 
 
-        // 4. CAROUSEL ENGINE
+        // 5. CAROUSEL ENGINE
         let currentSlide = 0;
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.dot-indicator');
@@ -1539,7 +1656,7 @@
         startAutoSlide();
 
 
-        // 5. SCROLL ANIMATION OBSERVER
+        // 6. SCROLL ANIMATION OBSERVER
         const observerOptions = {
             threshold: 0.15,
             rootMargin: '0px 0px -50px 0px'
@@ -1558,7 +1675,7 @@
         });
 
 
-        // 6. CATALOG FILTER ENGINE
+        // 7. CATALOG FILTER ENGINE
         function applyFilters() {
             const selectedModel = document.getElementById('filterModel').value;
             const selectedPrice = document.getElementById('filterPrice').value;
@@ -1593,7 +1710,7 @@
         }
 
 
-        // 7. MODAL HANDLER
+        // 8. MODAL HANDLER
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
