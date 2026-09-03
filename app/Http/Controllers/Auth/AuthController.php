@@ -59,7 +59,8 @@ class AuthController extends Controller
             // TODO: dispatch(new SendOtpMail($email, $token));
         }
 
-        return redirect()->route('auth.otp.form', ['email' => $email])
+        return redirect()->route('login')
+            ->with('email_sent', $email)
             ->with('info', 'OTP kode telah dikirim ke email Anda. Berlaku 10 menit.');
     }
 
