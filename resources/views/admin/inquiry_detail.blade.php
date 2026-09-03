@@ -94,14 +94,25 @@
         .message-group.buyer .message-bubble { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
         .message-time { font-size: 10px; color: #374151; padding: 0 4px; }
 
-        .chat-input-area { border-top: 1px solid rgba(255,255,255,0.06); padding: 16px 24px; background: rgba(6,6,9,0.9); display: flex; gap: 12px; align-items: flex-end; }
+        .chat-input-area { border-top: 1px solid rgba(255,255,255,0.06); padding: 12px 24px; background: rgba(6,6,9,0.95); display: flex; flex-direction: column; gap: 8px; }
+        .chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
         .chat-input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; color: white; font-size: 14px; font-family: 'Inter', sans-serif; resize: none; outline: none; max-height: 120px; transition: border-color 0.2s; }
         .chat-input:focus { border-color: rgba(220,38,38,0.5); }
         .chat-input::placeholder { color: #374151; }
-        .chat-send-btn { background: #dc2626; color: white; border: none; padding: 12px 20px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.2s; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .chat-send-btn { background: #dc2626; color: white; border: none; padding: 12px 20px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.2s; display: flex; align-items: center; gap: 8px; flex-shrink: 0; align-self: stretch; }
         .chat-send-btn:hover { background: #b91c1c; }
         .chat-send-btn:disabled { background: #374151; cursor: not-allowed; }
-        .chat-hint { font-size: 11px; color: #374151; padding: 0 28px 8px; background: rgba(6,6,9,0.9); }
+        .attach-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #6b7280; padding: 0 14px; cursor: pointer; flex-shrink: 0; align-self: stretch; display: flex; align-items: center; transition: color 0.2s, border-color 0.2s; }
+        .attach-btn:hover { color: #e5e7eb; border-color: rgba(255,255,255,0.25); }
+        .attachment-preview { display: none; align-items: center; justify-content: space-between; background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); padding: 6px 12px; font-size: 11px; font-family: 'Space Mono', monospace; color: #60a5fa; }
+        .attachment-preview button { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px; padding: 0; }
+        .chat-hint { font-size: 11px; color: #374151; padding: 0 28px 8px; background: rgba(6,6,9,0.95); }
+        /* Dark scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+        * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
     </style>
 </head>
 <body>
@@ -257,19 +268,46 @@
                                 @endif
                                 {{ $msg->sender_name }}
                             </span>
-                            <div class="message-bubble">{{ $msg->message }}</div>
+                            <div class="message-bubble">
+                                {{ $msg->message }}
+                                @if($msg->attachment)
+                                    @php $ext = strtolower(pathinfo($msg->attachment, PATHINFO_EXTENSION)); @endphp
+                                    @if(in_array($ext, ['jpg','jpeg','png','webp','gif']))
+                                        <div style="margin-top:6px;">
+                                            <a href="{{ asset('storage/'.$msg->attachment) }}" target="_blank">
+                                                <img src="{{ asset('storage/'.$msg->attachment) }}" style="max-width:240px; max-height:180px; border-radius:4px; border:1px solid rgba(255,255,255,0.2);">
+                                            </a>
+                                        </div>
+                                    @else
+                                        <div style="margin-top:6px;">
+                                            <a href="{{ asset('storage/'.$msg->attachment) }}" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:2px; color:#60a5fa; text-decoration:underline; font-size:11px; font-family:monospace;">
+                                                <i class="fa-solid fa-file-pdf"></i> Lihat File Lampiran
+                                            </a>
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
                             <span class="message-time">{{ $msg->created_at->format('d M, H:i') }}</span>
                         </div>
                     @endforeach
                 @endif
                 <div id="typingIndicator" style="display:none; align-self:flex-start; padding:10px 16px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); font-size:12px; color:#6b7280; font-style:italic;">Pembeli sedang mengetik…</div>
             </div>
-            <p class="chat-hint">Tekan Enter untuk kirim, Shift+Enter untuk baris baru</p>
             <div class="chat-input-area">
-                <textarea id="messageInput" class="chat-input" placeholder="Tulis balasan kepada pembeli…" rows="2"></textarea>
-                <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
-                    <i class="fa-solid fa-paper-plane"></i> KIRIM
-                </button>
+                <div id="attachmentPreview" class="attachment-preview">
+                    <span id="attachmentFileName"><i class="fa-solid fa-paperclip"></i> File terlampir</span>
+                    <button type="button" onclick="removeAttachment()"><i class="fa-solid fa-xmark"></i> Batal</button>
+                </div>
+                <div class="chat-input-row">
+                    <input type="file" id="fileInput" accept="image/*,application/pdf" style="display: none;" onchange="handleFileSelect(this)">
+                    <button type="button" class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Lampirkan Foto / PDF">
+                        <i class="fa-solid fa-paperclip" style="font-size: 15px;"></i>
+                    </button>
+                    <textarea id="messageInput" class="chat-input" placeholder="Tulis balasan atau lampirkan file..." rows="2"></textarea>
+                    <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
+                        <i class="fa-solid fa-paper-plane"></i> KIRIM
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -286,6 +324,22 @@
         }
         scrollBottom();
 
+        let selectedFile = null;
+
+        function handleFileSelect(input) {
+            if (input.files && input.files[0]) {
+                selectedFile = input.files[0];
+                document.getElementById('attachmentFileName').innerHTML = `<i class="fa-solid fa-file"></i> ${selectedFile.name} (${Math.round(selectedFile.size/1024)} KB)`;
+                document.getElementById('attachmentPreview').style.display = 'flex';
+            }
+        }
+
+        function removeAttachment() {
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('attachmentPreview').style.display = 'none';
+        }
+
         function renderMessage(msg) {
             const group = document.createElement('div');
             group.className = `message-group ${msg.sender_type}`;
@@ -294,9 +348,21 @@
                 ? '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> '
                 : '<i class="fa-solid fa-user" style="color:#6b7280;"></i> ';
             const time = new Date(msg.created_at).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+
+            let attachmentHtml = '';
+            const fileUrl = msg.attachment_url || (msg.attachment ? `/storage/${msg.attachment}` : null);
+            if (fileUrl) {
+                const isImg = fileUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i);
+                attachmentHtml = isImg
+                    ? `<div style="margin-top:6px;"><a href="${fileUrl}" target="_blank"><img src="${fileUrl}" style="max-width:240px; max-height:180px; border-radius:4px; border:1px solid rgba(255,255,255,0.2);"></a></div>`
+                    : `<div style="margin-top:6px;"><a href="${fileUrl}" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:2px; color:#60a5fa; text-decoration:underline; font-size:11px; font-family:monospace;"><i class="fa-solid fa-file-pdf"></i> Lihat File Lampiran</a></div>`;
+            }
+
+            const messageText = msg.message ? msg.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>') : '';
+
             group.innerHTML = `
                 <span class="message-sender">${rmIcon}${msg.sender_name}</span>
-                <div class="message-bubble">${msg.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
+                <div class="message-bubble">${messageText}${attachmentHtml}</div>
                 <span class="message-time">${time}</span>
             `;
             return group;
@@ -326,16 +392,20 @@
             const input = document.getElementById('messageInput');
             const btn   = document.getElementById('sendBtn');
             const text  = input.value.trim();
-            if (!text) return;
+            if (!text && !selectedFile) return;
 
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim…';
 
+            const formData = new FormData();
+            if (text) formData.append('message', text);
+            if (selectedFile) formData.append('attachment', selectedFile);
+
             try {
                 const res = await fetch(SEND_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
-                    body: JSON.stringify({ message: text })
+                    headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+                    body: formData
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -347,6 +417,7 @@
                     lastId = data.message.id;
                     input.value = '';
                     input.style.height = 'auto';
+                    removeAttachment();
                     scrollBottom();
                 }
             } catch (e) {
