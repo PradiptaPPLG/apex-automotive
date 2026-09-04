@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\InquiryController;
@@ -24,6 +25,7 @@ Route::post('/inquire', [InquiryController::class, 'store'])->name('inquire.stor
 // Auth — Login flow
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login/qr', [AuthController::class, 'loginQr'])->name('login.qr');
     Route::post('/login/send-otp', [AuthController::class, 'sendOtp'])->name('auth.send-otp');
     Route::get('/login/verify', [AuthController::class, 'showOtpForm'])->name('auth.otp.form');
     Route::post('/login/verify', [AuthController::class, 'verifyOtp'])->name('auth.verify-otp');
@@ -70,6 +72,9 @@ Route::middleware(['auth', 'delivery'])->prefix('delivery')->name('delivery.')->
 // ──────────────────────────────────────────────
 Route::middleware(['auth', 'rm'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminInquiryController::class, 'index'])->name('inquiries.index');
+    Route::get('/profile', [AdminProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+
     Route::get('/inquiries/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiries.show');
     Route::patch('/inquiries/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiries.status');
     Route::post('/inquiries/{inquiry}/message', [AdminInquiryController::class, 'sendMessage'])->name('inquiries.message');

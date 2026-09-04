@@ -408,6 +408,12 @@
                     <span>Sign in with Google</span>
                 </a>
 
+                <!-- SIGN IN WITH VIP ID CARD BUTTON -->
+                <button type="button" onclick="openQrModal()" class="btn-google" style="margin-bottom: 20px; background: rgba(229, 9, 20, 0.12); border-color: rgba(229, 9, 20, 0.4); color: #fff;">
+                    <i class="fa-solid fa-qrcode" style="color: #e50914; font-size: 16px;"></i>
+                    <span>Sign in with VIP ID Card</span>
+                </button>
+
                 <div class="divider">
                     <div class="divider-line"></div>
                     <div class="divider-text">Atau dengan Email</div>
@@ -491,6 +497,27 @@
 
     </div>
 
+    <!-- QR CODE SCANNER MODAL -->
+    <div id="qrModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); align-items:center; justify-content:center; padding: 20px;">
+        <div style="background:#0c0c10; border:1px solid rgba(255,255,255,0.15); border-left:3px solid #e50914; border-radius:8px; padding:32px 24px; text-align:center; max-width:400px; width:100%; box-shadow:0 25px 60px rgba(0,0,0,0.9);">
+            <div style="width:48px; height:48px; background:rgba(229,9,20,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <i class="fa-solid fa-qrcode" style="color:#e50914; font-size:22px;"></i>
+            </div>
+            <h3 style="font-family:'Cinzel', serif; font-size:18px; font-weight:700; color:#fff; margin-bottom:6px;">Scan VIP ID Card</h3>
+            <p style="font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:20px;">Arahkan QR Code pada ID Card Anda ke kamera komputer/smartphone Anda.</p>
+            
+            <div id="qr-reader" style="width:100%; margin-bottom:16px; border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.1); background:#000;"></div>
+            
+            <div id="qrError" style="display:none; font-size:11px; font-family:monospace; color:#ef4444; margin-bottom:14px; padding:10px; background:rgba(239,68,68,0.1); border-radius:4px; border:1px solid rgba(239,68,68,0.3);">
+            </div>
+
+            <button type="button" onclick="closeQrModal()" style="font-family:monospace; font-size:11px; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:10px 24px; border-radius:4px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition:all 0.2s;">
+                Tutup Pemindai
+            </button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script>
         const emailInput = document.getElementById('email');
         const displayTargetEmail = document.getElementById('displayTargetEmail');
@@ -527,6 +554,69 @@
                 }
             });
         });
+
+        /* ── QR CODE SCANNER LOGIC ── */
+        let html5QrcodeScanner = null;
+
+        function openQrModal() {
+            const modal = document.getElementById('qrModal');
+            modal.style.display = 'flex';
+            document.getElementById('qrError').style.display = 'none';
+            
+            if (!html5QrcodeScanner) {
+                html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: { width: 220, height: 220 } });
+                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            }
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').style.display = 'none';
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().catch(err => console.error("Gagal menghentikan kamera:", err));
+                html5QrcodeScanner = null;
+            }
+        }
+
+        async function onScanSuccess(decodedText) {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+                html5QrcodeScanner = null;
+            }
+
+            try {
+                const response = await fetch("{{ route('login.qr') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ qr_payload: decodedText })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    const errDiv = document.getElementById('qrError');
+                    errDiv.style.display = 'block';
+                    errDiv.innerText = data.message || "Autentikasi QR Gagal.";
+                    setTimeout(() => {
+                        html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: { width: 220, height: 220 } });
+                        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                    }, 3000);
+                }
+            } catch (e) {
+                console.error("Gagal autentikasi via QR:", e);
+                const errDiv = document.getElementById('qrError');
+                errDiv.style.display = 'block';
+                errDiv.innerText = "Terjadi kesalahan koneksi server.";
+            }
+        }
+
+        function onScanFailure(error) {
+            // Quietly continue scanning
+        }
     </script>
 </body>
 </html>
