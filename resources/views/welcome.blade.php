@@ -242,14 +242,20 @@
                                 @endif
                             </div>
                             <div class="py-1">
-                                <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
-                                    <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
-                                    <span>Portal VIP &amp; Konsultasi</span>
-                                </a>
                                 @if(auth()->user()->isRm())
                                     <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors">
                                         <i class="fa-solid fa-shield-halved w-4 text-center"></i>
-                                        <span>Admin / Sales RM Panel</span>
+                                        <span>Sales RM Panel Admin</span>
+                                    </a>
+                                @elseif(auth()->user()->isDelivery())
+                                    <a href="{{ route('delivery.portal') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 transition-colors">
+                                        <i class="fa-solid fa-truck-fast w-4 text-center"></i>
+                                        <span>Delivery Driver Console</span>
+                                    </a>
+                                @else
+                                    <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                        <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
+                                        <span>Portal VIP &amp; Konsultasi</span>
                                     </a>
                                 @endif
                                 <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
@@ -1463,10 +1469,17 @@
                 <h3 class="text-2xl font-serif font-bold text-neutral-900 dark:text-white uppercase">Request VIP Viewing</h3>
                 <p class="text-xs text-neutral-600 dark:text-neutral-400">Our luxury automotive advisor will contact you within 2 business hours.</p>
                 @auth
-                    <div class="flex items-center space-x-2 mt-1 bg-green-500/10 border border-green-500/30 px-3 py-1.5">
-                        <i class="fa-solid fa-circle-check text-green-500 text-[10px]"></i>
-                        <span class="text-[10px] font-mono text-green-400 uppercase tracking-wider font-bold">Data VIP Anda terisi otomatis &mdash; dapat diedit</span>
-                    </div>
+                    @if(auth()->user()->isRm() || auth()->user()->isDelivery())
+                        <div class="flex items-center space-x-2 mt-1 bg-amber-500/10 border border-amber-500/30 px-3 py-2">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xs"></i>
+                            <span class="text-[10px] font-mono text-amber-300 uppercase tracking-wider font-bold">MODE STAFF ({{ auth()->user()->isRm() ? 'Sales RM' : 'Delivery Escort' }}) &mdash; Fitur booking hanya untuk Pembeli/VIP Member</span>
+                        </div>
+                    @else
+                        <div class="flex items-center space-x-2 mt-1 bg-green-500/10 border border-green-500/30 px-3 py-1.5">
+                            <i class="fa-solid fa-circle-check text-green-500 text-[10px]"></i>
+                            <span class="text-[10px] font-mono text-green-400 uppercase tracking-wider font-bold">Data VIP Anda terisi otomatis &mdash; dapat diedit</span>
+                        </div>
+                    @endif
                 @endauth
             </div>
 
@@ -1540,10 +1553,17 @@
                     <span class="text-green-400 text-xs font-mono">Permintaan VIP Viewing terkirim! Sales RM kami akan menghubungi Anda segera.</span>
                 </div>
 
-                <button type="submit" id="inquireSubmitBtn" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>SUBMIT REQUEST</span>
-                </button>
+                @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
+                    <button type="button" disabled class="w-full py-3 bg-neutral-800 text-neutral-500 font-bold tracking-widest uppercase cursor-not-allowed flex items-center justify-center space-x-2 border border-neutral-700">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>BOOKING DINONAKTIFKAN (AKUN STAFF)</span>
+                    </button>
+                @else
+                    <button type="submit" id="inquireSubmitBtn" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>SUBMIT REQUEST</span>
+                    </button>
+                @endif
             </form>
         </div>
     </div>

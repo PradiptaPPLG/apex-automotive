@@ -393,7 +393,16 @@
                 const mapDivId = `loc-map-${msg.id}`;
                 contentHtml = `
                     <div class="location-card" data-location="${lat},${lng}" data-mapid="${mapDivId}">
-                        <div class="loc-label"><i class="fa-solid fa-location-dot"></i> LOKASI DIKIRIM</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div class="loc-label"><i class="fa-solid fa-location-dot"></i> LOKASI DIKIRIM</div>
+                            <div class="loc-menu-wrap" style="position:relative;">
+                                <button type="button" onclick="toggleLocMenu(event, '${msg.id}')" style="background:none; border:none; color:#9ca3af; cursor:pointer; padding:2px 6px;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <div id="loc-dropdown-${msg.id}" class="loc-dropdown" style="display:none; position:absolute; right:0; top:20px; background:#0d0d18; border:1px solid rgba(255,255,255,0.15); border-radius:4px; z-index:99; width:170px; box-shadow:0 10px 25px rgba(0,0,0,0.8);">
+                                    <button type="button" onclick="verifyLocationAction('${lat},${lng}')" style="width:100%; text-align:left; padding:8px 12px; background:none; border:none; color:#22d3ee; font-size:11px; font-family:'Space Mono',monospace; cursor:pointer; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-circle-check"></i> Verifikasi Lokasi</button>
+                                    <button type="button" onclick="rejectLocationAction()" style="width:100%; text-align:left; padding:8px 12px; background:none; border:none; color:#ef4444; font-size:11px; font-family:'Space Mono',monospace; cursor:pointer; display:flex; align-items:center; gap:8px; border-top:1px solid rgba(255,255,255,0.05);"><i class="fa-solid fa-circle-xmark"></i> Tolak Lokasi</button>
+                                </div>
+                            </div>
+                        </div>
                         <div id="${mapDivId}" class="loc-map-render"></div>
                         <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" class="loc-open-btn">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Google Maps
@@ -568,6 +577,66 @@
                     setTimeout(initLocationMaps, 150);
                 }
             } catch(e) { alert('Gagal mengirim lokasi.'); }
+        }
+
+        // === LOCATION VERIFICATION ACTIONS FOR RM ===
+        const VERIFY_LOC_URL = '{{ route('admin.inquiries.verify-location', $inquiry) }}';
+        const REJECT_LOC_URL = '{{ route('admin.inquiries.reject-location', $inquiry) }}';
+
+        function toggleLocMenu(e, id) {
+            e.stopPropagation();
+            document.querySelectorAll('.loc-dropdown').forEach(el => {
+                if (el.id !== 'loc-dropdown-' + id) el.style.display = 'none';
+            });
+            const dd = document.getElementById('loc-dropdown-' + id);
+            if (dd) {
+                dd.style.display = (dd.style.display === 'none' || !dd.style.display) ? 'block' : 'none';
+            }
+        }
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.loc-dropdown').forEach(el => el.style.display = 'none');
+        });
+
+        async function verifyLocationAction(coords) {
+            if (!confirm('Verifikasi titik lokasi pengiriman ini dan langsung jadwalkan pengiriman armada Towing ke Driver Escort?')) return;
+            try {
+                const res = await fetch(VERIFY_LOC_URL, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': CSRF, 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ location: coords })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('✅ ' + (data.message ? 'Lokasi berhasil diverifikasi! Pengiriman otomatis dijadwalkan.' : 'Lokasi diverifikasi.'));
+                    window.location.reload();
+                } else {
+                    alert(data.message || 'Gagal memverifikasi lokasi.');
+                }
+            } catch (e) {
+                alert('Terjadi kesalahan koneksi.');
+            }
+        }
+
+        async function rejectLocationAction() {
+            const reason = prompt('Masukkan alasan penolakan titik lokasi pengiriman:', 'Lokasi tidak dapat dijangkau oleh armada Flatbed Towing Apex.');
+            if (reason === null) return;
+            try {
+                const res = await fetch(REJECT_LOC_URL, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': CSRF, 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ reason: reason })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Pemberitahuan penolakan lokasi dikirim ke pembeli.');
+                    window.location.reload();
+                } else {
+                    alert(data.message || 'Gagal menolak lokasi.');
+                }
+            } catch (e) {
+                alert('Terjadi kesalahan koneksi.');
+            }
         }
 
         setTimeout(initLocationMaps, 400);
