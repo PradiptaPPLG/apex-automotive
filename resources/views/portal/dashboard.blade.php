@@ -285,10 +285,34 @@
         @else
             <div class="inquiries-grid">
                 @foreach($inquiries as $inquiry)
-                    <a href="{{ route('portal.consultation', $inquiry) }}" class="inquiry-card">
-                        <div class="inquiry-icon"><i class="fa-solid fa-car"></i></div>
+                    @php
+                        $isDelivery = in_array($inquiry->status, ['scheduled_delivery', 'delivered_completed']);
+                        $hasUnread = ($inquiry->messages_count > 0);
+                    @endphp
+                    <a href="{{ route('portal.consultation', $inquiry) }}" class="inquiry-card" style="position: relative;">
+                        @if($hasUnread)
+                            <span style="position: absolute; top: 12px; left: 12px; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444; z-index: 2;" title="Notifikasi / Pesan Baru"></span>
+                        @endif
+
+                        @if($isDelivery)
+                            <div class="inquiry-icon" style="border-color: rgba(249, 115, 22, 0.4); background: rgba(249, 115, 22, 0.12); color: #f97316;">
+                                <i class="fa-solid fa-box-archive"></i>
+                            </div>
+                        @else
+                            <div class="inquiry-icon" style="border-color: rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.12); color: #eab308;">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                            </div>
+                        @endif
+
                         <div class="inquiry-info">
-                            <div class="inquiry-car">{{ $inquiry->car_model ?? 'Kendaraan VIP' }}</div>
+                            <div class="inquiry-car" style="display: flex; align-items: center; gap: 8px;">
+                                {{ $inquiry->car_model ?? 'Kendaraan VIP' }}
+                                @if($isDelivery)
+                                    <span style="font-size: 9px; font-family: monospace; padding: 2px 6px; background: rgba(249, 115, 22, 0.2); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.4); border-radius: 2px;">DELIVERY ACTIVE</span>
+                                @else
+                                    <span style="font-size: 9px; font-family: monospace; padding: 2px 6px; background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.4); border-radius: 2px;">SALES CONSULTATION</span>
+                                @endif
+                            </div>
                             <div class="inquiry-meta">
                                 Diajukan {{ $inquiry->created_at->diffForHumans() }}
                                 @if($inquiry->assigned_rm_name)
@@ -297,9 +321,14 @@
                             </div>
                         </div>
                         <span class="inquiry-status {{ $inquiry->statusColor() }}">{{ $inquiry->statusLabel() }}</span>
-                        <div class="inquiry-msgs">
-                            <span class="inquiry-msgs-count">{{ $inquiry->messages_count }}</span>
-                            pesan
+                        <div class="inquiry-msgs" style="display: flex; align-items: center; gap: 8px;">
+                            <div>
+                                <span class="inquiry-msgs-count">{{ $inquiry->messages_count }}</span>
+                                pesan
+                            </div>
+                            @if($hasUnread)
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+                            @endif
                         </div>
                         <i class="fa-solid fa-chevron-right" style="color: #374151; font-size: 12px;"></i>
                     </a>
