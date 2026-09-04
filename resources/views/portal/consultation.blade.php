@@ -531,8 +531,16 @@
         {{-- Sidebar: Inquiry details --}}
         <aside class="sidebar">
             <div>
-                <p class="sidebar-section-label">Kendaraan Pilihan</p>
-                <p class="car-title">{{ $inquiry->car_model ?? '—' }}</p>
+                <p class="sidebar-section-label">// IDENTITAS PRODUK & INQUIRY</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                    <p class="car-title">{{ $inquiry->car_model ?? '—' }}</p>
+                    <span style="font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #dc2626; background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.4); padding: 2px 8px; border-radius: 2px;">
+                        ID: #APX-{{ str_pad($inquiry->id, 5, '0', STR_PAD_LEFT) }}
+                    </span>
+                </div>
+                <p style="font-family: 'Space Mono', monospace; font-size: 11px; color: #9ca3af; margin-top: 2px;">
+                    SKU Unit: <span style="color: #e5e7eb;">SUPERCAR-{{ strtoupper(substr(md5($inquiry->car_model ?? 'VIP'), 0, 6)) }}</span>
+                </p>
             </div>
 
             {{-- Live GPS Delivery Escort Widget --}}
@@ -739,6 +747,25 @@
 
         {{-- Main chat --}}
         <div class="chat-area">
+            {{-- Chat Channel Tabs (Sales RM vs Delivery Escort) --}}
+            <div style="background: rgba(12, 12, 20, 0.95); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+                <div style="display: flex; gap: 8px;">
+                    <button id="tabSalesBtn" onclick="switchChatChannel('sales')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.15); color: #eab308; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                        <span>CHAT SALES RM</span>
+                        <span id="salesDot" style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; box-shadow: 0 0 6px #ef4444;"></span>
+                    </button>
+                    <button id="tabDeliveryBtn" onclick="switchChatChannel('delivery')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #9ca3af; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                        <i class="fa-solid fa-box-archive" style="color: #f97316;"></i>
+                        <span>CHAT DELIVERY ESCORT</span>
+                        <span id="deliveryDot" style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; box-shadow: 0 0 6px #ef4444;"></span>
+                    </button>
+                </div>
+                <div id="channelBadgeInfo" style="font-family: 'Space Mono', monospace; font-size: 10px; color: #eab308; display: flex; align-items: center; gap: 6px; background: rgba(234, 179, 8, 0.1); padding: 4px 10px; border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 2px;">
+                    <i class="fa-solid fa-headset"></i> Sesi Konsultasi Sales RM
+                </div>
+            </div>
+
             <div class="messages-container" id="messagesContainer">
                 @if($messages->isEmpty())
                     <div class="no-messages">
@@ -1172,6 +1199,60 @@
                 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(buyerMap);
                 routePolyline = L.polyline([], { color: '#22d3ee', weight: 4, opacity: 0.9 }).addTo(buyerMap);
             } catch(e) {}
+        }
+
+        let currentChannel = 'sales';
+
+        function switchChatChannel(channel) {
+            currentChannel = channel;
+            const tabSales = document.getElementById('tabSalesBtn');
+            const tabDelivery = document.getElementById('tabDeliveryBtn');
+            const badgeInfo = document.getElementById('channelBadgeInfo');
+
+            if (channel === 'sales') {
+                tabSales.style.background = 'rgba(234, 179, 8, 0.15)';
+                tabSales.style.borderColor = 'rgba(234, 179, 8, 0.5)';
+                tabSales.style.color = '#eab308';
+
+                tabDelivery.style.background = 'rgba(255, 255, 255, 0.03)';
+                tabDelivery.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                tabDelivery.style.color = '#9ca3af';
+
+                badgeInfo.style.color = '#eab308';
+                badgeInfo.style.background = 'rgba(234, 179, 8, 0.1)';
+                badgeInfo.style.borderColor = 'rgba(234, 179, 8, 0.3)';
+                badgeInfo.innerHTML = '<i class="fa-solid fa-sack-dollar"></i> Sesi Konsultasi Sales RM';
+            } else {
+                tabDelivery.style.background = 'rgba(249, 115, 22, 0.2)';
+                tabDelivery.style.borderColor = 'rgba(249, 115, 22, 0.6)';
+                tabDelivery.style.color = '#f97316';
+
+                tabSales.style.background = 'rgba(255, 255, 255, 0.03)';
+                tabSales.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                tabSales.style.color = '#9ca3af';
+
+                badgeInfo.style.color = '#f97316';
+                badgeInfo.style.background = 'rgba(249, 115, 22, 0.15)';
+                badgeInfo.style.borderColor = 'rgba(249, 115, 22, 0.4)';
+                badgeInfo.innerHTML = '<i class="fa-solid fa-truck-fast"></i> Sesi Chat Driver Delivery Escort';
+            }
+
+            filterMessagesByChannel();
+        }
+
+        function filterMessagesByChannel() {
+            const msgGroups = document.querySelectorAll('.message-group');
+            msgGroups.forEach(el => {
+                if (el.classList.contains('driver')) {
+                    el.style.display = (currentChannel === 'delivery') ? 'flex' : 'none';
+                } else if (el.classList.contains('rm')) {
+                    el.style.display = (currentChannel === 'sales') ? 'flex' : 'none';
+                } else if (el.classList.contains('buyer')) {
+                    // For buyer messages, display in active channel
+                    el.style.display = 'flex';
+                }
+            });
+            scrollBottom();
         }
 
         let currentDriverPhone = '';
