@@ -206,6 +206,12 @@
             border-color: rgba(255,255,255,0.1);
             color: #e5e7eb;
         }
+        .message-group.driver { align-self: flex-start; align-items: flex-start; }
+        .message-group.driver .message-bubble {
+            background: rgba(34, 211, 238, 0.12);
+            border-color: rgba(34, 211, 238, 0.35);
+            color: #cffafe;
+        }
         .message-time {
             font-size: 10px;
             color: #374151;
@@ -529,6 +535,42 @@
                 <p class="car-title">{{ $inquiry->car_model ?? '—' }}</p>
             </div>
 
+            {{-- Live GPS Delivery Escort Widget --}}
+            <div id="liveDeliveryCard" style="display: none; background: rgba(34, 211, 238, 0.05); border: 1px solid rgba(34, 211, 238, 0.3); padding: 14px; border-radius: 4px; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #22d3ee; letter-spacing: 0.1em; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 8px #22d3ee;"></span>
+                        LIVE GPS DELIVERY ESCORT
+                    </div>
+                    <span id="buyerDeliveryStatusBadge" style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 2px 8px; background: rgba(34,211,238,0.2); color: #22d3ee; font-weight: 700; border-radius: 2px; text-transform: uppercase;">
+                        IN TRANSIT
+                    </span>
+                </div>
+
+                <div style="font-size: 12px; color: #e5e7eb; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="color: #9ca3af; font-size: 11px;">Escort Specialist:</span>
+                        <strong id="buyerDriverName" style="color: #ffffff;">Pradipta Endra</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="color: #9ca3af; font-size: 11px;">Armada Towing:</span>
+                        <span style="color: #22d3ee; font-family: monospace; font-size: 10px; font-weight: 700;">Enclosed Flatbed Truck</span>
+                    </div>
+                    <div id="buyerPhaseLabel" style="font-size: 11px; color: #86efac; font-family: monospace; background: rgba(34,197,94,0.1); padding: 6px 8px; border-left: 2px solid #22c55e;">
+                        Armada Menuju Lokasi Pembeli
+                    </div>
+                </div>
+
+                {{-- Interactive Live GPS Map Render --}}
+                <div id="buyerGpsMap" style="width: 100%; height: 160px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.1); margin-top: 4px;"></div>
+
+                <div style="display: flex; gap: 8px; margin-top: 4px;">
+                    <a id="callDriverBtn" href="tel:081234567890" style="flex: 1; text-align: center; padding: 8px; background: rgba(34,211,238,0.15); border: 1px solid rgba(34,211,238,0.4); color: #22d3ee; font-size: 10px; font-family: monospace; font-weight: 700; text-decoration: none; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="fa-solid fa-phone"></i> HUBUNGI DRIVER ESCORT
+                    </a>
+                </div>
+            </div>
+
             @if($inquiry->selected_config)
                 <div>
                     <p class="sidebar-section-label">Konfigurasi Pilihan</p>
@@ -710,8 +752,14 @@
                             <span class="message-sender">
                                 @if($msg->sender_type === 'rm')
                                     <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
+                                    <span style="color:#f87171; font-weight:700;">SALES RM</span> &mdash; {{ $msg->sender_name }}
+                                @elseif($msg->sender_type === 'driver')
+                                    <i class="fa-solid fa-truck-fast" style="color:#22d3ee;"></i>
+                                    <span style="color:#22d3ee; font-weight:700;">DRIVER ESCORT</span> &mdash; {{ $msg->sender_name }}
+                                @else
+                                    <i class="fa-solid fa-user" style="color:#9ca3af;"></i>
+                                    <span>PEMBELI (ANDA)</span>
                                 @endif
-                                {{ $msg->sender_name }}
                             </span>
                             <div class="message-bubble">
                                 @if($isLoc)
@@ -808,7 +856,15 @@
             const group = document.createElement('div');
             group.className = `message-group ${msg.sender_type}`;
             group.dataset.id = msg.id;
-            const rmIcon = msg.sender_type === 'rm' ? '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> ' : '';
+            
+            let senderIcon = '<i class="fa-solid fa-user" style="color:#9ca3af;"></i> ';
+            let senderLabel = msg.sender_name;
+            if (msg.sender_type === 'rm') {
+                senderIcon = '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> <span style="color:#f87171; font-weight:700;">SALES RM</span> &mdash; ';
+            } else if (msg.sender_type === 'driver') {
+                senderIcon = '<i class="fa-solid fa-truck-fast" style="color:#22d3ee;"></i> <span style="color:#22d3ee; font-weight:700;">DRIVER ESCORT</span> &mdash; ';
+            }
+            
             const time = new Date(msg.created_at).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
             let contentHtml = '';
             if (msg.message && msg.message.startsWith('__LOCATION__:')) {
@@ -836,7 +892,7 @@
                 contentHtml = msgText + attachHtml;
             }
             group.innerHTML = `
-                <span class="message-sender">${rmIcon}${msg.sender_name}</span>
+                <span class="message-sender">${senderIcon}${senderLabel}</span>
                 <div class="message-bubble">${contentHtml}</div>
                 <span class="message-time">${time}</span>`;
             return group;
@@ -1104,10 +1160,72 @@
             } catch(e) { alert('Gagal mengirim lokasi.'); }
         }
 
+        // === LIVE DRIVER GPS ESCORT POLLING & MAP RENDER ===
+        const TRACKING_URL = '{{ route('portal.tracking', $inquiry) }}';
+        let buyerMap = null, driverMarker = null, routePolyline = null;
+
+        function initBuyerTrackingMap() {
+            const mapEl = document.getElementById('buyerGpsMap');
+            if (!mapEl || buyerMap) return;
+            try {
+                buyerMap = L.map(mapEl, { attributionControl: false, zoomControl: false }).setView([-6.200000, 106.816666], 14);
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(buyerMap);
+                routePolyline = L.polyline([], { color: '#22d3ee', weight: 4, opacity: 0.9 }).addTo(buyerMap);
+            } catch(e) {}
+        }
+
+        async function pollDriverGps() {
+            try {
+                const res = await fetch(TRACKING_URL, { headers: { 'Accept': 'application/json' } });
+                const data = await res.json();
+                
+                const card = document.getElementById('liveDeliveryCard');
+                if (!data.active) {
+                    if (card) card.style.display = 'none';
+                    return;
+                }
+
+                if (card) card.style.display = 'flex';
+                initBuyerTrackingMap();
+
+                if (data.driver_name) {
+                    document.getElementById('buyerDriverName').textContent = data.driver_name;
+                }
+                if (data.driver_phone) {
+                    document.getElementById('callDriverBtn').href = `tel:${data.driver_phone}`;
+                }
+                if (data.status) {
+                    document.getElementById('buyerDeliveryStatusBadge').textContent = data.status.toUpperCase();
+                }
+                if (data.latest && data.latest.phase_label) {
+                    document.getElementById('buyerPhaseLabel').textContent = data.latest.phase_label;
+                }
+
+                if (data.trackings && data.trackings.length > 0) {
+                    const trackingCoords = data.trackings.map(t => [parseFloat(t.lat), parseFloat(t.lng)]);
+                    const lastPoint = trackingCoords[trackingCoords.length - 1];
+
+                    if (routePolyline) routePolyline.setLatLngs(trackingCoords);
+
+                    if (buyerMap) {
+                        if (driverMarker) {
+                            driverMarker.setLatLng(lastPoint);
+                        } else {
+                            driverMarker = L.marker(lastPoint).addTo(buyerMap).bindPopup('<b>Armada Towing Escort</b>');
+                        }
+                        buyerMap.setView(lastPoint, 15);
+                        buyerMap.invalidateSize();
+                    }
+                }
+            } catch(e) {}
+        }
+
         setTimeout(initLocationMaps, 400);
 
-        // Poll every 3 seconds
+        // Poll messages every 3 seconds & driver GPS every 3.5 seconds
         setInterval(pollMessages, 3000);
+        setInterval(pollDriverGps, 3500);
+        setTimeout(pollDriverGps, 600);
     </script>
     <!-- LOCATION PICKER MODAL -->
     <div id="locationModal" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.88); align-items:center; justify-content:center;">
