@@ -530,17 +530,51 @@
     <div class="consultation-layout">
         {{-- Sidebar: Inquiry details --}}
         <aside class="sidebar">
-            <div>
-                <p class="sidebar-section-label">// IDENTITAS PRODUK & INQUIRY</p>
+            {{-- Product Info Header with Image --}}
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 4px;">
+                <p class="sidebar-section-label">// UNIT KENDARAAN TERPILIH</p>
+                @php
+                    $carName = strtolower($inquiry->car_model ?? '');
+                    $carImg = asset('images/brand/mclaren_senna_gtr_volcano_yellow.png');
+                    if (str_contains($carName, 'bmw') || str_contains($carName, 'm4')) {
+                        $carImg = asset('images/brand/bmwm4competition_sao_paulo_yellow.png');
+                    } elseif (str_contains($carName, 'lamborghini') || str_contains($carName, 'revuelto')) {
+                        $carImg = asset('images/brand/lamborghini_revuelto_arancio_apodis.png');
+                    } elseif (str_contains($carName, 'porsche') || str_contains($carName, 'gt3')) {
+                        $carImg = asset('images/brand/porsche_rubystone_red.png');
+                    } elseif (str_contains($carName, 'audi') || str_contains($carName, 'r8')) {
+                        $carImg = asset('images/brand/audi_r8_tango_red_metallic.png');
+                    } elseif (str_contains($carName, 'bugatti')) {
+                        $carImg = asset('images/brand/buggati_chiron_le_mans_blue.png');
+                    } elseif (str_contains($carName, 'koenigsegg') || str_contains($carName, 'jesko')) {
+                        $carImg = asset('images/brand/koeningseg_jesko_absolut_crystal_white.png');
+                    } elseif (str_contains($carName, 'corvette')) {
+                        $carImg = asset('images/brand/chevrolet_corvette_c8_torch_red.png');
+                    } elseif (str_contains($carName, 'pagani')) {
+                        $carImg = asset('images/brand/pagani_huayra_bc.png');
+                    } elseif (str_contains($carName, 'zenvo')) {
+                        $carImg = asset('images/brand/zenvo_tsr_s_viola_parsifae.png');
+                    }
+                @endphp
+                
+                <div style="width: 100%; height: 140px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px; background: #000;">
+                    <img src="{{ $carImg }}" alt="{{ $inquiry->car_model }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                     <p class="car-title">{{ $inquiry->car_model ?? '—' }}</p>
                     <span style="font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #dc2626; background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.4); padding: 2px 8px; border-radius: 2px;">
                         ID: #APX-{{ str_pad($inquiry->id, 5, '0', STR_PAD_LEFT) }}
                     </span>
                 </div>
-                <p style="font-family: 'Space Mono', monospace; font-size: 11px; color: #9ca3af; margin-top: 2px;">
-                    SKU Unit: <span style="color: #e5e7eb;">SUPERCAR-{{ strtoupper(substr(md5($inquiry->car_model ?? 'VIP'), 0, 6)) }}</span>
+                <p style="font-family: 'Space Mono', monospace; font-size: 11px; color: #9ca3af; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
+                    SKU: <span style="color: #e5e7eb; font-weight: 700;">SUPERCAR-{{ strtoupper(substr(md5($inquiry->car_model ?? 'VIP'), 0, 6)) }}</span>
                 </p>
+                @if($inquiry->selected_config)
+                    <p style="font-size: 11px; color: #9ca3af; margin-top: 4px;">
+                        Spec: <span style="color: #e5e7eb;">{{ $inquiry->selected_config }}</span>
+                    </p>
+                @endif
             </div>
 
             {{-- Live GPS Delivery Escort Widget --}}
@@ -571,138 +605,130 @@
 
                 {{-- Interactive Live GPS Map Render --}}
                 <div id="buyerGpsMap" style="width: 100%; height: 160px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.1); margin-top: 4px;"></div>
-
-                <div style="display: flex; gap: 8px; margin-top: 4px;">
-                    <button id="callDriverBtn" onclick="contactDriver()" style="flex: 1; text-align: center; padding: 10px; background: rgba(249,115,22,0.2); border: 1px solid rgba(249,115,22,0.5); color: #f97316; font-size: 10px; font-family: monospace; font-weight: 700; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s;">
-                        <i class="fa-solid fa-phone"></i> HUBUNGI DRIVER ESCORT
-                    </button>
-                </div>
             </div>
 
-            @if($inquiry->selected_config)
+            {{-- Sales RM Specific Boxes Container --}}
+            <div id="salesSidebarContent" style="display: flex; flex-direction: column; gap: 16px;">
                 <div>
-                    <p class="sidebar-section-label">Konfigurasi Pilihan</p>
-                    <p class="detail-value" style="font-size:12px; color:#9ca3af;">{{ $inquiry->selected_config }}</p>
-                </div>
-            @endif
-
-            <div>
-                <div class="detail-row">
-                    <span class="detail-label">Nama</span>
-                    <span class="detail-value">{{ $inquiry->name }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">No. HP / WhatsApp</span>
-                    <span class="detail-value">{{ $inquiry->phone }}</span>
-                </div>
-                @if($inquiry->assigned_rm_name)
                     <div class="detail-row">
-                        <span class="detail-label">Sales RM</span>
-                        <span class="detail-value">{{ $inquiry->assigned_rm_name }}</span>
+                        <span class="detail-label">Nama Pembeli</span>
+                        <span class="detail-value">{{ $inquiry->name }}</span>
                     </div>
-                @endif
-                <div class="detail-row" style="border-bottom:none;">
-                    <span class="detail-label">Dibuat</span>
-                    <span class="detail-value">{{ $inquiry->created_at->format('d M Y, H:i') }}</span>
-                </div>
-            </div>
-
-            {{-- KYC Status Box --}}
-            <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 4px; margin-top: 6px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-shield-halved" style="color: #ef4444; font-size: 14px;"></i>
-                        <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 1px; text-transform: uppercase;">Legalitas KYC</span>
+                    <div class="detail-row">
+                        <span class="detail-label">No. HP / WhatsApp</span>
+                        <span class="detail-value">{{ $inquiry->phone }}</span>
                     </div>
-                    <a href="{{ route('profile.complete') }}" style="font-size: 11px; color: #fbbf24; text-decoration: underline; font-weight: 600;">Edit Profil</a>
-                </div>
-
-                @if(auth()->user()->hasCompletedProfile())
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #4ade80; margin-bottom: 10px;">
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>Tersimpan &amp; Lengkap</span>
-                    </div>
-                    <div style="font-size: 12px; color: #9ca3af; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; line-height: 1.6;">
-                        <div style="margin-bottom: 4px;">
-                            <strong style="color: #d1d5db;">NIK:</strong> <span style="color: #e5e7eb;">{{ auth()->user()->nik ?? '—' }}</span>
+                    @if($inquiry->assigned_rm_name)
+                        <div class="detail-row">
+                            <span class="detail-label">Sales RM</span>
+                            <span class="detail-value">{{ $inquiry->assigned_rm_name }}</span>
                         </div>
-                        <div>
-                            <strong style="color: #d1d5db;">Alamat:</strong>
-                            <p style="color: #9ca3af; margin-top: 2px; word-break: break-word;">{{ auth()->user()->address ?? '—' }}</p>
-                        </div>
+                    @endif
+                    <div class="detail-row" style="border-bottom:none;">
+                        <span class="detail-label">Dibuat</span>
+                        <span class="detail-value">{{ $inquiry->created_at->format('d M Y, H:i') }}</span>
                     </div>
-                @else
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fbbf24; margin-bottom: 12px;">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>Belum Lengkap</span>
-                    </div>
-                    <a href="{{ route('profile.complete') }}" style="display: block; text-align: center; width: 100%; padding: 10px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.4); color: #fde047; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
-                        ISI DATA LEGALITAS
-                    </a>
-                @endif
-            </div>
-
-            {{-- Phase 4: SPA Contract E-Sign Box --}}
-            <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(239, 68, 68, 0.3); padding: 16px; border-radius: 4px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                    <i class="fa-solid fa-file-signature" style="color: #ef4444; font-size: 14px;"></i>
-                    <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 1px; text-transform: uppercase;">Phase 4: Kontrak Jual Beli</span>
                 </div>
 
-                @if($inquiry->buyer_signed)
-                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px;">
-                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 6px;">
-                            <i class="fa-solid fa-certificate"></i>
-                            <span>SPA E-Sign Completed</span>
+                {{-- KYC Status Box --}}
+                <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 4px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-shield-halved" style="color: #ef4444; font-size: 14px;"></i>
+                            <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 1px; text-transform: uppercase;">Legalitas KYC</span>
                         </div>
-                        <p style="font-size: 11px; color: #9ca3af; margin-bottom: 10px;">
-                            Ditandatangani pada: <span style="color: #e5e7eb;">{{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</span>
-                        </p>
-                        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; margin-bottom: 12px;">
-                            <i class="fa-solid fa-stamp"></i> e-Meterai Sah
+                        <a href="{{ route('profile.complete') }}" style="font-size: 11px; color: #fbbf24; text-decoration: underline; font-weight: 600;">Edit Profil</a>
+                    </div>
+
+                    @if(auth()->user()->hasCompletedProfile())
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #4ade80; margin-bottom: 10px;">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Tersimpan &amp; Lengkap</span>
                         </div>
-                        <a href="{{ route('portal.contract.download', $inquiry) }}" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
-                            <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i>
-                            <span>Lihat / Cetak Dokumen SPA</span>
+                        <div style="font-size: 12px; color: #9ca3af; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; line-height: 1.6;">
+                            <div style="margin-bottom: 4px;">
+                                <strong style="color: #d1d5db;">NIK:</strong> <span style="color: #e5e7eb;">{{ auth()->user()->nik ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <strong style="color: #d1d5db;">Alamat:</strong>
+                                <p style="color: #9ca3af; margin-top: 2px; word-break: break-word;">{{ auth()->user()->address ?? '—' }}</p>
+                            </div>
+                        </div>
+                    @else
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fbbf24; margin-bottom: 12px;">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>Belum Lengkap</span>
+                        </div>
+                        <a href="{{ route('profile.complete') }}" style="display: block; text-align: center; width: 100%; padding: 10px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.4); color: #fde047; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
+                            ISI DATA LEGALITAS
                         </a>
-                    </div>
-                @else
-                    <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
-                        Dokumen Perjanjian Jual Beli (Sales &amp; Purchase Agreement) telah siap ditinjau dan ditandatangani secara digital.
-                    </p>
-                    <button onclick="toggleContractModal()" style="width: 100%; padding: 12px; background: #dc2626; color: #ffffff; border: none; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
-                        <i class="fa-solid fa-pen-nib"></i>
-                        <span>Review &amp; E-Sign SPA</span>
-                    </button>
-                @endif
-            {{-- Phase 5: Financial Settlement (Payment Escrow Box) --}}
-            <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(59, 130, 246, 0.4); padding: 16px; border-radius: 4px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                    <i class="fa-solid fa-vault" style="color: #60a5fa; font-size: 14px;"></i>
-                    <span style="font-size: 11px; font-weight: 700; color: #60a5fa; letter-spacing: 1px; text-transform: uppercase;">Phase 5: Pembayaran Escrow</span>
+                    @endif
                 </div>
 
-                @if($inquiry->status === 'payment_verified' || $inquiry->status === 'scheduled_delivery' || $inquiry->status === 'delivered_completed')
-                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px;">
-                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 4px;">
-                            <i class="fa-solid fa-shield-check"></i>
-                            <span>Pembayaran Terverifikasi Escrow</span>
-                        </div>
-                        <p style="font-size: 11px; color: #9ca3af;">Dana aman tersimpan di Rekening Terproteksi Apex Automotive Indonesia.</p>
+                {{-- Phase 4: SPA Contract E-Sign Box --}}
+                <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(239, 68, 68, 0.3); padding: 16px; border-radius: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <i class="fa-solid fa-file-signature" style="color: #ef4444; font-size: 14px;"></i>
+                        <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 1px; text-transform: uppercase;">Phase 4: Kontrak Jual Beli</span>
                     </div>
-                @elseif($inquiry->buyer_signed)
-                    <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
-                        Kontrak SPA telah sah. Silakan lakukan pembayaran Booking Fee / Pelunasan ke Rekening Escrow Terproteksi.
-                    </p>
-                    <button onclick="togglePaymentModal()" style="width: 100%; padding: 12px; background: #2563eb; color: #ffffff; border: none; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
-                        <i class="fa-solid fa-credit-card"></i>
-                        <span>Bayar via Escrow Terproteksi</span>
-                    </button>
-                @else
-                    <p style="font-size: 11px; color: #6b7280; font-style: italic;">
-                        Instruksi pembayaran akan aktif setelah Dokumen SPA ditandatangani (Phase 4).
-                    </p>
-                @endif
+
+                    @if($inquiry->buyer_signed)
+                        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px;">
+                            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 6px;">
+                                <i class="fa-solid fa-certificate"></i>
+                                <span>SPA E-Sign Completed</span>
+                            </div>
+                            <p style="font-size: 11px; color: #9ca3af; margin-bottom: 10px;">
+                                Ditandatangani pada: <span style="color: #e5e7eb;">{{ $inquiry->buyer_signed_at?->format('d M Y, H:i') }}</span>
+                            </p>
+                            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; margin-bottom: 12px;">
+                                <i class="fa-solid fa-stamp"></i> e-Meterai Sah
+                            </div>
+                            <a href="{{ route('portal.contract.download', $inquiry) }}" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border-radius: 2px;">
+                                <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i>
+                                <span>Lihat / Cetak Dokumen SPA</span>
+                            </a>
+                        </div>
+                    @else
+                        <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
+                            Dokumen Perjanjian Jual Beli (Sales &amp; Purchase Agreement) telah siap ditinjau dan ditandatangani secara digital.
+                        </p>
+                        <button onclick="toggleContractModal()" style="width: 100%; padding: 12px; background: #dc2626; color: #ffffff; border: none; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
+                            <i class="fa-solid fa-pen-nib"></i>
+                            <span>Review &amp; E-Sign SPA</span>
+                        </button>
+                    @endif
+                </div>
+
+                {{-- Phase 5: Financial Settlement (Payment Escrow Box) --}}
+                <div style="background: rgba(20, 20, 28, 0.7); border: 1px solid rgba(59, 130, 246, 0.4); padding: 16px; border-radius: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <i class="fa-solid fa-vault" style="color: #60a5fa; font-size: 14px;"></i>
+                        <span style="font-size: 11px; font-weight: 700; color: #60a5fa; letter-spacing: 1px; text-transform: uppercase;">Phase 5: Pembayaran Escrow</span>
+                    </div>
+
+                    @if($inquiry->status === 'payment_verified' || $inquiry->status === 'scheduled_delivery' || $inquiry->status === 'delivered_completed')
+                        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px; border-radius: 4px;">
+                            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 4px;">
+                                <i class="fa-solid fa-shield-check"></i>
+                                <span>Pembayaran Terverifikasi Escrow</span>
+                            </div>
+                            <p style="font-size: 11px; color: #9ca3af;">Dana aman tersimpan di Rekening Terproteksi Apex Automotive Indonesia.</p>
+                        </div>
+                    @elseif($inquiry->buyer_signed)
+                        <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 14px;">
+                            Kontrak SPA telah sah. Silakan lakukan pembayaran Booking Fee / Pelunasan ke Rekening Escrow Terproteksi.
+                        </p>
+                        <button onclick="togglePaymentModal()" style="width: 100%; padding: 12px; background: #2563eb; color: #ffffff; border: none; font-size: 11px; font-weight: 700; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <span>Bayar via Escrow Terproteksi</span>
+                        </button>
+                    @else
+                        <p style="font-size: 11px; color: #6b7280; font-style: italic;">
+                            Instruksi pembayaran akan aktif setelah Dokumen SPA ditandatangani (Phase 4).
+                        </p>
+                    @endif
+                </div>
             </div>
 
             @if($inquiry->notes)
@@ -1208,6 +1234,7 @@
             const tabSales = document.getElementById('tabSalesBtn');
             const tabDelivery = document.getElementById('tabDeliveryBtn');
             const badgeInfo = document.getElementById('channelBadgeInfo');
+            const salesSidebar = document.getElementById('salesSidebarContent');
 
             if (channel === 'sales') {
                 tabSales.style.background = 'rgba(234, 179, 8, 0.15)';
@@ -1222,6 +1249,8 @@
                 badgeInfo.style.background = 'rgba(234, 179, 8, 0.1)';
                 badgeInfo.style.borderColor = 'rgba(234, 179, 8, 0.3)';
                 badgeInfo.innerHTML = '<i class="fa-solid fa-sack-dollar"></i> Sesi Konsultasi Sales RM';
+
+                if (salesSidebar) salesSidebar.style.display = 'flex';
             } else {
                 tabDelivery.style.background = 'rgba(249, 115, 22, 0.2)';
                 tabDelivery.style.borderColor = 'rgba(249, 115, 22, 0.6)';
@@ -1235,6 +1264,8 @@
                 badgeInfo.style.background = 'rgba(249, 115, 22, 0.15)';
                 badgeInfo.style.borderColor = 'rgba(249, 115, 22, 0.4)';
                 badgeInfo.innerHTML = '<i class="fa-solid fa-truck-fast"></i> Sesi Chat Driver Delivery Escort';
+
+                if (salesSidebar) salesSidebar.style.display = 'none';
             }
 
             filterMessagesByChannel();
