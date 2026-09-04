@@ -109,8 +109,8 @@
         .attach-btn:hover { color: #e5e7eb; border-color: rgba(255,255,255,0.25); }
         .loc-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #6b7280; padding: 0 14px; cursor: pointer; flex-shrink: 0; align-self: stretch; display: flex; align-items: center; transition: color 0.2s, border-color 0.2s; }
         .loc-btn:hover { color: #22d3ee; border-color: rgba(34,211,238,0.35); }
-        .location-card { background: rgba(34,211,238,0.05); border: 1px solid rgba(34,211,238,0.2); padding: 8px; display: flex; flex-direction: column; gap: 6px; max-width: 260px; }
-        .loc-map-render { width: 244px; height: 150px; }
+        .location-card { background: rgba(34,211,238,0.05); border: 1px solid rgba(34,211,238,0.2); padding: 8px; display: flex; flex-direction: column; gap: 6px; max-width: 260px; position: relative; z-index: 50; overflow: visible; }
+        .loc-map-render { width: 244px; height: 150px; position: relative; z-index: 1; }
         .loc-open-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-family: 'Space Mono', monospace; color: #22d3ee; text-decoration: none; letter-spacing: 0.05em; }
         .loc-open-btn:hover { text-decoration: underline; }
         .loc-label { font-family: 'Space Mono', monospace; font-size: 9px; color: #22d3ee; letter-spacing: 0.12em; text-transform: uppercase; }
