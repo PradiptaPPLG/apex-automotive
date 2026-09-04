@@ -13,6 +13,13 @@ class InquiryController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        if (auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery())) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun Staff (Sales RM / Delivery Driver) tidak dapat membuat inquiry/booking kendaraan untuk diri sendiri.',
+            ], 403);
+        }
+
         $validated = $request->validate([
             'name'             => ['required', 'string', 'max:255'],
             'phone'            => ['required', 'string', 'max:30'],

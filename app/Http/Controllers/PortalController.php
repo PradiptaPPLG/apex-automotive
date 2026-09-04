@@ -7,13 +7,23 @@ use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use Illuminate\Http\RedirectResponse;
+
 class PortalController extends Controller
 {
     /**
      * Show the buyer's VIP portal dashboard with all their inquiries.
      */
-    public function dashboard(): View
+    public function dashboard(): View|RedirectResponse
     {
+        if (auth()->user()->isRm()) {
+            return redirect()->route('admin.inquiries.index');
+        }
+
+        if (auth()->user()->isDelivery()) {
+            return redirect()->route('delivery.portal');
+        }
+
         $inquiries = auth()->user()
             ->inquiries()
             ->withCount('messages')
