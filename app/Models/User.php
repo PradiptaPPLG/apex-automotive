@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\QrCodeSvg;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -17,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
     'postal_code', 'profile_completed',
     'ownership_type', 'ktp_file', 'kk_file', 'npwp_file',
     'nib_file', 'akta_file', 'kyc_status', 'kyc_notes',
-    'avatar', 'id_card_theme',
+    'avatar', 'id_card_theme', 'enable_login_video',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -33,7 +34,7 @@ class User extends Authenticatable
         $secret = config('app.key');
         $hash = hash_hmac('sha256', $this->nik ?? $this->email, $secret);
 
-        return 'qrlogin|' . $this->id . '|' . $hash;
+        return 'qrlogin|'.$this->id.'|'.$hash;
     }
 
     /**
@@ -41,7 +42,7 @@ class User extends Authenticatable
      */
     public function getQrCodeSvgAttribute(): string
     {
-        return \App\Helpers\QrCodeSvg::generate($this->qr_login_payload, 130);
+        return QrCodeSvg::generate($this->qr_login_payload, 130);
     }
 
     /**
@@ -71,6 +72,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'profile_completed' => 'boolean',
+            'enable_login_video' => 'boolean',
         ];
     }
 

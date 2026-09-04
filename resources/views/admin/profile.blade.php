@@ -431,13 +431,33 @@
                             {{-- ID Card Theme --}}
                             <div class="form-group">
                                 <label class="form-label">Tema Warna ID Card</label>
-                                <select name="id_card_theme" class="form-select">
-                                    <option value="1" {{ (old('id_card_theme', $user->id_card_theme) == 1) ? 'selected' : '' }}>Carbon Stealth (Hitam Apex)</option>
-                                    <option value="2" {{ (old('id_card_theme', $user->id_card_theme) == 2) ? 'selected' : '' }}>Indigo Luxury (Biru Gelap)</option>
-                                    <option value="3" {{ (old('id_card_theme', $user->id_card_theme) == 3) ? 'selected' : '' }}>Emerald Executive (Hijau Dark)</option>
-                                    <option value="4" {{ (old('id_card_theme', $user->id_card_theme) == 4) ? 'selected' : '' }}>Cyber Amber (Emas Gelap)</option>
-                                    <option value="5" {{ (old('id_card_theme', $user->id_card_theme) == 5) ? 'selected' : '' }}>Crimson Speed (Merah Apex)</option>
-                                </select>
+                                 <select name="id_card_theme" class="form-select">
+                                     <option value="1" {{ (old('id_card_theme', $user->id_card_theme) == 1) ? 'selected' : '' }}>Carbon Stealth (Hitam Apex)</option>
+                                     <option value="2" {{ (old('id_card_theme', $user->id_card_theme) == 2) ? 'selected' : '' }}>Indigo Luxury (Biru Gelap)</option>
+                                     <option value="3" {{ (old('id_card_theme', $user->id_card_theme) == 3) ? 'selected' : '' }}>Emerald Executive (Hijau Dark)</option>
+                                     <option value="4" {{ (old('id_card_theme', $user->id_card_theme) == 4) ? 'selected' : '' }}>Cyber Amber (Emas Gelap)</option>
+                                     <option value="5" {{ (old('id_card_theme', $user->id_card_theme) == 5) ? 'selected' : '' }}>Crimson Speed (Merah Apex)</option>
+                                 </select>
+                            </div>
+
+                            {{-- Cinematic Video Background Toggle (Hemat Kuota Data) --}}
+                            <div class="form-group full" style="background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.3); padding: 14px; border-radius: 8px; margin: 6px 0;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div>
+                                        <div style="font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: #ffffff; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                                            <i class="fa-solid fa-film" style="color: #ef4444;"></i> Video Intro Cinematic Halaman Login (10MB+)
+                                        </div>
+                                        <p style="font-size: 11px; color: #9ca3af; margin-top: 4px;">
+                                            Matikan toggle ini untuk menghentikan pemuatan video MP4 dan menghemat kuota internet hingga 100%. Gambar statis <code>carousell1.png</code> akan digunakan sebagai latar belakang.
+                                        </p>
+                                    </div>
+                                    <label style="position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; cursor: pointer;">
+                                        <input type="checkbox" name="enable_login_video" value="1" {{ old('enable_login_video', $user->enable_login_video) ? 'checked' : '' }} style="opacity: 0; width: 0; height: 0;" onchange="this.nextElementSibling.style.background = this.checked ? '#dc2626' : '#374151';">
+                                        <span style="position: absolute; inset: 0; background: {{ old('enable_login_video', $user->enable_login_video) ? '#dc2626' : '#374151' }}; border-radius: 24px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);">
+                                            <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 2px; background: white; border-radius: 50%; transition: 0.3s; transform: {{ old('enable_login_video', $user->enable_login_video) ? 'translateX(20px)' : 'translateX(0)' }};"></span>
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
 
                             {{-- Address --}}

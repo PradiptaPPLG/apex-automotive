@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,19 +27,22 @@ class ProfileController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'          => ['required', 'string', 'max:255'],
-            'phone'         => ['nullable', 'string', 'max:20'],
-            'nik'           => ['nullable', 'string', 'max:20'],
-            'address'       => ['nullable', 'string', 'max:500'],
-            'city'          => ['nullable', 'string', 'max:100'],
-            'province'      => ['nullable', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'nik' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'province' => ['nullable', 'string', 'max:100'],
             'id_card_theme' => ['required', 'integer', 'in:1,2,3,4,5'],
-            'avatar'        => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'enable_login_video' => ['nullable', 'boolean'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
+
+        $validated['enable_login_video'] = $request->has('enable_login_video');
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {

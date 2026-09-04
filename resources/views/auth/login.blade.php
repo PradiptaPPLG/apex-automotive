@@ -334,11 +334,15 @@
 </head>
 <body>
 
-    <!-- BACKGROUND VIDEO & OVERLAY -->
+    <!-- BACKGROUND MEDIA & OVERLAY (Default: Static Image for 100% Data Saving) -->
     <div class="bg-container">
-        <video class="bg-video" autoplay muted loop playsinline preload="auto">
-            <source src="{{ asset('intro_login.mp4') }}" type="video/mp4">
-        </video>
+        @if(!empty($enableVideo))
+            <video class="bg-video" autoplay muted loop playsinline preload="none">
+                <source src="{{ asset('intro_login.mp4') }}" type="video/mp4">
+            </video>
+        @else
+            <img class="bg-video" src="{{ asset('images/carousell/carousell1.png') }}" alt="Apex Background" style="object-fit: cover; filter: brightness(0.65);">
+        @endif
         <div class="bg-overlay"></div>
     </div>
 

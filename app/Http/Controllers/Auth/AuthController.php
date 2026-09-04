@@ -22,7 +22,9 @@ class AuthController extends Controller
      */
     public function showLogin(): View
     {
-        return view('auth.login');
+        $enableVideo = (bool) User::whereIn('role', ['rm', 'admin'])->where('enable_login_video', true)->exists();
+
+        return view('auth.login', compact('enableVideo'));
     }
 
     /**
