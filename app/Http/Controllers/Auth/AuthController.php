@@ -218,7 +218,7 @@ class AuthController extends Controller
                 return redirect()->route('profile.complete')->with('welcome', true);
             }
 
-            return redirect()->intended('/');
+            return redirect()->intended('/')->with('welcome', true);
         } catch (\Throwable $e) {
             Log::error('Google Auth Failed: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
             Log::error($e->getTraceAsString());
@@ -288,6 +288,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('logged_out', true);
     }
 }

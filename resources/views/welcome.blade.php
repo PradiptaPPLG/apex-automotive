@@ -125,6 +125,18 @@
             </p>
         </div>
     </div>
+    <script>
+        (function() {
+            try {
+                const isFreshAuth = {{ (session('welcome') || session('logged_out') || session('email_sent')) ? 'true' : 'false' }};
+                const hasSeen = sessionStorage.getItem('apex_intro_seen');
+                if (hasSeen && !isFreshAuth) {
+                    const el = document.getElementById('intro-screen');
+                    if (el) el.style.display = 'none';
+                }
+            } catch (e) {}
+        })();
+    </script>
 
 
     <!-- ==========================================
@@ -1337,8 +1349,8 @@
     <!-- ==========================================
          INTERACTIVE CAR INSPECTOR & COLOR/BODYKIT CONFIGURATOR MODAL
          ========================================== -->
-    <div id="carInspectorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 sm:p-6 transition-all duration-300">
-        <div class="glass-card max-w-5xl w-full p-6 sm:p-8 border border-neutral-300 dark:border-white/20 shadow-2xl relative max-h-[92vh] overflow-y-auto">
+    <div id="carInspectorModal" onclick="if(event.target === this) toggleModal('carInspectorModal')" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 sm:p-6 transition-all duration-300">
+        <div onclick="event.stopPropagation()" class="glass-card max-w-5xl w-full p-6 sm:p-8 border border-neutral-300 dark:border-white/20 shadow-2xl relative max-h-[92vh] overflow-y-auto">
             
             <!-- CLOSE BUTTON -->
             <button onclick="toggleModal('carInspectorModal')" class="absolute top-5 right-5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white text-xl z-20">
@@ -1436,13 +1448,21 @@
                     </div>
 
                     <!-- ACTION BUTTONS -->
-                    <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button onclick="bookCarWithSelectedConfig()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center">
-                            <i class="fa-solid fa-calendar-check mr-2"></i> BOOK THIS SPEC
-                        </button>
-                        <button onclick="toggleModal('carInspectorModal'); toggleModal('inquireModal');" class="py-3 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 font-bold text-xs tracking-widest uppercase transition-colors flex items-center justify-center">
-                            REQUEST QUOTE
-                        </button>
+                    <div class="pt-2 w-full">
+                        @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
+                            <button type="button" disabled class="w-full py-3.5 bg-neutral-900/90 text-neutral-400 font-bold text-xs tracking-widest uppercase cursor-not-allowed flex items-center justify-center border border-red-900/50 shadow-lg">
+                                <i class="fa-solid fa-lock mr-2 text-red-500"></i> BOOKING DINONAKTIFKAN (AKUN STAFF)
+                            </button>
+                        @else
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button onclick="bookCarWithSelectedConfig()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center">
+                                    <i class="fa-solid fa-calendar-check mr-2"></i> BOOK THIS SPEC
+                                </button>
+                                <button onclick="toggleModal('carInspectorModal'); toggleModal('inquireModal');" class="py-3 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 font-bold text-xs tracking-widest uppercase transition-colors flex items-center justify-center">
+                                    REQUEST QUOTE
+                                </button>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
@@ -1455,8 +1475,8 @@
     <!-- ==========================================
          INQUIRE & VIP MODAL
          ========================================== -->
-    <div id="inquireModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300">
-        <div class="glass-card max-w-lg w-full p-8 border border-neutral-300 dark:border-white/20 shadow-2xl relative">
+    <div id="inquireModal" onclick="if(event.target === this) toggleModal('inquireModal')" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300">
+        <div onclick="event.stopPropagation()" class="glass-card max-w-lg w-full p-8 border border-neutral-300 dark:border-white/20 shadow-2xl relative">
             <button onclick="toggleModal('inquireModal')" class="absolute top-4 right-4 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white text-lg">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1889,12 +1909,21 @@
         window.addEventListener('DOMContentLoaded', () => {
             const intro = document.getElementById('intro-screen');
             if (intro) {
-                setTimeout(() => {
-                    intro.classList.add('opacity-0', 'pointer-events-none');
+                const hasSeenIntro = sessionStorage.getItem('apex_intro_seen');
+                const isFreshAuthAction = {{ (session('welcome') || session('logged_out') || session('profile_success') || session('info')) ? 'true' : 'false' }};
+
+                if (hasSeenIntro && !isFreshAuthAction) {
+                    intro.style.display = 'none';
+                    intro.remove();
+                } else {
+                    sessionStorage.setItem('apex_intro_seen', 'true');
                     setTimeout(() => {
-                        intro.remove();
-                    }, 1000);
-                }, 2400);
+                        intro.classList.add('opacity-0', 'pointer-events-none');
+                        setTimeout(() => {
+                            intro.remove();
+                        }, 1000);
+                    }, 2400);
+                }
             }
 
             // Sync toggle button initial state
@@ -2154,6 +2183,11 @@
         }
 
         function bookCarWithSelectedConfig() {
+            @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
+                alert('Akun Staff (Sales RM / Delivery Driver) tidak dapat melakukan booking unit kendaraan.');
+                return;
+            @endif
+
             const car = CAR_DATABASE[currentInspectedCarKey];
             if (!car) return;
 
@@ -2368,6 +2402,14 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.toggle('hidden');
+
+                // Lock background body scroll when any modal popup is open
+                const activeModals = document.querySelectorAll('#carInspectorModal:not(.hidden), #inquireModal:not(.hidden)');
+                if (activeModals.length > 0) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
             }
         }
 

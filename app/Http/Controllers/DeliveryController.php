@@ -72,6 +72,15 @@ class DeliveryController extends Controller
             'note'        => $request->input('note'),
         ]);
 
+        // Auto-post driver update message into buyer thread (sender_type = driver)
+        \App\Models\ConsultationMessage::create([
+            'inquiry_id'  => $delivery->inquiry_id,
+            'sender_type' => 'driver',
+            'sender_name' => auth()->user()->name . ' (Escort Specialist)',
+            'message'     => '🚛 **[LIVE GPS UPDATE - ESCORT DRIVER]**' . "\n" . ($request->input('phase_label') ?: 'Posisi armada diperbarui') . "\nKoordinat: " . $request->input('lat') . ', ' . $request->input('lng'),
+            'is_read'     => false,
+        ]);
+
         return response()->json([
             'success'  => true,
             'tracking' => $tracking,
