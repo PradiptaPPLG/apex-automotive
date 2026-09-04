@@ -793,6 +793,41 @@
             </div>
 
             <div class="messages-container" id="messagesContainer">
+                {{-- Delivery Product Order Manifest (Auto-sent to driver like e-commerce) --}}
+                <div id="deliveryManifestCard" style="display: none; width: 100%; max-width: 440px; margin: 0 auto 16px; background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.35); border-radius: 6px; padding: 16px; font-family: 'Inter', sans-serif;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(249,115,22,0.2); padding-bottom: 8px; margin-bottom: 12px;">
+                        <div style="font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #f97316; letter-spacing: 1px; text-transform: uppercase;">
+                            <i class="fa-solid fa-receipt mr-1"></i> RESI PEMESANAN & DOKUMEN PENGIRIMAN
+                        </div>
+                        <span style="font-size: 9px; font-family: monospace; padding: 2px 6px; background: rgba(249,115,22,0.2); color: #fb923c; border-radius: 2px; font-weight: 700;">OTOMATIS TERKIRIM KE DRIVER</span>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div style="width: 70px; height: 55px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; background: #000;">
+                            <img src="{{ $carImg }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: #ffffff; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                {{ $inquiry->car_model }}
+                            </div>
+                            <div style="font-size: 10px; color: #f97316; font-family: monospace; margin-top: 2px;">
+                                ID: #APX-{{ str_pad($inquiry->id, 5, '0', STR_PAD_LEFT) }} &nbsp;·&nbsp; SKU: SUPERCAR-{{ strtoupper(substr(md5($inquiry->car_model ?? 'VIP'), 0, 6)) }}
+                            </div>
+                            @if($inquiry->selected_config)
+                                <div style="font-size: 10px; color: #9ca3af; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    Spec: {{ $inquiry->selected_config }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 12px; padding-top: 8px; border-top: 1px dashed rgba(249,115,22,0.25); font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 4px;">
+                        <div><strong style="color: #9ca3af;">Penerima:</strong> {{ auth()->user()->name }} ({{ auth()->user()->phone ?? $inquiry->phone }})</div>
+                        <div><strong style="color: #9ca3af;">Alamat Tujuan:</strong> {{ auth()->user()->address ?? 'Alamat Terverifikasi KYC Pembeli VIP' }}</div>
+                        <div><strong style="color: #9ca3af;">Armada Towing:</strong> Enclosed Flatbed Towing (Tutup Velvet Red)</div>
+                    </div>
+                </div>
+
                 @if($messages->isEmpty())
                     <div class="no-messages">
                         <i class="fa-regular fa-comments"></i>
@@ -1273,14 +1308,32 @@
 
         function filterMessagesByChannel() {
             const msgGroups = document.querySelectorAll('.message-group');
+            const manifestCard = document.getElementById('deliveryManifestCard');
+            
+            if (manifestCard) {
+                manifestCard.style.display = (currentChannel === 'delivery') ? 'block' : 'none';
+            }
+
             msgGroups.forEach(el => {
-                if (el.classList.contains('driver')) {
+                const isDriverMsg = el.classList.contains('driver');
+                const isRmMsg = el.classList.contains('rm');
+                const isBuyerMsg = el.classList.contains('buyer');
+                const isLocationShare = el.querySelector('.location-card') !== null;
+
+                if (isDriverMsg) {
+                    // Driver messages only show in Delivery tab
                     el.style.display = (currentChannel === 'delivery') ? 'flex' : 'none';
-                } else if (el.classList.contains('rm')) {
+                } else if (isRmMsg) {
+                    // Sales RM messages only show in Sales tab
                     el.style.display = (currentChannel === 'sales') ? 'flex' : 'none';
-                } else if (el.classList.contains('buyer')) {
-                    // For buyer messages, display in active channel
-                    el.style.display = 'flex';
+                } else if (isBuyerMsg) {
+                    if (currentChannel === 'sales') {
+                        // All buyer messages show in Sales tab
+                        el.style.display = 'flex';
+                    } else {
+                        // Delivery tab only shows location sharing messages from buyer
+                        el.style.display = isLocationShare ? 'flex' : 'none';
+                    }
                 }
             });
             scrollBottom();
