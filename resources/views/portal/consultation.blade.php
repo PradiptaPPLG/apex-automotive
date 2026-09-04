@@ -536,13 +536,13 @@
             </div>
 
             {{-- Live GPS Delivery Escort Widget --}}
-            <div id="liveDeliveryCard" style="display: none; background: rgba(34, 211, 238, 0.05); border: 1px solid rgba(34, 211, 238, 0.3); padding: 14px; border-radius: 4px; flex-direction: column; gap: 10px;">
+            <div id="liveDeliveryCard" style="display: none; background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.35); padding: 14px; border-radius: 4px; flex-direction: column; gap: 10px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #22d3ee; letter-spacing: 0.1em; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
-                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 8px #22d3ee;"></span>
-                        LIVE GPS DELIVERY ESCORT
+                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #f97316; letter-spacing: 0.1em; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444;" title="Aktif"></span>
+                        <i class="fa-solid fa-truck-fast"></i> LIVE GPS DELIVERY ESCORT
                     </div>
-                    <span id="buyerDeliveryStatusBadge" style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 2px 8px; background: rgba(34,211,238,0.2); color: #22d3ee; font-weight: 700; border-radius: 2px; text-transform: uppercase;">
+                    <span id="buyerDeliveryStatusBadge" style="font-family: 'Space Mono', monospace; font-size: 9px; padding: 2px 8px; background: rgba(249, 115, 22, 0.25); color: #fb923c; font-weight: 700; border-radius: 2px; text-transform: uppercase;">
                         IN TRANSIT
                     </span>
                 </div>
@@ -554,9 +554,9 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <span style="color: #9ca3af; font-size: 11px;">Armada Towing:</span>
-                        <span style="color: #22d3ee; font-family: monospace; font-size: 10px; font-weight: 700;">Enclosed Flatbed Truck</span>
+                        <span style="color: #f97316; font-family: monospace; font-size: 10px; font-weight: 700;">Enclosed Flatbed Truck</span>
                     </div>
-                    <div id="buyerPhaseLabel" style="font-size: 11px; color: #86efac; font-family: monospace; background: rgba(34,197,94,0.1); padding: 6px 8px; border-left: 2px solid #22c55e;">
+                    <div id="buyerPhaseLabel" style="font-size: 11px; color: #fed7aa; font-family: monospace; background: rgba(249,115,22,0.15); padding: 6px 8px; border-left: 2px solid #f97316;">
                         Armada Menuju Lokasi Pembeli
                     </div>
                 </div>
@@ -565,9 +565,9 @@
                 <div id="buyerGpsMap" style="width: 100%; height: 160px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.1); margin-top: 4px;"></div>
 
                 <div style="display: flex; gap: 8px; margin-top: 4px;">
-                    <a id="callDriverBtn" href="tel:081234567890" style="flex: 1; text-align: center; padding: 8px; background: rgba(34,211,238,0.15); border: 1px solid rgba(34,211,238,0.4); color: #22d3ee; font-size: 10px; font-family: monospace; font-weight: 700; text-decoration: none; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <button id="callDriverBtn" onclick="contactDriver()" style="flex: 1; text-align: center; padding: 10px; background: rgba(249,115,22,0.2); border: 1px solid rgba(249,115,22,0.5); color: #f97316; font-size: 10px; font-family: monospace; font-weight: 700; cursor: pointer; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s;">
                         <i class="fa-solid fa-phone"></i> HUBUNGI DRIVER ESCORT
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1174,6 +1174,21 @@
             } catch(e) {}
         }
 
+        let currentDriverPhone = '';
+        function contactDriver() {
+            const phone = currentDriverPhone || '081234567890';
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const waUrl = `https://wa.me/62${cleanPhone.startsWith('0') ? cleanPhone.slice(1) : cleanPhone}`;
+            
+            const choice = confirm(`Hubungi Driver Escort (${phone})?\n\n- Klik [OK] untuk Buka WhatsApp Chat\n- Klik [Cancel] untuk Salin Nomor HP`);
+            if (choice) {
+                window.open(waUrl, '_blank');
+            } else {
+                navigator.clipboard.writeText(phone);
+                alert(`Nomor Telepon ${phone} berhasil disalin!`);
+            }
+        }
+
         async function pollDriverGps() {
             try {
                 const res = await fetch(TRACKING_URL, { headers: { 'Accept': 'application/json' } });
@@ -1192,7 +1207,7 @@
                     document.getElementById('buyerDriverName').textContent = data.driver_name;
                 }
                 if (data.driver_phone) {
-                    document.getElementById('callDriverBtn').href = `tel:${data.driver_phone}`;
+                    currentDriverPhone = data.driver_phone;
                 }
                 if (data.status) {
                     document.getElementById('buyerDeliveryStatusBadge').textContent = data.status.toUpperCase();
