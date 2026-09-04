@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EmailOtpToken;
 use App\Models\User;
 use GuzzleHttp\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -224,6 +225,58 @@ class AuthController extends Controller
 
             return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan akun Google: '.$e->getMessage()]);
         }
+    }
+
+    /**
+     * Authenticate user via QR Code from VIP ID Card.
+     */
+    public function loginQr(Request $request): JsonResponse
+    {
+        $payload = $request->input('qr_payload');
+
+        if (! $payload) {
+            return response()->json(['success' => false, 'message' => 'QR Code tidak terdeteksi.'], 400);
+        }
+
+        $parts = explode('|', $payload);
+        if (count($parts) !== 3 || $parts[0] !== 'qrlogin') {
+            return response()->json(['success' => false, 'message' => 'Format QR Code tidak valid.'], 422);
+        }
+
+        $userId = $parts[1];
+        $hash   = $parts[2];
+
+        $user = User::find($userId);
+        if (! $user) {
+            return response()->json(['success' => false, 'message' => 'Pengguna tidak ditemukan.'], 404);
+        }
+
+        $secret = config('app.key');
+        $expectedHash = hash_hmac('sha256', $user->nik ?? $user->email, $secret);
+
+        if (! hash_equals($expectedHash, $hash)) {
+            return response()->json(['success' => false, 'message' => 'QR Code tidak valid atau telah dimanipulasi.'], 403);
+        }
+
+        Auth::login($user, remember: true);
+        $request->session()->regenerate();
+
+        $redirect = route('home');
+        if ($user->isRm()) {
+            $redirect = route('admin.inquiries.index');
+        } elseif ($user->isDelivery()) {
+            $redirect = route('delivery.portal');
+        } elseif (! $user->hasCompletedProfile()) {
+            $redirect = route('profile.complete');
+        } else {
+            $redirect = route('portal.dashboard');
+        }
+
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Autentikasi ID Card Berhasil! Mengalihkan...',
+            'redirect' => $redirect,
+        ]);
     }
 
     /**
