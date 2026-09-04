@@ -214,6 +214,9 @@
         <div class="admin-nav-right">
             <i class="fa-solid fa-circle" style="color:#dc2626; font-size:8px;"></i>
             <span>{{ auth()->user()->name }}</span>
+            <a href="{{ route('admin.profile.show') }}" style="color:#e5e7eb; text-decoration:none; font-family:'Space Mono', monospace; font-size:10px; text-transform:uppercase; border:1px solid rgba(220,38,38,0.4); padding:4px 10px; border-radius:4px; transition:all 0.2s; background:rgba(220,38,38,0.1);">
+                <i class="fa-solid fa-id-card mr-1" style="color:#dc2626;"></i> Profil & ID Card
+            </a>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
                 <button type="submit" class="logout-btn">Keluar</button>

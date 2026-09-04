@@ -130,7 +130,12 @@
         <a href="{{ route('admin.inquiries.index') }}" class="nav-back">
             <i class="fa-solid fa-arrow-left"></i> Semua Inquiry
         </a>
-        <span class="admin-badge">RM Panel</span>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="{{ route('admin.profile.show') }}" style="color:#e5e7eb; text-decoration:none; font-family:'Space Mono', monospace; font-size:10px; text-transform:uppercase; border:1px solid rgba(220,38,38,0.4); padding:4px 10px; border-radius:4px; transition:all 0.2s; background:rgba(220,38,38,0.1);">
+                <i class="fa-solid fa-id-card mr-1" style="color:#dc2626;"></i> Profil & ID Card
+            </a>
+            <span class="admin-badge">RM Panel</span>
+        </div>
     </nav>
 
     <div class="layout">
