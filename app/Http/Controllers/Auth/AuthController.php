@@ -140,19 +140,19 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'           => ['required', 'string', 'max:255'],
-            'phone'          => ['required', 'string', 'max:20'],
-            'nik'            => ['required', 'digits:16'],
-            'npwp'           => ['nullable', 'string', 'max:20'],
-            'address'        => ['required', 'string', 'max:500'],
-            'city'           => ['required', 'string', 'max:100'],
-            'province'       => ['required', 'string', 'max:100'],
-            'postal_code'    => ['required', 'digits_between:4,6'],
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:20'],
+            'nik' => ['required', 'digits:16'],
+            'npwp' => ['nullable', 'string', 'max:20'],
+            'address' => ['required', 'string', 'max:500'],
+            'city' => ['required', 'string', 'max:100'],
+            'province' => ['required', 'string', 'max:100'],
+            'postal_code' => ['required', 'digits_between:4,6'],
             'ownership_type' => ['required', 'in:individual,company'],
-            'ktp_file'       => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'kk_file'        => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'nib_file'       => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'akta_file'      => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'ktp_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'kk_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'nib_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'akta_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ]);
 
         $fileFields = ['ktp_file', 'kk_file', 'nib_file', 'akta_file'];
@@ -165,7 +165,7 @@ class AuthController extends Controller
 
         $user->update(array_merge($validated, [
             'profile_completed' => true,
-            'kyc_status'        => 'pending',
+            'kyc_status' => 'pending',
         ]));
 
         return redirect()->route('portal.dashboard')
@@ -177,7 +177,7 @@ class AuthController extends Controller
      */
     public function redirectToGoogle(): RedirectResponse
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->with(['prompt' => 'select_account'])->redirect();
     }
 
     /**
@@ -244,7 +244,7 @@ class AuthController extends Controller
         }
 
         $userId = $parts[1];
-        $hash   = $parts[2];
+        $hash = $parts[2];
 
         $user = User::find($userId);
         if (! $user) {
@@ -273,8 +273,8 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'success'  => true,
-            'message'  => 'Autentikasi ID Card Berhasil! Mengalihkan...',
+            'success' => true,
+            'message' => 'Autentikasi ID Card Berhasil! Mengalihkan...',
             'redirect' => $redirect,
         ]);
     }
