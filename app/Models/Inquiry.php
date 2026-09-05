@@ -34,15 +34,15 @@ class Inquiry extends Model
     public static function statusLabels(): array
     {
         return [
-            'inquiry_received'     => 'Lead Diterima',
-            'consultation_active'  => 'Konsultasi Aktif',
-            'spk_issued'           => 'SPK Diterbitkan',
-            'kyc_pending'          => 'Menunggu Dokumen KYC',
-            'kyc_approved'         => 'KYC Disetujui',
-            'contract_signed'      => 'Kontrak Ditandatangani',
-            'payment_verified'     => 'Pembayaran Terkonfirmasi',
-            'scheduled_delivery'   => 'Dijadwalkan Pengiriman',
-            'delivered_completed'  => 'Selesai — Kendaraan Diterima',
+            'inquiry_received' => 'Lead Diterima',
+            'consultation_active' => 'Konsultasi Aktif',
+            'spk_issued' => 'SPK Diterbitkan',
+            'kyc_pending' => 'Menunggu Dokumen KYC',
+            'kyc_approved' => 'KYC Disetujui',
+            'contract_signed' => 'Kontrak Ditandatangani',
+            'payment_verified' => 'Pembayaran Terkonfirmasi',
+            'scheduled_delivery' => 'Dijadwalkan Pengiriman',
+            'delivered_completed' => 'Selesai — Kendaraan Diterima',
         ];
     }
 
@@ -76,16 +76,16 @@ class Inquiry extends Model
     public function statusColor(): string
     {
         return match ($this->status) {
-            'inquiry_received'    => 'text-yellow-400 border-yellow-400/30 bg-yellow-400/10',
+            'inquiry_received' => 'text-yellow-400 border-yellow-400/30 bg-yellow-400/10',
             'consultation_active' => 'text-blue-400 border-blue-400/30 bg-blue-400/10',
-            'spk_issued'          => 'text-purple-400 border-purple-400/30 bg-purple-400/10',
-            'kyc_pending'         => 'text-orange-400 border-orange-400/30 bg-orange-400/10',
-            'kyc_approved'        => 'text-teal-400 border-teal-400/30 bg-teal-400/10',
-            'contract_signed'     => 'text-cyan-400 border-cyan-400/30 bg-cyan-400/10',
-            'payment_verified'    => 'text-green-400 border-green-400/30 bg-green-400/10',
-            'scheduled_delivery'  => 'text-indigo-400 border-indigo-400/30 bg-indigo-400/10',
+            'spk_issued' => 'text-purple-400 border-purple-400/30 bg-purple-400/10',
+            'kyc_pending' => 'text-orange-400 border-orange-400/30 bg-orange-400/10',
+            'kyc_approved' => 'text-teal-400 border-teal-400/30 bg-teal-400/10',
+            'contract_signed' => 'text-cyan-400 border-cyan-400/30 bg-cyan-400/10',
+            'payment_verified' => 'text-green-400 border-green-400/30 bg-green-400/10',
+            'scheduled_delivery' => 'text-indigo-400 border-indigo-400/30 bg-indigo-400/10',
             'delivered_completed' => 'text-red-400 border-red-400/30 bg-red-400/10',
-            default               => 'text-neutral-400 border-neutral-400/30 bg-neutral-400/10',
+            default => 'text-neutral-400 border-neutral-400/30 bg-neutral-400/10',
         };
     }
 }

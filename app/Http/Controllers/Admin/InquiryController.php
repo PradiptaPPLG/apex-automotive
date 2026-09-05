@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ConsultationMessage;
+use App\Models\Delivery;
+use App\Models\DeliveryTracking;
 use App\Models\Inquiry;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -68,7 +71,7 @@ class InquiryController extends Controller
     public function sendMessage(Request $request, Inquiry $inquiry): JsonResponse
     {
         $request->validate([
-            'message'    => ['nullable', 'string', 'max:3000'],
+            'message' => ['nullable', 'string', 'max:3000'],
             'attachment' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
         ]);
 
@@ -82,18 +85,18 @@ class InquiryController extends Controller
         }
 
         $message = ConsultationMessage::create([
-            'inquiry_id'  => $inquiry->id,
+            'inquiry_id' => $inquiry->id,
             'sender_type' => 'rm',
             'sender_name' => auth()->user()->name,
-            'message'     => $request->input('message') ?? '',
-            'attachment'  => $attachmentPath,
-            'is_read'     => false,
+            'message' => $request->input('message') ?? '',
+            'attachment' => $attachmentPath,
+            'is_read' => false,
         ]);
 
         // Activate consultation status if needed
         if ($inquiry->status === 'inquiry_received') {
             $inquiry->update([
-                'status'           => 'consultation_active',
+                'status' => 'consultation_active',
                 'assigned_rm_name' => auth()->user()->name,
             ]);
         }
@@ -101,7 +104,7 @@ class InquiryController extends Controller
         return response()->json([
             'success' => true,
             'message' => array_merge($message->toArray(), [
-                'attachment_url' => $message->attachment ? asset('storage/' . $message->attachment) : null,
+                'attachment_url' => $message->attachment ? asset('storage/'.$message->attachment) : null,
             ]),
         ]);
     }
@@ -118,7 +121,7 @@ class InquiryController extends Controller
             ->orderBy('created_at')
             ->get(['id', 'sender_type', 'sender_name', 'message', 'attachment', 'created_at'])
             ->map(function ($msg) {
-                $msg->attachment_url = $msg->attachment ? asset('storage/' . $msg->attachment) : null;
+                $msg->attachment_url = $msg->attachment ? asset('storage/'.$msg->attachment) : null;
 
                 return $msg;
             });
@@ -142,14 +145,14 @@ class InquiryController extends Controller
             abort(404, 'Dokumen Kontrak SPA belum siap.');
         }
 
-        $filePath = storage_path('app/public/' . $inquiry->spa_contract_pdf);
+        $filePath = storage_path('app/public/'.$inquiry->spa_contract_pdf);
         if (! file_exists($filePath)) {
             abort(404, 'Berkas PDF Kontrak tidak ditemukan.');
         }
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="Apex_SPA_Contract_' . $inquiry->id . '.pdf"',
+            'Content-Disposition' => 'inline; filename="Apex_SPA_Contract_'.$inquiry->id.'.pdf"',
         ]);
     }
 
@@ -167,9 +170,9 @@ class InquiryController extends Controller
         ]);
 
         // Auto-assign ke delivery driver pradipta.endra4@smp.belajar.id
-        $driver = \App\Models\User::where('email', 'pradipta.endra4@smp.belajar.id')->first();
+        $driver = User::where('email', 'pradipta.endra4@smp.belajar.id')->first();
         if ($driver) {
-            $delivery = \App\Models\Delivery::firstOrCreate(
+            $delivery = Delivery::firstOrCreate(
                 ['inquiry_id' => $inquiry->id],
                 [
                     'driver_id' => $driver->id,
@@ -183,7 +186,7 @@ class InquiryController extends Controller
             // Seed initial tracking point if coords exist
             if ($coords) {
                 [$lat, $lng] = explode(',', $coords);
-                \App\Models\DeliveryTracking::create([
+                DeliveryTracking::create([
                     'delivery_id' => $delivery->id,
                     'lat' => trim($lat),
                     'lng' => trim($lng),
@@ -197,11 +200,11 @@ class InquiryController extends Controller
         $msgText = "✅ **LOKASI TERVERIFIKASI & DISETUJUI**\n\nLokasi pengiriman Anda telah dikonfirmasi. Tim *Apex White-Glove Delivery Escort* (Driver: Pradipta) sedang menyiapkan armada Towing Flatbed.\n\nDetail Pengiriman:\n• Unit: {$inquiry->car_model}\n• Pembeli: {$inquiry->name}\n• Pengirim: Pradipta Endra (Escort Specialist)\n\nAnda dapat memantau posisi armada secara real-time di panel samping.";
 
         $message = ConsultationMessage::create([
-            'inquiry_id'  => $inquiry->id,
+            'inquiry_id' => $inquiry->id,
             'sender_type' => 'rm',
             'sender_name' => auth()->user()->name,
-            'message'     => $msgText,
-            'is_read'     => false,
+            'message' => $msgText,
+            'is_read' => false,
         ]);
 
         return response()->json([
@@ -221,11 +224,11 @@ class InquiryController extends Controller
         $msgText = "❌ **LOKASI DITOLAK / PERLU PENYESUAIAN**\n\nAlasan: {$reason}\n\nMohon kirimkan ulang titik lokasi alternatif yang dapat diakses kendaraan *Flatbed Towing Apex* (misal: area jalan raya terdekat atau garasi utama).";
 
         $message = ConsultationMessage::create([
-            'inquiry_id'  => $inquiry->id,
+            'inquiry_id' => $inquiry->id,
             'sender_type' => 'rm',
             'sender_name' => auth()->user()->name,
-            'message'     => $msgText,
-            'is_read'     => false,
+            'message' => $msgText,
+            'is_read' => false,
         ]);
 
         return response()->json([

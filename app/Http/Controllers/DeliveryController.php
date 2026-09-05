@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConsultationMessage;
 use App\Models\Delivery;
 use App\Models\DeliveryTracking;
 use App\Models\Inquiry;
@@ -48,11 +49,11 @@ class DeliveryController extends Controller
         }
 
         $request->validate([
-            'lat'         => ['required', 'numeric'],
-            'lng'         => ['required', 'numeric'],
+            'lat' => ['required', 'numeric'],
+            'lng' => ['required', 'numeric'],
             'phase_label' => ['nullable', 'string', 'max:100'],
-            'status'      => ['nullable', 'string', 'in:pending,in_transit,delivered'],
-            'note'        => ['nullable', 'string', 'max:500'],
+            'status' => ['nullable', 'string', 'in:pending,in_transit,delivered'],
+            'note' => ['nullable', 'string', 'max:500'],
         ]);
 
         if ($request->filled('status')) {
@@ -66,25 +67,25 @@ class DeliveryController extends Controller
 
         $tracking = DeliveryTracking::create([
             'delivery_id' => $delivery->id,
-            'lat'         => $request->input('lat'),
-            'lng'         => $request->input('lng'),
+            'lat' => $request->input('lat'),
+            'lng' => $request->input('lng'),
             'phase_label' => $request->input('phase_label', 'Armada Dalam Perjalanan'),
-            'note'        => $request->input('note'),
+            'note' => $request->input('note'),
         ]);
 
         // Auto-post driver update message into buyer thread (sender_type = driver)
-        \App\Models\ConsultationMessage::create([
-            'inquiry_id'  => $delivery->inquiry_id,
+        ConsultationMessage::create([
+            'inquiry_id' => $delivery->inquiry_id,
             'sender_type' => 'driver',
-            'sender_name' => auth()->user()->name . ' (Escort Specialist)',
-            'message'     => '🚛 **[LIVE GPS UPDATE - ESCORT DRIVER]**' . "\n" . ($request->input('phase_label') ?: 'Posisi armada diperbarui') . "\nKoordinat: " . $request->input('lat') . ', ' . $request->input('lng'),
-            'is_read'     => false,
+            'sender_name' => auth()->user()->name.' (Escort Specialist)',
+            'message' => '🚛 **[LIVE GPS UPDATE - ESCORT DRIVER]**'."\n".($request->input('phase_label') ?: 'Posisi armada diperbarui')."\nKoordinat: ".$request->input('lat').', '.$request->input('lng'),
+            'is_read' => false,
         ]);
 
         return response()->json([
-            'success'  => true,
+            'success' => true,
             'tracking' => $tracking,
-            'status'   => $delivery->status,
+            'status' => $delivery->status,
         ]);
     }
 
@@ -104,13 +105,13 @@ class DeliveryController extends Controller
         }
 
         return response()->json([
-            'active'       => true,
-            'status'       => $delivery->status,
-            'driver_name'  => $delivery->driver?->name ?? 'Pradipta Endra',
+            'active' => true,
+            'status' => $delivery->status,
+            'driver_name' => $delivery->driver?->name ?? 'Pradipta Endra',
             'driver_phone' => $delivery->driver?->phone ?? '0812-3456-7890',
-            'car_model'    => $inquiry->car_model,
-            'trackings'    => $delivery->trackings,
-            'latest'       => $delivery->latestTracking,
+            'car_model' => $inquiry->car_model,
+            'trackings' => $delivery->trackings,
+            'latest' => $delivery->latestTracking,
         ]);
     }
 }

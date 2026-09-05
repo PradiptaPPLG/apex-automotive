@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\EnsureDelivery;
+use App\Http\Middleware\ManagerMiddleware;
+use App\Http\Middleware\RmMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,9 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'rm' => \App\Http\Middleware\RmMiddleware::class,
-            'delivery' => \App\Http\Middleware\EnsureDelivery::class,
-            'manager' => \App\Http\Middleware\ManagerMiddleware::class,
+            'rm' => RmMiddleware::class,
+            'delivery' => EnsureDelivery::class,
+            'manager' => ManagerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

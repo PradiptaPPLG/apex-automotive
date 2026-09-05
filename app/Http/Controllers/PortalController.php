@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ConsultationMessage;
 use App\Models\Inquiry;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use Illuminate\Http\RedirectResponse;
 
 class PortalController extends Controller
 {

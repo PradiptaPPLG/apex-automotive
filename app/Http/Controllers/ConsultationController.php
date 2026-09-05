@@ -17,7 +17,7 @@ class ConsultationController extends Controller
         abort_if($inquiry->user_id !== auth()->id(), 403);
 
         $request->validate([
-            'message'    => ['nullable', 'string', 'max:3000'],
+            'message' => ['nullable', 'string', 'max:3000'],
             'attachment' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
         ]);
 
@@ -31,12 +31,12 @@ class ConsultationController extends Controller
         }
 
         $message = ConsultationMessage::create([
-            'inquiry_id'  => $inquiry->id,
+            'inquiry_id' => $inquiry->id,
             'sender_type' => 'buyer',
             'sender_name' => auth()->user()->name,
-            'message'     => $request->input('message') ?? '',
-            'attachment'  => $attachmentPath,
-            'is_read'     => false,
+            'message' => $request->input('message') ?? '',
+            'attachment' => $attachmentPath,
+            'is_read' => false,
         ]);
 
         // Auto-activate consultation if still in inquiry_received
@@ -47,7 +47,7 @@ class ConsultationController extends Controller
         return response()->json([
             'success' => true,
             'message' => array_merge($message->toArray(), [
-                'attachment_url' => $message->attachment ? asset('storage/' . $message->attachment) : null,
+                'attachment_url' => $message->attachment ? asset('storage/'.$message->attachment) : null,
             ]),
         ]);
     }
@@ -66,7 +66,7 @@ class ConsultationController extends Controller
             ->orderBy('created_at')
             ->get(['id', 'sender_type', 'sender_name', 'message', 'attachment', 'created_at'])
             ->map(function ($msg) {
-                $msg->attachment_url = $msg->attachment ? asset('storage/' . $msg->attachment) : null;
+                $msg->attachment_url = $msg->attachment ? asset('storage/'.$msg->attachment) : null;
 
                 return $msg;
             });
@@ -78,8 +78,8 @@ class ConsultationController extends Controller
             ->update(['is_read' => true]);
 
         return response()->json([
-            'messages'     => $messages,
-            'status'       => $inquiry->fresh()->status,
+            'messages' => $messages,
+            'status' => $inquiry->fresh()->status,
             'status_label' => $inquiry->fresh()->statusLabel(),
         ]);
     }

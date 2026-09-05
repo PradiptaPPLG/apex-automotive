@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use App\Models\Car;
+use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
     public function index()
     {
         $cars = Car::latest()->paginate(10);
+
         return view('manager.cars.index', compact('cars'));
     }
 
     public function create()
     {
-        return view('manager.cars.form', ['car' => new Car()]);
+        return view('manager.cars.form', ['car' => new Car]);
     }
 
     public function store(Request $request)
@@ -68,6 +68,7 @@ class CarController extends Controller
     public function destroy(Car $car)
     {
         $car->delete();
+
         return redirect()->route('manager.cars.index')->with('success', 'Mobil telah dihapus dari showroom.');
     }
 }

@@ -21,26 +21,26 @@ class InquiryController extends Controller
         }
 
         $validated = $request->validate([
-            'name'             => ['required', 'string', 'max:255'],
-            'phone'            => ['required', 'string', 'max:30'],
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:30'],
             'car_model_display' => ['nullable', 'string', 'max:255'],
-            'car_model'        => ['nullable', 'string', 'max:255'],
-            'selected_config'  => ['nullable', 'string'],
-            'notes'            => ['nullable', 'string', 'max:2000'],
-            'user_email'       => ['nullable', 'email'],
+            'car_model' => ['nullable', 'string', 'max:255'],
+            'selected_config' => ['nullable', 'string'],
+            'notes' => ['nullable', 'string', 'max:2000'],
+            'user_email' => ['nullable', 'email'],
         ]);
 
         $carModel = $validated['car_model'] ?: $validated['car_model_display'] ?? null;
 
         $inquiry = Inquiry::create([
-            'user_id'         => auth()->id(),
-            'name'            => $validated['name'],
-            'email'           => $validated['user_email'] ?? (auth()->user()?->email),
-            'phone'           => $validated['phone'],
-            'car_model'       => $carModel,
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'email' => $validated['user_email'] ?? (auth()->user()?->email),
+            'phone' => $validated['phone'],
+            'car_model' => $carModel,
             'selected_config' => $validated['selected_config'] ?? null,
-            'notes'           => $validated['notes'] ?? null,
-            'status'          => 'inquiry_received',
+            'notes' => $validated['notes'] ?? null,
+            'status' => 'inquiry_received',
         ]);
 
         return response()->json([

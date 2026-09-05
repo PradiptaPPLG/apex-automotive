@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 #[Fillable(['email', 'token', 'expires_at', 'used'])]
 class EmailOtpToken extends Model

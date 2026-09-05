@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class TeamController extends Controller
@@ -60,6 +59,7 @@ class TeamController extends Controller
         }
 
         $user->delete();
+
         return redirect()->route('manager.team.index')->with('success', 'Anggota tim berhasil dihapus.');
     }
 }
