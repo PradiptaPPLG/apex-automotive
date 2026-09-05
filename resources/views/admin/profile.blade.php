@@ -179,6 +179,49 @@
         .card-detail-label { color: #6b7280; font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; }
         .card-detail-val { color: #e5e7eb; font-weight: 600; font-family: 'Space Mono', monospace; font-size: 11px; }
 
+        /* Pure CSS Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #374151;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: #dc2626;
+            border-color: rgba(220, 38, 38, 0.6);
+        }
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
         .qr-wrapper {
             background: #ffffff;
             padding: 12px;
@@ -451,11 +494,9 @@
                                             Matikan toggle ini untuk menghentikan pemuatan video MP4 dan menghemat kuota internet hingga 100%. Gambar statis <code>carousell1.png</code> akan digunakan sebagai latar belakang.
                                         </p>
                                     </div>
-                                    <label style="position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; cursor: pointer;">
-                                        <input type="checkbox" name="enable_login_video" value="1" {{ old('enable_login_video', $user->enable_login_video) ? 'checked' : '' }} style="opacity: 0; width: 0; height: 0;" onchange="this.nextElementSibling.style.background = this.checked ? '#dc2626' : '#374151';">
-                                        <span style="position: absolute; inset: 0; background: {{ old('enable_login_video', $user->enable_login_video) ? '#dc2626' : '#374151' }}; border-radius: 24px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);">
-                                            <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 2px; background: white; border-radius: 50%; transition: 0.3s; transform: {{ old('enable_login_video', $user->enable_login_video) ? 'translateX(20px)' : 'translateX(0)' }};"></span>
-                                        </span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="videoToggleInput" name="enable_login_video" value="1" {{ old('enable_login_video', $user->enable_login_video) ? 'checked' : '' }}>
+                                        <span class="toggle-slider"></span>
                                     </label>
                                 </div>
                             </div>
