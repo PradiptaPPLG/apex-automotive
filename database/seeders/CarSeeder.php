@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Car;
 use Illuminate\Database\Seeder;
 
 class CarSeeder extends Seeder
@@ -136,7 +136,7 @@ class CarSeeder extends Seeder
         ];
 
         foreach ($cars as $car) {
-            \App\Models\Car::updateOrCreate(['name' => $car['name']], $car);
+            Car::updateOrCreate(['name' => $car['name']], $car);
         }
     }
 }
