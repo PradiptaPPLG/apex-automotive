@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -217,8 +218,9 @@
                 <span class="text-xs font-mono text-neutral-400">
                     <i class="fa-regular fa-clock text-red-500 mr-1"></i> {{ date('d M Y') }}
                 </span>
-                <span class="px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 font-mono text-xs uppercase rounded">
-                    {{ auth()->user()->email }}
+                <span style="padding: 6px 12px; background: rgba(220, 38, 38, 0.12); border: 1px solid rgba(220, 38, 38, 0.3); color: #fca5a5; font-family: 'Space Mono', monospace; font-size: 11px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-user-shield text-red-500"></i>
+                    <span>{{ auth()->user()->email }}</span>
                 </span>
             </div>
         </header>

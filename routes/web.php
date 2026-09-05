@@ -96,6 +96,7 @@ Route::middleware(['auth', 'manager'])->prefix('manager')->name('manager.')->gro
     Route::get('/preview', [DashboardController::class, 'preview'])->name('preview');
 
     // Cars Management
+    Route::patch('/cars/{car}/status', [CarController::class, 'toggleStatus'])->name('cars.status');
     Route::resource('cars', CarController::class)->except(['show']);
 
     // Team Management (Sales RM & Delivery Driver)

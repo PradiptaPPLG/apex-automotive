@@ -16,12 +16,23 @@ class DashboardController extends Controller
         $totalDelivery = User::where('role', 'delivery')->count();
         $totalInquiries = Inquiry::count();
 
-        // Stats by status for inquiries chart
+        // Stats by status for inquiries chart (matching exact DB status values)
         $inquiryStats = [
-            'pending' => Inquiry::where('status', 'pending')->count(),
-            'approved' => Inquiry::where('status', 'approved')->count(),
-            'payment_verified' => Inquiry::where('status', 'payment_verified')->count(),
-            'rejected' => Inquiry::where('status', 'rejected')->count(),
+            'received' => Inquiry::where('status', 'inquiry_received')->count(),
+            'consultation' => Inquiry::where('status', 'consultation_active')->count(),
+            'spk' => Inquiry::where('status', 'spk_issued')->count(),
+            'kyc' => Inquiry::whereIn('status', ['kyc_pending', 'kyc_approved'])->count(),
+            'contract' => Inquiry::where('status', 'contract_signed')->count(),
+            'payment' => Inquiry::where('status', 'payment_verified')->count(),
+            'delivery' => Inquiry::whereIn('status', ['scheduled_delivery', 'delivery_in_transit'])->count(),
+            'completed' => Inquiry::where('status', 'delivered_completed')->count(),
+        ];
+
+        // Car status breakdown
+        $carStats = [
+            'available' => Car::where('status', 'available')->count(),
+            'reserved' => Car::where('status', 'reserved')->count(),
+            'sold' => Car::where('status', 'sold')->count(),
         ];
 
         // Recent inquiries
@@ -39,6 +50,7 @@ class DashboardController extends Controller
             'totalDelivery',
             'totalInquiries',
             'inquiryStats',
+            'carStats',
             'recentInquiries',
             'recentCars'
         ));

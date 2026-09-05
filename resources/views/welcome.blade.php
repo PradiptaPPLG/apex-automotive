@@ -255,26 +255,25 @@
                             </div>
                             <div class="py-1" style="background: #0c0c14;">
                                 @if(auth()->user()->isManager())
-                                    <a href="{{ route('manager.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors" style="background: rgba(220,38,38,0.1);">
+                                    <a href="{{ route('manager.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors" style="background: rgba(220,38,38,0.15);">
                                         <i class="fa-solid fa-chart-line w-4 text-center text-red-500"></i>
                                         <span>Dashboard Manager Executive</span>
                                     </a>
                                 @elseif(auth()->user()->isRm())
-                                    <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors" style="hover-background:#1a1200;">
-                                        <i class="fa-solid fa-shield-halved w-4 text-center"></i>
+                                    <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors" style="background: rgba(234,179,8,0.15);">
+                                        <i class="fa-solid fa-shield-halved w-4 text-center text-amber-400"></i>
                                         <span>Sales RM Panel Admin</span>
                                     </a>
                                 @elseif(auth()->user()->isDelivery())
-                                    <a href="{{ route('delivery.portal') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors">
-                                        <i class="fa-solid fa-truck-fast w-4 text-center"></i>
+                                    <a href="{{ route('delivery.portal') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors" style="background: rgba(34,211,238,0.15);">
+                                        <i class="fa-solid fa-truck-fast w-4 text-center text-cyan-400"></i>
                                         <span>Delivery Driver Console</span>
                                     </a>
-                                @else
-                                    <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
-                                        <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
-                                        <span>Portal VIP &amp; Konsultasi</span>
-                                    </a>
                                 @endif
+                                <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
+                                    <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
+                                    <span>Portal VIP &amp; Konsultasi</span>
+                                </a>
                                 <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                     <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
                                     <span>Profil &amp; Alamat VIP</span>

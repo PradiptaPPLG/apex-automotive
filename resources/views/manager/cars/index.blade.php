@@ -64,18 +64,47 @@
                                     <span style="color: #f87171; background: rgba(248, 113, 113, 0.15); border: 1px solid rgba(248, 113, 113, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">SOLD</span>
                                 @endif
                             </td>
-                            <td style="padding: 12px 10px; text-align: right;">
-                                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                    <a href="{{ route('manager.cars.edit', $car) }}" style="padding: 6px 10px; background: rgba(255,255,255,0.06); color: #60a5fa; text-decoration: none; border-radius: 4px; font-size: 12px;" title="Edit">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    <form method="POST" action="{{ route('manager.cars.destroy', $car) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus mobil ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="padding: 6px 10px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Hapus">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </form>
+                            <td style="padding: 12px 10px; text-align: right; position: relative;">
+                                <div style="position: relative; display: inline-block;">
+                                    <button onclick="toggleActionDropdown({{ $car->id }})" style="padding: 6px 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #d1d5db; border-radius: 4px; font-size: 13px; cursor: pointer;">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+
+                                    <div id="dropdown-menu-{{ $car->id }}" class="action-dropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; width: 170px; background: #0c0c14; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.8); z-index: 50; padding: 4px 0; text-align: left;">
+                                        <a href="{{ route('manager.cars.edit', $car) }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #60a5fa; text-decoration: none; font-size: 12px;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                            <i class="fa-solid fa-pen-to-square w-4"></i> Edit Detail
+                                        </a>
+
+                                        @if($car->status !== 'sold')
+                                            <form method="POST" action="{{ route('manager.cars.status', $car) }}" style="margin: 0;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="sold">
+                                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #f87171; background: none; border: none; font-size: 12px; cursor: pointer; text-align: left;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">
+                                                    <i class="fa-solid fa-ban w-4"></i> Set SOLD OUT
+                                                </button>
+                                            </form>
+                                        @else
+                                            <form method="POST" action="{{ route('manager.cars.status', $car) }}" style="margin: 0;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="available">
+                                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #4ade80; background: none; border: none; font-size: 12px; cursor: pointer; text-align: left;" onmouseover="this.style.background='rgba(74,222,128,0.1)'" onmouseout="this.style.background='transparent'">
+                                                    <i class="fa-solid fa-circle-check w-4"></i> Set Available
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        <div style="border-top: 1px solid rgba(255,255,255,0.08); margin: 4px 0;"></div>
+
+                                        <form method="POST" action="{{ route('manager.cars.destroy', $car) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus mobil ini?')" style="margin: 0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #ef4444; background: none; border: none; font-size: 12px; cursor: pointer; text-align: left;" onmouseover="this.style.background='rgba(239,68,68,0.15)'" onmouseout="this.style.background='transparent'">
+                                                <i class="fa-solid fa-trash w-4"></i> Hapus Mobil
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -95,4 +124,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleActionDropdown(id) {
+        event.stopPropagation();
+        const targetDropdown = document.getElementById('dropdown-menu-' + id);
+        document.querySelectorAll('.action-dropdown').forEach(dropdown => {
+            if (dropdown !== targetDropdown) {
+                dropdown.style.display = 'none';
+            }
+        });
+        if (targetDropdown.style.display === 'block') {
+            targetDropdown.style.display = 'none';
+        } else {
+            targetDropdown.style.display = 'block';
+        }
+    }
+
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.action-dropdown').forEach(dropdown => {
+            dropdown.style.display = 'none';
+        });
+    });
+</script>
 @endsection

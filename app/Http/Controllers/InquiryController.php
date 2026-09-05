@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Car;
 use App\Models\Inquiry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,6 +32,16 @@ class InquiryController extends Controller
         ]);
 
         $carModel = $validated['car_model'] ?: $validated['car_model_display'] ?? null;
+
+        if ($carModel) {
+            $car = Car::where('name', 'LIKE', "%{$carModel}%")->first();
+            if ($car && $car->status === 'sold') {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Maaf, unit {$car->name} sudah SOLD OUT (Terjual) dan tidak dapat dipesan lagi.",
+                ], 422);
+            }
+        }
 
         $inquiry = Inquiry::create([
             'user_id' => auth()->id(),

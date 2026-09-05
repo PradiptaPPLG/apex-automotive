@@ -71,4 +71,17 @@ class CarController extends Controller
 
         return redirect()->route('manager.cars.index')->with('success', 'Mobil telah dihapus dari showroom.');
     }
+
+    public function toggleStatus(Request $request, Car $car)
+    {
+        $request->validate([
+            'status' => 'required|in:available,reserved,sold',
+        ]);
+
+        $car->update(['status' => $request->status]);
+
+        $statusLabel = strtoupper($request->status);
+
+        return redirect()->route('manager.cars.index')->with('success', "Status mobil {$car->name} diubah menjadi {$statusLabel}.");
+    }
 }
