@@ -85,6 +85,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Determine whether the user is a Manager.
+     */
+    public function isManager(): bool
+    {
+        return $this->role === 'manager';
+    }
+
+    /**
      * Determine whether the user is a Sales RM.
      */
     public function isRm(): bool

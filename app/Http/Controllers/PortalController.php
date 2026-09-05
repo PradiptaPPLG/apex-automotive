@@ -16,6 +16,10 @@ class PortalController extends Controller
      */
     public function dashboard(): View|RedirectResponse
     {
+        if (auth()->user()->isManager()) {
+            return redirect()->route('manager.dashboard');
+        }
+
         if (auth()->user()->isRm()) {
             return redirect()->route('admin.inquiries.index');
         }

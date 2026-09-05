@@ -234,17 +234,17 @@
 
                 @auth
                     {{-- AUTHENTICATED: Show user profile badge & dropdown --}}
-                    <div class="relative inline-block text-left group" id="userDropdownWrapper">
-                        <button type="button" class="flex items-center space-x-2 px-3 py-2 border border-red-600/40 bg-neutral-900/90 hover:bg-red-600/10 transition-all duration-200 text-xs font-mono font-semibold text-white cursor-pointer rounded-sm shadow-md">
+                    <div class="relative inline-block text-left" id="userDropdownWrapper">
+                        <button type="button" id="userDropdownToggle" onclick="toggleUserDropdown()" class="flex items-center space-x-2 px-3 py-2 border border-red-600/40 bg-[#0c0c14] hover:bg-red-600/10 transition-all duration-200 text-xs font-mono font-semibold text-white cursor-pointer rounded-sm shadow-md">
                             <span class="inline-flex w-6 h-6 items-center justify-center rounded-full bg-red-600 text-white text-[11px] font-extrabold uppercase shrink-0">
                                 {{ strtoupper(substr(auth()->user()->name ?? 'V', 0, 1)) }}
                             </span>
                             <span class="uppercase tracking-wider max-w-[120px] sm:max-w-[160px] truncate text-[11px] font-bold">{{ auth()->user()->name ?? 'VIP Buyer' }}</span>
-                            <i class="fa-solid fa-chevron-down text-[9px] text-red-500 ml-1"></i>
+                            <i id="userDropdownChevron" class="fa-solid fa-chevron-down text-[9px] text-red-500 ml-1 transition-transform duration-200"></i>
                         </button>
-                        {{-- Dropdown Menu --}}
-                        <div class="absolute right-0 top-full mt-1.5 w-64 bg-[#0c0c10] border border-white/15 shadow-2xl z-[100] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 rounded-sm overflow-hidden">
-                            <div class="p-3.5 bg-white/5 border-b border-white/10">
+                        {{-- Dropdown Menu — solid background, click trigger --}}
+                        <div id="userDropdownMenu" class="absolute right-0 top-full mt-2 w-64 z-[100] hidden rounded-sm overflow-hidden" style="background: #0c0c14; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px rgba(0,0,0,0.85);">
+                            <div class="p-3.5 border-b" style="background: #111118; border-color: rgba(255,255,255,0.08);">
                                 <p class="text-[9px] font-mono text-red-500 uppercase tracking-widest font-bold">AKUN VIP TERVERIFIKASI</p>
                                 <p class="text-xs font-semibold text-white truncate mt-1">{{ auth()->user()->email }}</p>
                                 @if (! auth()->user()->hasCompletedProfile())
@@ -253,35 +253,40 @@
                                     </a>
                                 @endif
                             </div>
-                            <div class="py-1">
-                                @if(auth()->user()->isRm())
-                                    <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors">
+                            <div class="py-1" style="background: #0c0c14;">
+                                @if(auth()->user()->isManager())
+                                    <a href="{{ route('manager.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors" style="background: rgba(220,38,38,0.1);">
+                                        <i class="fa-solid fa-chart-line w-4 text-center text-red-500"></i>
+                                        <span>Dashboard Manager Executive</span>
+                                    </a>
+                                @elseif(auth()->user()->isRm())
+                                    <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors" style="hover-background:#1a1200;">
                                         <i class="fa-solid fa-shield-halved w-4 text-center"></i>
                                         <span>Sales RM Panel Admin</span>
                                     </a>
                                 @elseif(auth()->user()->isDelivery())
-                                    <a href="{{ route('delivery.portal') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 transition-colors">
+                                    <a href="{{ route('delivery.portal') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors">
                                         <i class="fa-solid fa-truck-fast w-4 text-center"></i>
                                         <span>Delivery Driver Console</span>
                                     </a>
                                 @else
-                                    <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                    <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
                                         <span>Portal VIP &amp; Konsultasi</span>
                                     </a>
                                 @endif
-                                <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                     <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
                                     <span>Profil &amp; Alamat VIP</span>
                                 </a>
-                                <a href="{{ route('faq') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white hover:bg-white/10 transition-colors">
+                                <a href="{{ route('faq') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                     <i class="fa-solid fa-circle-question text-red-500 w-4 text-center"></i>
                                     <span>Bantuan &amp; FAQ</span>
                                 </a>
-                                <div class="border-t border-white/10 my-1"></div>
+                                <div class="border-t my-1" style="border-color: rgba(255,255,255,0.08);"></div>
                                 <form method="POST" action="{{ route('logout') }}" class="m-0">
                                     @csrf
-                                    <button type="submit" class="flex w-full items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors cursor-pointer text-left">
+                                    <button type="submit" class="flex w-full items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors cursor-pointer text-left" style="background: transparent;" onmouseover="this.style.background='rgba(220,38,38,0.08)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i>
                                         <span>KELUAR / LOGOUT</span>
                                     </button>
@@ -2425,6 +2430,32 @@
             }
             toggleModal('inquireModal');
         }
+
+        // 9. USER ACCOUNT DROPDOWN (click-based, solid background)
+        function toggleUserDropdown() {
+            const menu = document.getElementById('userDropdownMenu');
+            const chevron = document.getElementById('userDropdownChevron');
+            if (!menu) return;
+            const isOpen = !menu.classList.contains('hidden');
+            if (isOpen) {
+                menu.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            } else {
+                menu.classList.remove('hidden');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('userDropdownWrapper');
+            const menu = document.getElementById('userDropdownMenu');
+            const chevron = document.getElementById('userDropdownChevron');
+            if (wrapper && menu && !wrapper.contains(e.target)) {
+                menu.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
     </script>
 </body>
 </html>

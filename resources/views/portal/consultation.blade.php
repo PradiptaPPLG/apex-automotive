@@ -345,8 +345,8 @@
         <div class="nav-title">
             Konsultasi VIP &nbsp;·&nbsp; <strong>{{ $inquiry->car_model ?? 'Kendaraan VIP' }}</strong>
         </div>
-        <div class="flex items-center space-x-2">
-            <button onclick="toggleHelpModal()" class="text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 w-7 h-7 rounded-full flex items-center justify-center transition-colors text-xs cursor-pointer" title="Petunjuk Alur Purchase & Dokumen">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleHelpModal()" class="text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-colors text-xs cursor-pointer" title="Petunjuk Alur Purchase & Dokumen">
                 <i class="fa-solid fa-circle-question text-red-500"></i>
             </button>
             <span class="status-badge {{ $inquiry->statusColor() }}" id="statusBadge">{{ $inquiry->statusLabel() }}</span>
@@ -607,6 +607,61 @@
                 <div id="buyerGpsMap" style="width: 100%; height: 160px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.1); margin-top: 4px;"></div>
             </div>
 
+            {{-- Delivery-only Sidebar (only shown in Delivery tab) --}}
+            <div id="deliverySidebarContent" style="display: none; flex-direction: column; gap: 14px;">
+                <div style="background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.35); padding: 14px; border-radius: 4px;">
+                    <p style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: #f97316; margin-bottom: 10px;">// DETAIL PENGIRIMAN</p>
+                    <div style="font-size: 11px; color: #e5e7eb; line-height: 1.8;">
+                        {{-- Unit --}}
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 6px;">
+                            <span style="color: #9ca3af;">Unit:</span>
+                            <span style="color: #fff; font-weight: 700; text-align: right; max-width: 160px;">{{ $inquiry->car_model }}</span>
+                        </div>
+                        {{-- Warna / Bodykit dari selected_config --}}
+                        @if($inquiry->selected_color)
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 6px;">
+                            <span style="color: #9ca3af;">Warna:</span>
+                            <span style="display: inline-flex; align-items: center; gap: 5px; font-weight: 700; color: #fff;">
+                                <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: {{ $inquiry->selected_color }};"></span>
+                                {{ $inquiry->selected_color }}
+                            </span>
+                        </div>
+                        @endif
+                        @if($inquiry->selected_config)
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 6px;">
+                            <span style="color: #9ca3af;">Spesifikasi:</span>
+                            <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px; max-width: 160px; text-align: right;">
+                                @foreach(explode(',', $inquiry->selected_config) as $configItem)
+                                    <span style="background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.35); color: #fb923c; font-size: 9px; font-family: 'Space Mono', monospace; font-weight: 700; padding: 1px 6px; border-radius: 2px; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;">
+                                        {{ trim($configItem) }}
+                                    </span>
+                                @endforeach
+                            </span>
+                        </div>
+                        @endif
+                        {{-- Pembeli --}}
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 6px;">
+                            <span style="color: #9ca3af;">Pembeli:</span>
+                            <span style="color: #fff; font-weight: 700;">{{ $inquiry->name }}</span>
+                        </div>
+                        {{-- Tujuan --}}
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 6px;">
+                            <span style="color: #9ca3af;">Tujuan:</span>
+                            <span style="color: #e5e7eb; text-align: right; max-width: 160px; font-size: 10px;">{{ auth()->user()->address ?? 'Alamat KYC Terverifikasi' }}</span>
+                        </div>
+                        {{-- Armada --}}
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">Armada:</span>
+                            <span style="color: #f97316; font-weight: 700;">Enclosed Flatbed Truck</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: rgba(249,115,22,0.06); border: 1px solid rgba(249,115,22,0.2); padding: 12px; border-radius: 4px; font-size: 11px; color: #fed7aa; font-family: 'Space Mono', monospace; line-height: 1.7;">
+                    <p style="font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #f97316; margin-bottom: 8px;">// CATATAN DRIVER</p>
+                    <p style="font-size: 11px; color: #9ca3af; font-family: 'Inter', sans-serif;">Tab ini menampilkan pesan langsung dari Driver Escort yang mengantarkan unit Anda. Chat Sales RM tersedia di tab <strong style="color: #eab308;">CHAT SALES RM</strong>.</p>
+                </div>
+            </div>
+
             {{-- Sales RM Specific Boxes Container --}}
             <div id="salesSidebarContent" style="display: flex; flex-direction: column; gap: 16px;">
                 <div>
@@ -836,7 +891,7 @@
                 @else
                     @foreach($messages as $msg)
                         @php $isLoc = $msg->message && str_starts_with($msg->message, '__LOCATION__:'); @endphp
-                        <div class="message-group {{ $msg->sender_type }}" data-id="{{ $msg->id }}">
+                        <div class="message-group {{ $msg->sender_type }}" data-id="{{ $msg->id }}" data-channel="{{ in_array($msg->sender_type, ['driver']) ? 'delivery' : 'sales' }}">
                             <span class="message-sender">
                                 @if($msg->sender_type === 'rm')
                                     <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
@@ -884,7 +939,8 @@
                 @endif
                 <div class="typing-indicator" id="typingIndicator">Sales RM sedang mengetik…</div>
             </div>
-            <div class="chat-input-area">
+            {{-- Sales Chat Input --}}
+            <div id="salesChatInput" class="chat-input-area">
                 <div id="attachmentPreview" class="attachment-preview">
                     <span id="attachmentFileName"><i class="fa-solid fa-paperclip"></i> File terlampir</span>
                     <button type="button" onclick="removeAttachment()"><i class="fa-solid fa-xmark"></i> Batal</button>
@@ -900,13 +956,21 @@
                     <textarea
                         id="messageInput"
                         class="chat-input"
-                        placeholder="Tulis pesan atau lampirkan bukti transfer..."
+                        placeholder="Tulis pesan ke Sales RM atau lampirkan bukti transfer..."
                         rows="2"
                     ></textarea>
                     <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
                         <i class="fa-solid fa-paper-plane"></i> KIRIM
                     </button>
                 </div>
+            </div>
+            {{-- Delivery Read-only Notice (shown only in delivery tab) --}}
+            <div id="deliveryChatNotice" style="display: none; border-top: 1px solid rgba(249,115,22,0.25); padding: 14px 24px; background: rgba(249,115,22,0.05); flex-direction: column; gap: 6px; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 10px; font-family: 'Space Mono', monospace; font-size: 10px; color: #f97316; text-transform: uppercase; letter-spacing: 0.08em;">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <span>Sesi Chat Driver Escort — Read Only</span>
+                </div>
+                <p style="font-size: 12px; color: #6b7280; font-family: 'Inter', sans-serif;">Chat ini hanya menampilkan pesan dari Driver Escort Anda. Untuk berkomunikasi dengan Sales RM, gunakan tab <strong style="color: #eab308;">CHAT SALES RM</strong>.</p>
             </div>
         </div>
     </div>
@@ -944,6 +1008,7 @@
             const group = document.createElement('div');
             group.className = `message-group ${msg.sender_type}`;
             group.dataset.id = msg.id;
+            group.dataset.channel = (msg.sender_type === 'driver') ? 'delivery' : 'sales';
             
             let senderIcon = '<i class="fa-solid fa-user" style="color:#9ca3af;"></i> ';
             let senderLabel = msg.sender_name;
@@ -1270,6 +1335,9 @@
             const tabDelivery = document.getElementById('tabDeliveryBtn');
             const badgeInfo = document.getElementById('channelBadgeInfo');
             const salesSidebar = document.getElementById('salesSidebarContent');
+            const deliverySidebar = document.getElementById('deliverySidebarContent');
+            const salesInput = document.getElementById('salesChatInput');
+            const deliveryNotice = document.getElementById('deliveryChatNotice');
 
             if (channel === 'sales') {
                 tabSales.style.background = 'rgba(234, 179, 8, 0.15)';
@@ -1286,6 +1354,9 @@
                 badgeInfo.innerHTML = '<i class="fa-solid fa-sack-dollar"></i> Sesi Konsultasi Sales RM';
 
                 if (salesSidebar) salesSidebar.style.display = 'flex';
+                if (deliverySidebar) deliverySidebar.style.display = 'none';
+                if (salesInput) salesInput.style.display = 'flex';
+                if (deliveryNotice) deliveryNotice.style.display = 'none';
             } else {
                 tabDelivery.style.background = 'rgba(249, 115, 22, 0.2)';
                 tabDelivery.style.borderColor = 'rgba(249, 115, 22, 0.6)';
@@ -1301,6 +1372,9 @@
                 badgeInfo.innerHTML = '<i class="fa-solid fa-truck-fast"></i> Sesi Chat Driver Delivery Escort';
 
                 if (salesSidebar) salesSidebar.style.display = 'none';
+                if (deliverySidebar) deliverySidebar.style.display = 'flex';
+                if (salesInput) salesInput.style.display = 'none';
+                if (deliveryNotice) deliveryNotice.style.display = 'flex';
             }
 
             filterMessagesByChannel();
@@ -1309,33 +1383,30 @@
         function filterMessagesByChannel() {
             const msgGroups = document.querySelectorAll('.message-group');
             const manifestCard = document.getElementById('deliveryManifestCard');
-            
+            const noMsgEl = document.querySelector('.no-messages');
+
             if (manifestCard) {
                 manifestCard.style.display = (currentChannel === 'delivery') ? 'block' : 'none';
             }
 
+            let visibleCount = 0;
             msgGroups.forEach(el => {
-                const isDriverMsg = el.classList.contains('driver');
-                const isRmMsg = el.classList.contains('rm');
-                const isBuyerMsg = el.classList.contains('buyer');
-                const isLocationShare = el.querySelector('.location-card') !== null;
-
-                if (isDriverMsg) {
-                    // Driver messages only show in Delivery tab
-                    el.style.display = (currentChannel === 'delivery') ? 'flex' : 'none';
-                } else if (isRmMsg) {
-                    // Sales RM messages only show in Sales tab
-                    el.style.display = (currentChannel === 'sales') ? 'flex' : 'none';
-                } else if (isBuyerMsg) {
-                    if (currentChannel === 'sales') {
-                        // All buyer messages show in Sales tab
-                        el.style.display = 'flex';
-                    } else {
-                        // Delivery tab only shows location sharing messages from buyer
-                        el.style.display = isLocationShare ? 'flex' : 'none';
-                    }
-                }
+                const msgChannel = el.dataset.channel || 'sales'; // default to sales
+                const isVisible = msgChannel === currentChannel;
+                el.style.display = isVisible ? 'flex' : 'none';
+                if (isVisible) visibleCount++;
             });
+
+            // Show/hide no-messages placeholder
+            if (noMsgEl) {
+                noMsgEl.style.display = visibleCount === 0 ? 'block' : 'none';
+                if (currentChannel === 'delivery') {
+                    noMsgEl.innerHTML = '<i class="fa-solid fa-truck-fast" style="font-size:2rem; color:#f97316; margin-bottom:12px;"></i><p>Belum ada pesan dari Driver Escort.<br><span style="font-size:11px;">Pesan akan muncul saat pengiriman aktif.</span></p>';
+                } else {
+                    noMsgEl.innerHTML = '<i class="fa-regular fa-comments"></i><p>Belum ada pesan. Sales RM kami akan segera menghubungi Anda.<br>Anda juga bisa mulai mengirim pesan di bawah.</p>';
+                }
+            }
+
             scrollBottom();
         }
 

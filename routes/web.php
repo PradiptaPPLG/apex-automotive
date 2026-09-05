@@ -83,3 +83,20 @@ Route::middleware(['auth', 'rm'])->prefix('admin')->name('admin.')->group(functi
     Route::post('/inquiries/{inquiry}/verify-location', [AdminInquiryController::class, 'verifyLocation'])->name('inquiries.verify-location');
     Route::post('/inquiries/{inquiry}/reject-location', [AdminInquiryController::class, 'rejectLocation'])->name('inquiries.reject-location');
 });
+
+// ──────────────────────────────────────────────
+// MANAGER ROUTES (pradiptaghensin@gmail.com)
+// ──────────────────────────────────────────────
+Route::middleware(['auth', 'manager'])->prefix('manager')->name('manager.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Manager\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/preview', [\App\Http\Controllers\Manager\DashboardController::class, 'preview'])->name('preview');
+
+    // Cars Management
+    Route::resource('cars', \App\Http\Controllers\Manager\CarController::class)->except(['show']);
+
+    // Team Management (Sales RM & Delivery Driver)
+    Route::get('/team', [\App\Http\Controllers\Manager\TeamController::class, 'index'])->name('team.index');
+    Route::get('/team/create', [\App\Http\Controllers\Manager\TeamController::class, 'create'])->name('team.create');
+    Route::post('/team', [\App\Http\Controllers\Manager\TeamController::class, 'store'])->name('team.store');
+    Route::delete('/team/{user}', [\App\Http\Controllers\Manager\TeamController::class, 'destroy'])->name('team.destroy');
+});

@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'rm' => \App\Http\Middleware\RmMiddleware::class,
             'delivery' => \App\Http\Middleware\EnsureDelivery::class,
+            'manager' => \App\Http\Middleware\ManagerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
