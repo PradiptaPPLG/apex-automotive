@@ -337,7 +337,7 @@
     <!-- BACKGROUND MEDIA & OVERLAY (Default: Static Image for 100% Data Saving) -->
     <div class="bg-container">
         @if(!empty($enableVideo))
-            <video class="bg-video" autoplay muted loop playsinline preload="none">
+            <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="{{ asset('images/carousell/carousell1.png') }}">
                 <source src="{{ asset('intro_login.mp4') }}" type="video/mp4">
             </video>
         @else
