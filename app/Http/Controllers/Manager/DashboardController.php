@@ -25,7 +25,7 @@ class DashboardController extends Controller
         ];
 
         // Recent inquiries
-        $recentInquiries = Inquiry::with(['user', 'assignedRm'])
+        $recentInquiries = Inquiry::with('user')
             ->latest()
             ->take(5)
             ->get();

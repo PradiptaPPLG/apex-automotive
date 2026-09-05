@@ -123,7 +123,7 @@
                                     <div style="font-size: 11px; font-family: 'Space Mono', monospace; color: #ef4444;">#APX-{{ str_pad($inquiry->id, 5, '0', STR_PAD_LEFT) }}</div>
                                 </td>
                                 <td style="padding: 12px 10px;">{{ $inquiry->car_model }}</td>
-                                <td style="padding: 12px 10px;">{{ $inquiry->assignedRm?->name ?? 'Belum Diassigned' }}</td>
+                                <td style="padding: 12px 10px;">{{ $inquiry->assigned_rm_name ?? 'Belum Diassigned' }}</td>
                                 <td style="padding: 12px 10px;">
                                     <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 8px; border-radius: 2px; text-transform: uppercase; font-weight: 700;" class="{{ $inquiry->statusColor() }}">
                                         {{ $inquiry->statusLabel() }}
