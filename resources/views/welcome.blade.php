@@ -1541,16 +1541,20 @@
                         </div>
                     </div>
 
-                    <!-- INTERIOR PREVIEW DIRECTLY BELOW THE MAIN CAR CARD -->
-                    <div class="rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-2 space-y-1">
-                        <div class="flex items-center justify-between text-[10px] font-mono text-neutral-400 font-bold px-1 uppercase tracking-widest">
-                            <span><i class="fa-solid fa-couch text-red-500 mr-1"></i> INTERIOR CABIN SPECIFICATION</span>
-                            <span class="text-neutral-500 font-normal">OEM FACTORY CABIN</span>
+                    <!-- INTERIOR PREVIEW DIRECTLY BELOW THE MAIN CAR CARD WITH COLOR SPEC BADGE -->
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
+                        <div class="sm:col-span-7 rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-2 space-y-1">
+                            <div class="h-28 sm:h-32 rounded overflow-hidden relative">
+                                <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
+                            </div>
                         </div>
-                        <div class="h-24 sm:h-28 rounded overflow-hidden relative">
-                            <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
-                            <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur-md text-[9px] font-mono text-neutral-300 px-2 py-0.5 border border-white/10 uppercase font-bold">
-                                FIXED OEM CABIN PREVIEW
+                        <div class="sm:col-span-5 rounded-lg border border-neutral-300 dark:border-white/10 bg-neutral-950 p-3.5 flex flex-col justify-center font-mono space-y-2">
+                            <div class="text-[11px] font-bold text-neutral-300 tracking-wider">
+                                COLOR: <span id="inspectColorSideBadge" class="text-red-500 font-extrabold uppercase">--</span>
+                            </div>
+                            <div class="text-[10px] text-amber-500 font-extrabold flex items-center tracking-widest">
+                                <i class="fa-solid fa-xmark mr-1.5 text-xs text-red-500"></i>
+                                <span id="inspectSpecSideBadge">FACTORY STOCK SPEC</span>
                             </div>
                         </div>
                     </div>
@@ -2258,7 +2262,7 @@
             
             specsGrid.innerHTML += `
                 <a href="/car-info/${carKey}" class="bg-neutral-200/50 dark:bg-neutral-900/30 p-2 border border-neutral-300/50 dark:border-white/5 flex items-center justify-center text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors opacity-75 hover:opacity-100" style="text-decoration: none;">
-                    <span class="text-[10px] font-bold tracking-widest text-neutral-500">Read all</span>
+                    <span class="text-[10px] font-bold tracking-widest text-neutral-500">Read all description</span>
                 </a>
             `;
 
@@ -2324,14 +2328,25 @@
                 }, 150);
             }
 
+            const sideColorBadge = document.getElementById('inspectColorSideBadge');
+            const sideSpecBadge = document.getElementById('inspectSpecSideBadge');
+
             if (colorBadge) {
                 colorBadge.innerText = selectedColor.name;
                 colorBadge.classList.remove('opacity-40');
             }
 
+            if (sideColorBadge) {
+                sideColorBadge.innerText = selectedColor.name;
+            }
+
             if (kitBadge) {
                 kitBadge.innerText = 'FACTORY STOCK SPEC';
                 kitBadge.classList.add('opacity-40');
+            }
+
+            if (sideSpecBadge) {
+                sideSpecBadge.innerText = 'FACTORY STOCK SPEC';
             }
 
             // Highlight active color dot, DEACTIVATE/CLEAR all bodykit buttons
@@ -2373,14 +2388,25 @@
                 }, 150);
             }
 
+            const sideColorBadge = document.getElementById('inspectColorSideBadge');
+            const sideSpecBadge = document.getElementById('inspectSpecSideBadge');
+
             if (kitBadge) {
                 kitBadge.innerText = `${selectedKit.num}: ${selectedKit.name}`;
                 kitBadge.classList.remove('opacity-40');
             }
 
+            if (sideSpecBadge) {
+                sideSpecBadge.innerText = `${selectedKit.num}: ${selectedKit.name}`;
+            }
+
             if (colorBadge) {
                 colorBadge.innerText = 'MODIFIED AERO FINISH';
                 colorBadge.classList.add('opacity-40');
+            }
+
+            if (sideColorBadge) {
+                sideColorBadge.innerText = 'MODIFIED AERO FINISH';
             }
 
             // Highlight active bodykit button, DEACTIVATE/CLEAR all color dots
