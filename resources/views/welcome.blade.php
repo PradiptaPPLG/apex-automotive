@@ -2246,6 +2246,26 @@
             document.getElementById('inspectYear').innerText = car.year;
             document.getElementById('inspectCondition').innerText = car.condition;
 
+            // Set link to ALL INFO & Full Docs Page
+            const allInfoBtn = document.getElementById('inspectAllInfoBtn');
+            if (allInfoBtn) {
+                allInfoBtn.href = `/car-info/${carKey}`;
+            }
+
+            // Set Modify Garage Button visibility / behavior
+            const garageBtn = document.getElementById('inspectModifyGarageBtn');
+            if (garageBtn) {
+                if (carKey === 'audi_r8') {
+                    garageBtn.innerHTML = '<i class="fa-solid fa-wrench text-amber-300"></i> <span>MODIFY / CUSTOMIZE WHEELS (GARAGE STUDIO)</span> <i class="fa-solid fa-arrow-right ml-1"></i>';
+                    garageBtn.className = "w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 border border-amber-400/40 cursor-pointer";
+                    garageBtn.disabled = false;
+                } else {
+                    garageBtn.innerHTML = '<i class="fa-solid fa-lock text-neutral-400"></i> <span>MODIFY WHEELS (UNAVAILABLE FOR THIS MODEL)</span>';
+                    garageBtn.className = "w-full py-3 bg-neutral-900 text-neutral-500 font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-2 border border-white/5 cursor-not-allowed opacity-60";
+                    garageBtn.disabled = true;
+                }
+            }
+
             // Handle Discount & Strikethrough Price in Modal
             const origPriceRow = document.getElementById('inspectOriginalPriceRow');
             const discountBadge = document.getElementById('inspectDiscountBadge');
@@ -2421,7 +2441,18 @@
             });
         }
 
+        function openGarageStudio() {
+            if (currentInspectedCarKey !== 'audi_r8') return;
+
+            // Trigger Peak Wave transition animation then redirect to garage studio
+            triggerPixelWaveTransition();
+            setTimeout(() => {
+                window.location.href = "{{ route('garage') }}";
+            }, 500);
+        }
+
         function bookCarWithSelectedConfig() {
+
             @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
                 alert('Akun Staff (Sales RM / Delivery Driver) tidak dapat melakukan booking unit kendaraan.');
                 return;
