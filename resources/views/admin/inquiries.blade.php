@@ -9,16 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.theme-head')
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: #060609;
-            color: #e5e7eb;
+            background: var(--bg-main);
+            color: var(--text-base);
             min-height: 100vh;
         }
         .admin-nav {
-            background: rgba(6, 6, 9, 0.98);
+            background: var(--bg-surface);
             border-bottom: 1px solid rgba(220, 38, 38, 0.2);
             padding: 0 2rem;
             height: 60px;
@@ -26,18 +27,10 @@
             align-items: center;
             justify-content: space-between;
             position: sticky; top: 0; z-index: 50;
+            backdrop-filter: blur(12px);
         }
-        .admin-nav-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .admin-nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
+        .admin-nav-left { display: flex; align-items: center; gap: 16px; }
+        .admin-nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .admin-nav-logo img { height: 28px; }
         .admin-badge {
             font-family: 'Space Mono', monospace;
@@ -54,14 +47,14 @@
             align-items: center;
             gap: 12px;
             font-size: 13px;
-            color: #9ca3af;
+            color: var(--text-muted);
         }
         .logout-btn {
             font-family: 'Space Mono', monospace;
             font-size: 10px;
-            color: #6b7280;
+            color: var(--text-dim);
             background: none;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
             padding: 6px 12px;
             cursor: pointer;
             text-transform: uppercase;
@@ -93,19 +86,15 @@
             font-family: 'Playfair Display', serif;
             font-size: 2rem;
             font-weight: 800;
-            color: white;
+            color: var(--text-heading);
         }
-        .filter-tabs {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
+        .filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
         .filter-tab {
             font-family: 'Space Mono', monospace;
             font-size: 10px;
             padding: 6px 14px;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #6b7280;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
             text-decoration: none;
             transition: all 0.2s;
             letter-spacing: 0.1em;
@@ -123,53 +112,46 @@
             margin-bottom: 2rem;
         }
         .stat-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.07);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             padding: 16px 20px;
         }
         .stat-num {
             font-family: 'Playfair Display', serif;
             font-size: 2rem;
             font-weight: 800;
-            color: white;
+            color: var(--text-heading);
         }
         .stat-label {
             font-family: 'Space Mono', monospace;
             font-size: 9px;
-            color: #4b5563;
+            color: var(--text-dimmer);
             text-transform: uppercase;
             letter-spacing: 0.12em;
             margin-top: 2px;
         }
-        .inquiries-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .inquiries-table { width: 100%; border-collapse: collapse; }
         .inquiries-table thead th {
             font-family: 'Space Mono', monospace;
             font-size: 9px;
-            color: #4b5563;
+            color: var(--text-dimmer);
             letter-spacing: 0.15em;
             text-transform: uppercase;
             padding: 10px 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-soft);
         }
         .inquiries-table tbody tr {
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid var(--border-soft);
             transition: background 0.15s;
             cursor: pointer;
         }
-        .inquiries-table tbody tr:hover { background: rgba(255,255,255,0.03); }
-        .inquiries-table tbody td {
-            padding: 14px 16px;
-            font-size: 13px;
-            vertical-align: middle;
-        }
-        .td-name { font-weight: 600; color: white; }
-        .td-car { font-family: 'Space Mono', monospace; font-size: 11px; color: #9ca3af; }
-        .td-phone { font-size: 12px; color: #6b7280; }
-        .td-date { font-size: 11px; color: #4b5563; }
+        .inquiries-table tbody tr:hover { background: var(--bg-hover); }
+        .inquiries-table tbody td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
+        .td-name { font-weight: 600; color: var(--text-heading); }
+        .td-car  { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); }
+        .td-phone{ font-size: 12px; color: var(--text-dim); }
+        .td-date { font-size: 11px; color: var(--text-dimmer); }
         .status-pill {
             font-family: 'Space Mono', monospace;
             font-size: 9px;
@@ -198,9 +180,12 @@
         .empty-row td {
             text-align: center;
             padding: 4rem;
-            color: #374151;
+            color: var(--text-dim);
             font-size: 14px;
         }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -212,9 +197,12 @@
             <span class="admin-badge">RM Panel</span>
         </div>
         <div class="admin-nav-right">
+            <button onclick="toggleGlobalTheme()" class="apex-theme-btn">
+                <i class="fa-solid fa-moon" style="color:#818cf8;"></i> DARK MODE
+            </button>
             <i class="fa-solid fa-circle" style="color:#dc2626; font-size:8px;"></i>
             <span>{{ auth()->user()->name }}</span>
-            <a href="{{ route('admin.profile.show') }}" style="color:#e5e7eb; text-decoration:none; font-family:'Space Mono', monospace; font-size:10px; text-transform:uppercase; border:1px solid rgba(220,38,38,0.4); padding:4px 10px; border-radius:4px; transition:all 0.2s; background:rgba(220,38,38,0.1);">
+            <a href="{{ route('admin.profile.show') }}" style="color:var(--text-base); text-decoration:none; font-family:'Space Mono', monospace; font-size:10px; text-transform:uppercase; border:1px solid rgba(220,38,38,0.4); padding:4px 10px; border-radius:4px; transition:all 0.2s; background:rgba(220,38,38,0.1);">
                 <i class="fa-solid fa-id-card mr-1" style="color:#dc2626;"></i> Profil & ID Card
             </a>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
@@ -240,9 +228,7 @@
             </div>
         </div>
 
-        @php
-            $allInquiries = \App\Models\Inquiry::all();
-        @endphp
+        @php $allInquiries = \App\Models\Inquiry::all(); @endphp
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-num">{{ $allInquiries->count() }}</div>
@@ -292,14 +278,14 @@
                         <td class="td-car">{{ $inquiry->car_model ?? '—' }}</td>
                         <td class="td-phone">{{ $inquiry->phone }}</td>
                         <td><span class="status-pill {{ $inquiry->statusColor() }}">{{ $inquiry->statusLabel() }}</span></td>
-                        <td>
+                        <td style="color: var(--text-base);">
                             {{ $inquiry->messages_count }}
                             @if($inquiry->unread_count > 0)
                                 <span class="unread-badge">{{ $inquiry->unread_count }}</span>
                             @endif
                         </td>
                         <td class="td-date">{{ $inquiry->created_at->format('d M Y') }}</td>
-                        <td><i class="fa-solid fa-chevron-right" style="color:#374151; font-size:12px;"></i></td>
+                        <td><i class="fa-solid fa-chevron-right" style="color: var(--text-dimmer); font-size:12px;"></i></td>
                     </tr>
                 @empty
                     <tr class="empty-row">
