@@ -258,6 +258,10 @@
                 <a href="{{ route('admin.inquiries.index') }}" class="logout-btn">
                     <i class="fa-solid fa-shield-halved mr-1"></i> Admin Panel
                 </a>
+            @elseif(auth()->user()->isDelivery())
+                <a href="{{ route('delivery.portal') }}" class="logout-btn" style="border-color: rgba(249, 115, 22, 0.4); color: #f97316;">
+                    <i class="fa-solid fa-truck-fast mr-1"></i> Delivery Driver Panel
+                </a>
             @endif
             <div class="nav-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
             <span>{{ auth()->user()->name }}</span>
@@ -270,9 +274,15 @@
 
     <main class="main-content">
         <div class="page-header">
-            <p class="page-label">// Portal VIP Pembeli</p>
+            <p class="page-label">// {{ auth()->user()->isRm() || auth()->user()->isManager() ? 'Portal Sales RM & Staff — Contact Recent Buyer' : 'Portal VIP Pembeli' }}</p>
             <h1 class="page-title">Selamat Datang, {{ explode(' ', auth()->user()->name)[0] }}</h1>
-            <p class="page-subtitle">Lacak seluruh status konsultasi dan pemesanan kendaraan eksklusif Anda.</p>
+            <p class="page-subtitle">
+                @if(auth()->user()->isRm() || auth()->user()->isManager())
+                    Daftar kontak buyer & inquiry konsumen terbaru. Klik kartu untuk merespon chat konsultasi.
+                @else
+                    Lacak seluruh status konsultasi dan pemesanan kendaraan eksklusif Anda.
+                @endif
+            </p>
         </div>
 
         @if($inquiries->isEmpty())
@@ -287,11 +297,11 @@
                 @foreach($inquiries as $inquiry)
                     @php
                         $isDelivery = in_array($inquiry->status, ['scheduled_delivery', 'delivered_completed']);
-                        $hasUnread = ($inquiry->messages_count > 0);
+                        $hasUnread = (($inquiry->unread_count ?? 0) > 0);
                     @endphp
                     <a href="{{ route('portal.consultation', $inquiry) }}" class="inquiry-card" style="position: relative;">
                         @if($hasUnread)
-                            <span style="position: absolute; top: 12px; left: 12px; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444; z-index: 2;" title="Notifikasi / Pesan Baru"></span>
+                            <span style="position: absolute; top: 12px; left: 12px; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444; z-index: 2;" title="Pesan Baru Belum Dibaca"></span>
                         @endif
 
                         @if($isDelivery)
@@ -307,14 +317,16 @@
                         <div class="inquiry-info">
                             <div class="inquiry-car" style="display: flex; align-items: center; gap: 8px;">
                                 {{ $inquiry->car_model ?? 'Kendaraan VIP' }}
-                                @if($isDelivery)
+                                @if(auth()->user()->isRm() || auth()->user()->isManager())
+                                    <span style="font-size: 9px; font-family: monospace; padding: 2px 6px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 2px;">BUYER: {{ $inquiry->name }}</span>
+                                @elseif($isDelivery)
                                     <span style="font-size: 9px; font-family: monospace; padding: 2px 6px; background: rgba(249, 115, 22, 0.2); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.4); border-radius: 2px;">DELIVERY ACTIVE</span>
                                 @else
                                     <span style="font-size: 9px; font-family: monospace; padding: 2px 6px; background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.4); border-radius: 2px;">SALES CONSULTATION</span>
                                 @endif
                             </div>
                             <div class="inquiry-meta">
-                                Diajukan {{ $inquiry->created_at->diffForHumans() }}
+                                Kontak: <strong style="color: #e5e7eb;">{{ $inquiry->name }}</strong> ({{ $inquiry->phone }}) &nbsp;·&nbsp; Diajukan {{ $inquiry->created_at->diffForHumans() }}
                                 @if($inquiry->assigned_rm_name)
                                     &nbsp;·&nbsp; RM: {{ $inquiry->assigned_rm_name }}
                                 @endif

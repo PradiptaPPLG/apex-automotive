@@ -88,8 +88,16 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 16px;
-                pointer-events: auto;
+                pointer-events: none;
                 user-select: none;
+                opacity: 0;
+                transform: translateX(-15px);
+                transition: opacity 0.35s ease, transform 0.35s ease;
+            }
+            .apex-scroll-navigator.visible {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateX(0);
             }
             .nav-section-row {
                 display: flex;
@@ -1592,7 +1600,7 @@
                             <i class="fa-solid fa-arrow-right ml-1"></i>
                         </button>
 
-                        @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
+                        @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()))
                             <button type="button" disabled class="w-full py-3.5 bg-neutral-900/90 text-neutral-400 font-bold text-xs tracking-widest uppercase cursor-not-allowed flex items-center justify-center border border-red-900/50 shadow-lg">
                                 <i class="fa-solid fa-lock mr-2 text-red-500"></i> BOOKING DINONAKTIFKAN (AKUN STAFF)
                             </button>
@@ -1633,10 +1641,10 @@
                 <h3 class="text-2xl font-serif font-bold text-neutral-900 dark:text-white uppercase">Request VIP Viewing</h3>
                 <p class="text-xs text-neutral-600 dark:text-neutral-400">Our luxury automotive advisor will contact you within 2 business hours.</p>
                 @auth
-                    @if(auth()->user()->isRm() || auth()->user()->isDelivery())
+                    @if(auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery())
                         <div class="flex items-center space-x-2 mt-1 bg-amber-500/10 border border-amber-500/30 px-3 py-2">
                             <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xs"></i>
-                            <span class="text-[10px] font-mono text-amber-300 uppercase tracking-wider font-bold">MODE STAFF ({{ auth()->user()->isRm() ? 'Sales RM' : 'Delivery Escort' }}) &mdash; Fitur booking hanya untuk Pembeli/VIP Member</span>
+                            <span class="text-[10px] font-mono text-amber-300 uppercase tracking-wider font-bold">MODE STAFF ({{ auth()->user()->isRm() ? 'Sales RM' : (auth()->user()->isManager() ? 'Manager' : 'Delivery Escort') }}) &mdash; Fitur booking hanya untuk Pembeli/VIP Member</span>
                         </div>
                     @else
                         <div class="flex items-center space-x-2 mt-1 bg-green-500/10 border border-green-500/30 px-3 py-1.5">
@@ -1717,7 +1725,7 @@
                     <span class="text-green-400 text-xs font-mono">Permintaan VIP Viewing terkirim! Sales RM kami akan menghubungi Anda segera.</span>
                 </div>
 
-                @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
+                @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()))
                     <button type="button" disabled class="w-full py-3 bg-neutral-800 text-neutral-500 font-bold tracking-widest uppercase cursor-not-allowed flex items-center justify-center space-x-2 border border-neutral-700">
                         <i class="fa-solid fa-lock"></i>
                         <span>BOOKING DINONAKTIFKAN (AKUN STAFF)</span>
@@ -2378,7 +2386,7 @@
 
         function bookCarWithSelectedConfig() {
 
-            @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
+            @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()))
                 alert('Akun Staff (Sales RM / Delivery Driver) tidak dapat melakukan booking unit kendaraan.');
                 return;
             @endif
@@ -2655,7 +2663,31 @@
             }
         }
 
+        function updateScrollNavVisibility() {
+            const navEl = document.getElementById('apexScrollNavigator');
+            const etalaseSec = document.getElementById('certified-suggestions');
+            if (navEl) {
+                if (etalaseSec) {
+                    const etalaseTop = etalaseSec.getBoundingClientRect().top;
+                    if (etalaseTop <= window.innerHeight * 0.75) {
+                        navEl.classList.add('visible');
+                    } else {
+                        navEl.classList.remove('visible');
+                    }
+                } else {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    if (scrollTop > 300) {
+                        navEl.classList.add('visible');
+                    } else {
+                        navEl.classList.remove('visible');
+                    }
+                }
+            }
+        }
+
         window.addEventListener('scroll', function() {
+            updateScrollNavVisibility();
+
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
@@ -2702,6 +2734,10 @@
                     .join('');
             }
         });
+
+        // Initialize visibility on page load
+        document.addEventListener('DOMContentLoaded', updateScrollNavVisibility);
+        updateScrollNavVisibility();
 
     </script>
 </body>

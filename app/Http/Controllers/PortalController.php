@@ -15,23 +15,24 @@ class PortalController extends Controller
      */
     public function dashboard(): View|RedirectResponse
     {
-        if (auth()->user()->isManager()) {
-            return redirect()->route('manager.dashboard');
-        }
+        $user = auth()->user();
 
-        if (auth()->user()->isRm()) {
-            return redirect()->route('admin.inquiries.index');
+        if ($user->isRm() || $user->isManager() || $user->isDelivery()) {
+            $inquiries = Inquiry::with('user')
+                ->withCount(['messages', 'messages as unread_count' => function ($q) {
+                    $q->where('sender_type', 'buyer')->where('is_read', false);
+                }])
+                ->latest()
+                ->get();
+        } else {
+            $inquiries = $user
+                ->inquiries()
+                ->withCount(['messages', 'messages as unread_count' => function ($q) {
+                    $q->where('sender_type', 'rm')->where('is_read', false);
+                }])
+                ->latest()
+                ->get();
         }
-
-        if (auth()->user()->isDelivery()) {
-            return redirect()->route('delivery.portal');
-        }
-
-        $inquiries = auth()->user()
-            ->inquiries()
-            ->withCount('messages')
-            ->latest()
-            ->get();
 
         return view('portal.dashboard', compact('inquiries'));
     }
@@ -41,7 +42,8 @@ class PortalController extends Controller
      */
     public function consultation(Inquiry $inquiry): View
     {
-        abort_if($inquiry->user_id !== auth()->id(), 403, 'Akses ditolak.');
+        $isStaff = auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery();
+        abort_if(! $isStaff && $inquiry->user_id !== auth()->id(), 403, 'Akses ditolak.');
 
         $messages = $inquiry->messages;
 

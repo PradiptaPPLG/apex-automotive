@@ -10,11 +10,15 @@ use Illuminate\Http\Request;
 class ConsultationController extends Controller
 {
     /**
-     * Store a new message from the buyer in a consultation thread.
+     * Store a new message from the buyer (or staff) in a consultation thread.
      */
     public function store(Request $request, Inquiry $inquiry): JsonResponse
     {
-        abort_if($inquiry->user_id !== auth()->id(), 403);
+        $user = auth()->user();
+        $isStaff = $user->isRm() || $user->isManager() || $user->isDelivery();
+
+        // Only staff or the inquiry owner can post
+        abort_if(! $isStaff && $inquiry->user_id !== $user->id, 403);
 
         $request->validate([
             'message' => ['nullable', 'string', 'max:3000'],
@@ -30,17 +34,26 @@ class ConsultationController extends Controller
             $attachmentPath = $request->file('attachment')->store('chat_attachments', 'public');
         }
 
+        // Determine sender_type based on role
+        if ($user->isDelivery()) {
+            $senderType = 'driver';
+        } elseif ($user->isRm() || $user->isManager()) {
+            $senderType = 'rm';
+        } else {
+            $senderType = 'buyer';
+        }
+
         $message = ConsultationMessage::create([
             'inquiry_id' => $inquiry->id,
-            'sender_type' => 'buyer',
-            'sender_name' => auth()->user()->name,
+            'sender_type' => $senderType,
+            'sender_name' => $user->name,
             'message' => $request->input('message') ?? '',
             'attachment' => $attachmentPath,
             'is_read' => false,
         ]);
 
         // Auto-activate consultation if still in inquiry_received
-        if ($inquiry->status === 'inquiry_received') {
+        if ($senderType === 'buyer' && $inquiry->status === 'inquiry_received') {
             $inquiry->update(['status' => 'consultation_active']);
         }
 
@@ -53,11 +66,14 @@ class ConsultationController extends Controller
     }
 
     /**
-     * Poll for the latest messages in a consultation thread (for buyer).
+     * Poll for the latest messages in a consultation thread.
      */
     public function poll(Request $request, Inquiry $inquiry): JsonResponse
     {
-        abort_if($inquiry->user_id !== auth()->id(), 403);
+        $user = auth()->user();
+        $isStaff = $user->isRm() || $user->isManager() || $user->isDelivery();
+
+        abort_if(! $isStaff && $inquiry->user_id !== $user->id, 403);
 
         $afterId = (int) $request->query('after', 0);
 
@@ -71,11 +87,20 @@ class ConsultationController extends Controller
                 return $msg;
             });
 
-        // Mark RM messages as read
-        ConsultationMessage::where('inquiry_id', $inquiry->id)
-            ->where('sender_type', 'rm')
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
+        // Mark messages as read based on viewer role
+        if ($isStaff && ! $user->isDelivery()) {
+            // RM/Manager marks buyer messages as read
+            ConsultationMessage::where('inquiry_id', $inquiry->id)
+                ->where('sender_type', 'buyer')
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+        } elseif (! $isStaff) {
+            // Buyer marks RM messages as read
+            ConsultationMessage::where('inquiry_id', $inquiry->id)
+                ->where('sender_type', 'rm')
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+        }
 
         return response()->json([
             'messages' => $messages,

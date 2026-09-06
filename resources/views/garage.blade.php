@@ -24,6 +24,9 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background: var(--bg-main);
+        }
+        html.dark .garage-wrapper {
             background: radial-gradient(circle at 50% 30%, rgba(30, 30, 45, 0.4) 0%, rgba(8, 8, 16, 0.98) 100%);
         }
         .garage-topbar {
@@ -32,7 +35,7 @@
             align-items: center;
             justify-content: space-between;
             z-index: 20;
-            background: rgba(12, 12, 20, 0.85);
+            background: var(--bg-surface);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
         }
@@ -64,24 +67,24 @@
             max-width: 82%;
             max-height: 60vh;
             object-fit: contain;
-            filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.9));
+            filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.4));
             transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .rim-badge-overlay {
             position: absolute;
             top: 28px;
             left: 36px;
-            background: rgba(12, 12, 20, 0.9);
+            background: var(--bg-surface);
             backdrop-filter: blur(12px);
             padding: 14px 20px;
             border: 1px solid var(--border);
             border-left: 4px solid #ef4444;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
             z-index: 10;
         }
         .garage-bottom-panel {
             padding: 24px 36px;
-            background: rgba(12, 12, 20, 0.95);
+            background: var(--bg-surface);
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
             z-index: 20;
@@ -106,7 +109,7 @@
             box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
         }
         .category-tab-btn.disabled {
-            opacity: 0.35;
+            opacity: 0.45;
             cursor: not-allowed;
             background: transparent;
         }
@@ -140,7 +143,7 @@
             width: 64px;
             height: 64px;
             object-fit: contain;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
         }
     </style>
 </head>
@@ -169,9 +172,9 @@
         <!-- MAIN CAR VIEWPORT -->
         <main class="car-stage-container">
             <div class="rim-badge-overlay">
-                <div class="text-[9px] font-mono text-neutral-400 uppercase tracking-widest font-bold">SELECTED WHEELS</div>
-                <div id="activeRimTitle" class="font-bold text-base text-white tracking-wide font-mono mt-0.5">3SDM 3.33 FX2 FORGED</div>
-                <div id="activeRimSpec" class="text-[10px] font-mono text-red-400 mt-0.5">20" SILVER / GUNMETAL COMPETITION</div>
+                <div class="text-[9px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold">SELECTED WHEELS</div>
+                <div id="activeRimTitle" class="font-bold text-base text-neutral-900 dark:text-white tracking-wide font-mono mt-0.5">3SDM 3.33 FX2 FORGED</div>
+                <div id="activeRimSpec" class="text-[10px] font-mono text-red-600 dark:text-red-400 mt-0.5">20" SILVER / GUNMETAL COMPETITION</div>
             </div>
 
             <!-- AUDI R8 CAR STAGE -->
@@ -181,14 +184,14 @@
         <!-- BOTTOM CUSTOMIZATION TOOLBAR -->
         <footer class="garage-bottom-panel space-y-4">
             <!-- CATEGORY SELECTOR TABS -->
-            <div class="flex flex-wrap items-center justify-between border-b border-white/10 pb-3 gap-3">
+            <div class="flex flex-wrap items-center justify-between border-b border-neutral-200 dark:border-white/10 pb-3 gap-3">
                 <div class="flex flex-wrap items-center gap-3">
                     <button class="category-tab-btn active"><i class="fa-solid fa-dharmachakra mr-1.5"></i> CUSTOM WHEELS / VELG (7)</button>
                     <button class="category-tab-btn disabled" title="Modifikasi Aero Kit hanya pada Audi R8 GT4"><i class="fa-solid fa-feather-pointed mr-1.5"></i> SPOILERS (UNAVAILABLE)</button>
                     <button class="category-tab-btn disabled" title="Modifikasi Exhaust"><i class="fa-solid fa-fire mr-1.5"></i> EXHAUST SYSTEM (UNAVAILABLE)</button>
                     <button class="category-tab-btn disabled" title="Modifikasi Suspensi"><i class="fa-solid fa-sliders mr-1.5"></i> SUSPENSION (UNAVAILABLE)</button>
                 </div>
-                <span class="text-[11px] font-mono text-neutral-400 font-bold uppercase tracking-wider">MODEL: AUDI R8 GT4 COMPETITION</span>
+                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 font-bold uppercase tracking-wider">MODEL: AUDI R8 GT4 COMPETITION</span>
             </div>
 
             <!-- RIMS CAROUSEL / GRID -->
@@ -196,43 +199,43 @@
                 <!-- 1. 3SDM 3.33 fx2 -->
                 <div class="rim-thumb-card active" onclick="selectGarageRim(0)">
                     <img src="{{ asset('images/modified/rims/3SDM 3.33 fx2.webp') }}" alt="3SDM 3.33 fx2">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">3.33 FX2</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">3.33 FX2</span>
                 </div>
 
                 <!-- 2. 3SDM 3.84 Red -->
                 <div class="rim-thumb-card" onclick="selectGarageRim(1)">
                     <img src="{{ asset('images/modified/rims/3SDM 3.84 Red.webp') }}" alt="3SDM 3.84 Red">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">3.84 RED</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">3.84 RED</span>
                 </div>
 
                 <!-- 3. 3SDM 3pc Alloy -->
                 <div class="rim-thumb-card" onclick="selectGarageRim(2)">
                     <img src="{{ asset('images/modified/rims/3SDM 3pc Alloy.webp') }}" alt="3SDM 3pc Alloy">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">3PC ALLOY</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">3PC ALLOY</span>
                 </div>
 
                 <!-- 4. 3SDM 3pc forged -->
                 <div class="rim-thumb-card" onclick="selectGarageRim(3)">
                     <img src="{{ asset('images/modified/rims/3SDM 3pc forged.webp') }}" alt="3SDM 3pc forged">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">3PC FORGED</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">3PC FORGED</span>
                 </div>
 
                 <!-- 5. 3SDM 3pc pink -->
                 <div class="rim-thumb-card" onclick="selectGarageRim(4)">
                     <img src="{{ asset('images/modified/rims/3SDM 3pc pink.webp') }}" alt="3SDM 3pc pink">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">3PC PINK</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">3PC PINK</span>
                 </div>
 
                 <!-- 6. 3SDM Street old -->
                 <div class="rim-thumb-card" onclick="selectGarageRim(5)">
                     <img src="{{ asset('images/modified/rims/3SDM Street old.webp') }}" alt="3SDM Street old">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">STREET OLD</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">STREET OLD</span>
                 </div>
 
                 <!-- 7. Alloy gloss black -->
                 <div class="rim-thumb-card" onclick="selectGarageRim(6)">
                     <img src="{{ asset('images/modified/rims/Alloy gloss black.webp') }}" alt="Alloy gloss black">
-                    <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">GLOSS BLACK</span>
+                    <span class="text-[9px] font-mono font-bold text-neutral-800 dark:text-neutral-200 text-center uppercase truncate w-full">GLOSS BLACK</span>
                 </div>
             </div>
         </footer>

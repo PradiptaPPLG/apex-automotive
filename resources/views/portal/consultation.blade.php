@@ -175,8 +175,10 @@
             gap: 4px;
             max-width: 70%;
         }
+        /* Base: Buyer POV (default) — buyer=right, rm=left, driver=left */
         .message-group.buyer { align-self: flex-end; align-items: flex-end; }
         .message-group.rm { align-self: flex-start; align-items: flex-start; }
+        .message-group.driver { align-self: flex-start; align-items: flex-start; }
         .message-sender {
             font-family: 'Space Mono', monospace;
             font-size: 9px;
@@ -196,22 +198,38 @@
             gap: 6px;
         }
         .message-bubble .msg-text { white-space: pre-wrap; }
+        /* Buyer bubble: red tint */
         .message-group.buyer .message-bubble {
             background: rgba(220, 38, 38, 0.15);
             border-color: rgba(220, 38, 38, 0.3);
             color: #fecaca;
         }
+        /* RM bubble: white/grey tint */
         .message-group.rm .message-bubble {
             background: rgba(255,255,255,0.06);
             border-color: rgba(255,255,255,0.1);
             color: #e5e7eb;
         }
-        .message-group.driver { align-self: flex-start; align-items: flex-start; }
+        /* Driver bubble: cyan tint */
         .message-group.driver .message-bubble {
             background: rgba(34, 211, 238, 0.12);
             border-color: rgba(34, 211, 238, 0.35);
             color: #cffafe;
         }
+        @php $viewerRole = auth()->user()->role; @endphp
+        @if($viewerRole === 'rm' || $viewerRole === 'manager')
+        /* RM/Manager POV: rm=right (self), buyer=left (other) */
+        .message-group.rm { align-self: flex-end !important; align-items: flex-end !important; }
+        .message-group.rm .message-bubble { background: rgba(220, 38, 38, 0.15); border-color: rgba(220, 38, 38, 0.3); color: #fecaca; }
+        .message-group.buyer { align-self: flex-start !important; align-items: flex-start !important; }
+        .message-group.buyer .message-bubble { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
+        @elseif($viewerRole === 'delivery')
+        /* Delivery Driver POV: driver=right (self), others=left */
+        .message-group.driver { align-self: flex-end !important; align-items: flex-end !important; }
+        .message-group.driver .message-bubble { background: rgba(249, 115, 22, 0.2); border-color: rgba(249, 115, 22, 0.45); color: #fed7aa; }
+        .message-group.buyer { align-self: flex-start !important; align-items: flex-start !important; }
+        .message-group.buyer .message-bubble { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
+        @endif
         .message-time {
             font-size: 10px;
             color: #374151;
@@ -343,7 +361,7 @@
             <span>Portal Saya</span>
         </a>
         <div class="nav-title">
-            Konsultasi VIP &nbsp;·&nbsp; <strong>{{ $inquiry->car_model ?? 'Kendaraan VIP' }}</strong>
+            Konsultasi VIP &nbsp;·&nbsp; <strong>{{ (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()) ? $inquiry->name . ' (' . $inquiry->phone . ')' : ($inquiry->car_model ?? 'Kendaraan VIP') }}</strong>
         </div>
         <div class="flex items-center gap-3">
             <button onclick="toggleHelpModal()" class="text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-colors text-xs cursor-pointer" title="Petunjuk Alur Purchase & Dokumen">
@@ -834,12 +852,12 @@
                     <button id="tabSalesBtn" onclick="switchChatChannel('sales')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.15); color: #eab308; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
                         <i class="fa-solid fa-sack-dollar"></i>
                         <span>CHAT SALES RM</span>
-                        <span id="salesDot" style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; box-shadow: 0 0 6px #ef4444;"></span>
+                        <span id="salesDot" style="display: none; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
                     </button>
                     <button id="tabDeliveryBtn" onclick="switchChatChannel('delivery')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #9ca3af; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
                         <i class="fa-solid fa-box-archive" style="color: #f97316;"></i>
                         <span>CHAT DELIVERY ESCORT</span>
-                        <span id="deliveryDot" style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; box-shadow: 0 0 6px #ef4444;"></span>
+                        <span id="deliveryDot" style="display: none; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
                     </button>
                 </div>
                 <div id="channelBadgeInfo" style="font-family: 'Space Mono', monospace; font-size: 10px; color: #eab308; display: flex; align-items: center; gap: 6px; background: rgba(234, 179, 8, 0.1); padding: 4px 10px; border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 2px;">
@@ -892,16 +910,16 @@
                     @foreach($messages as $msg)
                         @php $isLoc = $msg->message && str_starts_with($msg->message, '__LOCATION__:'); @endphp
                         <div class="message-group {{ $msg->sender_type }}" data-id="{{ $msg->id }}" data-channel="{{ in_array($msg->sender_type, ['driver']) ? 'delivery' : 'sales' }}">
-                            <span class="message-sender">
+                            <span class="message-sender" style="display:flex; align-items:center; gap:6px;">
                                 @if($msg->sender_type === 'rm')
-                                    <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
+                                    <img src="{{ asset('images/logo/profile_sales.webp') }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
                                     <span style="color:#f87171; font-weight:700;">SALES RM</span> &mdash; {{ $msg->sender_name }}
                                 @elseif($msg->sender_type === 'driver')
-                                    <i class="fa-solid fa-truck-fast" style="color:#22d3ee;"></i>
+                                    <img src="{{ asset('images/logo/profile_delivery.webp') }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
                                     <span style="color:#22d3ee; font-weight:700;">DRIVER ESCORT</span> &mdash; {{ $msg->sender_name }}
                                 @else
-                                    <i class="fa-solid fa-user" style="color:#9ca3af;"></i>
-                                    <span>PEMBELI (ANDA)</span>
+                                    <img src="{{ asset('images/logo/profile_user.webp') }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+                                    <span>PEMBELI</span> &mdash; {{ $msg->sender_name }}
                                 @endif
                             </span>
                             <div class="message-bubble">
@@ -940,7 +958,7 @@
                 <div class="typing-indicator" id="typingIndicator">Sales RM sedang mengetik…</div>
             </div>
             {{-- Sales Chat Input --}}
-            <div id="salesChatInput" class="chat-input-area">
+            <div id="salesChatInput" class="chat-input-area" style="display: {{ auth()->user()->isDelivery() ? 'none' : 'flex' }};">
                 <div id="attachmentPreview" class="attachment-preview">
                     <span id="attachmentFileName"><i class="fa-solid fa-paperclip"></i> File terlampir</span>
                     <button type="button" onclick="removeAttachment()"><i class="fa-solid fa-xmark"></i> Batal</button>
@@ -950,13 +968,17 @@
                     <button type="button" class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Lampirkan Foto / PDF">
                         <i class="fa-solid fa-paperclip" style="font-size: 15px;"></i>
                     </button>
+                    @if(auth()->user()->isRm() || auth()->user()->isManager())
+                        {{-- RM/Manager: no location button (location is buyer's feature) --}}
+                    @else
                     <button type="button" class="loc-btn" onclick="openLocationModal()" title="Kirim Lokasi">
                         <i class="fa-solid fa-location-dot" style="font-size: 15px;"></i>
                     </button>
+                    @endif
                     <textarea
                         id="messageInput"
                         class="chat-input"
-                        placeholder="Tulis pesan ke Sales RM atau lampirkan bukti transfer..."
+                        placeholder="{{ auth()->user()->isRm() || auth()->user()->isManager() ? 'Tulis balasan ke buyer...' : 'Tulis pesan ke Sales RM atau lampirkan bukti transfer...' }}"
                         rows="2"
                     ></textarea>
                     <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
@@ -964,7 +986,8 @@
                     </button>
                 </div>
             </div>
-            {{-- Delivery Read-only Notice (shown only in delivery tab) --}}
+            {{-- Delivery Read-only Notice (shown to buyers in delivery tab) --}}
+            @if(!auth()->user()->isDelivery())
             <div id="deliveryChatNotice" style="display: none; border-top: 1px solid rgba(249,115,22,0.25); padding: 14px 24px; background: rgba(249,115,22,0.05); flex-direction: column; gap: 6px; flex-shrink: 0;">
                 <div style="display: flex; align-items: center; gap: 10px; font-family: 'Space Mono', monospace; font-size: 10px; color: #f97316; text-transform: uppercase; letter-spacing: 0.08em;">
                     <i class="fa-solid fa-truck-fast"></i>
@@ -972,10 +995,39 @@
                 </div>
                 <p style="font-size: 12px; color: #6b7280; font-family: 'Inter', sans-serif;">Chat ini hanya menampilkan pesan dari Driver Escort Anda. Untuk berkomunikasi dengan Sales RM, gunakan tab <strong style="color: #eab308;">CHAT SALES RM</strong>.</p>
             </div>
+            @endif
+            {{-- Driver Chat Input (shown to delivery driver in delivery tab) --}}
+            @if(auth()->user()->isDelivery())
+            <div id="driverChatInput" class="chat-input-area" style="display: {{ auth()->user()->isDelivery() ? 'flex' : 'none' }}; border-top-color: rgba(249,115,22,0.3); background: rgba(8,8,16,0.95);">
+                <div id="driverAttachmentPreview" class="attachment-preview">
+                    <span id="driverAttachmentFileName"><i class="fa-solid fa-paperclip"></i> File terlampir</span>
+                    <button type="button" onclick="removeDriverAttachment()"><i class="fa-solid fa-xmark"></i> Batal</button>
+                </div>
+                <div class="chat-input-row">
+                    <input type="file" id="driverFileInput" accept="image/*,application/pdf" style="display: none;" onchange="handleDriverFileSelect(this)">
+                    <button type="button" class="attach-btn" onclick="document.getElementById('driverFileInput').click()" title="Lampirkan Foto">
+                        <i class="fa-solid fa-paperclip" style="font-size: 15px;"></i>
+                    </button>
+                    <button type="button" class="loc-btn" onclick="openLocationModal()" title="Kirim Lokasi GPS">
+                        <i class="fa-solid fa-location-dot" style="font-size: 15px; color: #f97316;"></i>
+                    </button>
+                    <textarea
+                        id="driverMessageInput"
+                        class="chat-input"
+                        placeholder="Kirim update pengiriman ke buyer..."
+                        rows="2"
+                    ></textarea>
+                    <button id="driverSendBtn" class="chat-send-btn" onclick="sendDriverMessage()" style="background: #f97316;">
+                        <i class="fa-solid fa-paper-plane"></i> KIRIM
+                    </button>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 
     <script>
+        const USER_ROLE = '{{ auth()->user()->role }}';
         const INQUIRY_ID = {{ $inquiry->id }};
         const POLL_URL = '{{ route('portal.message.poll', $inquiry) }}';
         const SEND_URL = '{{ route('portal.message.store', $inquiry) }}';
@@ -1004,18 +1056,25 @@
             document.getElementById('attachmentPreview').style.display = 'none';
         }
 
+        // Maps each role to the sender_type they "own" (self = right side)
+        const SELF_SENDER = USER_ROLE === 'rm' || USER_ROLE === 'manager' ? 'rm'
+                          : USER_ROLE === 'delivery' ? 'driver'
+                          : 'buyer';
+
         function renderMessage(msg) {
             const group = document.createElement('div');
-            group.className = `message-group ${msg.sender_type}`;
+            // Apply a 'self' class if this message belongs to the current viewer
+            const isSelf = msg.sender_type === SELF_SENDER;
+            group.className = `message-group ${msg.sender_type}${isSelf ? ' self' : ''}`;
             group.dataset.id = msg.id;
             group.dataset.channel = (msg.sender_type === 'driver') ? 'delivery' : 'sales';
             
-            let senderIcon = '<i class="fa-solid fa-user" style="color:#9ca3af;"></i> ';
+            let senderIcon = '<img src="/images/logo/profile_user.webp" style="width:20px; height:20px; border-radius:50%; object-fit:cover;"> <span>PEMBELI</span> &mdash; ';
             let senderLabel = msg.sender_name;
             if (msg.sender_type === 'rm') {
-                senderIcon = '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> <span style="color:#f87171; font-weight:700;">SALES RM</span> &mdash; ';
+                senderIcon = '<img src="/images/logo/profile_sales.webp" style="width:20px; height:20px; border-radius:50%; object-fit:cover;"> <span style="color:#f87171; font-weight:700;">SALES RM</span> &mdash; ';
             } else if (msg.sender_type === 'driver') {
-                senderIcon = '<i class="fa-solid fa-truck-fast" style="color:#22d3ee;"></i> <span style="color:#22d3ee; font-weight:700;">DRIVER ESCORT</span> &mdash; ';
+                senderIcon = '<img src="/images/logo/profile_delivery.webp" style="width:20px; height:20px; border-radius:50%; object-fit:cover;"> <span style="color:#22d3ee; font-weight:700;">DRIVER ESCORT</span> &mdash; ';
             }
             
             const time = new Date(msg.created_at).toLocaleString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
@@ -1045,7 +1104,7 @@
                 contentHtml = msgText + attachHtml;
             }
             group.innerHTML = `
-                <span class="message-sender">${senderIcon}${senderLabel}</span>
+                <span class="message-sender" style="display:flex; align-items:center; gap:6px;">${senderIcon}${senderLabel}</span>
                 <div class="message-bubble">${contentHtml}</div>
                 <span class="message-time">${time}</span>`;
             return group;
@@ -1327,7 +1386,63 @@
             } catch(e) {}
         }
 
-        let currentChannel = 'sales';
+        let currentChannel = (USER_ROLE === 'delivery') ? 'delivery' : 'sales';
+
+        // Driver-specific file attachment
+        let selectedDriverFile = null;
+        function handleDriverFileSelect(input) {
+            if (input.files && input.files[0]) {
+                selectedDriverFile = input.files[0];
+                document.getElementById('driverAttachmentFileName').innerHTML = `<i class="fa-solid fa-file text-orange-400 mr-1"></i> ${selectedDriverFile.name} (${Math.round(selectedDriverFile.size/1024)} KB)`;
+                document.getElementById('driverAttachmentPreview').style.display = 'flex';
+            }
+        }
+        function removeDriverAttachment() {
+            selectedDriverFile = null;
+            document.getElementById('driverFileInput').value = '';
+            document.getElementById('driverAttachmentPreview').style.display = 'none';
+        }
+        async function sendDriverMessage() {
+            const input = document.getElementById('driverMessageInput');
+            const text = input.value.trim();
+            if (!text && !selectedDriverFile) return;
+            const btn = document.getElementById('driverSendBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim…';
+            const formData = new FormData();
+            if (text) formData.append('message', text);
+            if (selectedDriverFile) formData.append('attachment', selectedDriverFile);
+            try {
+                const res = await fetch(SEND_URL, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const container = document.getElementById('messagesContainer');
+                    const noMsg = container.querySelector('.no-messages');
+                    if (noMsg) noMsg.remove();
+                    const typing = document.getElementById('typingIndicator');
+                    container.insertBefore(renderMessage(data.message), typing);
+                    lastId = data.message.id;
+                    input.value = '';
+                    input.style.height = 'auto';
+                    removeDriverAttachment();
+                    scrollBottom();
+                }
+            } catch (e) {
+                alert('Gagal mengirim pesan. Coba lagi.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> KIRIM';
+            }
+        }
+        if (document.getElementById('driverMessageInput')) {
+            document.getElementById('driverMessageInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendDriverMessage(); }
+            });
+        }
 
         function switchChatChannel(channel) {
             currentChannel = channel;
@@ -1355,8 +1470,10 @@
 
                 if (salesSidebar) salesSidebar.style.display = 'flex';
                 if (deliverySidebar) deliverySidebar.style.display = 'none';
-                if (salesInput) salesInput.style.display = 'flex';
+                if (salesInput) salesInput.style.display = USER_ROLE === 'delivery' ? 'none' : 'flex';
                 if (deliveryNotice) deliveryNotice.style.display = 'none';
+                const driverIn = document.getElementById('driverChatInput');
+                if (driverIn) driverIn.style.display = 'none';
             } else {
                 tabDelivery.style.background = 'rgba(249, 115, 22, 0.2)';
                 tabDelivery.style.borderColor = 'rgba(249, 115, 22, 0.6)';
@@ -1374,7 +1491,9 @@
                 if (salesSidebar) salesSidebar.style.display = 'none';
                 if (deliverySidebar) deliverySidebar.style.display = 'flex';
                 if (salesInput) salesInput.style.display = 'none';
-                if (deliveryNotice) deliveryNotice.style.display = 'flex';
+                if (deliveryNotice) deliveryNotice.style.display = USER_ROLE === 'delivery' ? 'none' : 'flex';
+                const driverIn = document.getElementById('driverChatInput');
+                if (driverIn) driverIn.style.display = USER_ROLE === 'delivery' ? 'flex' : 'none';
             }
 
             filterMessagesByChannel();
@@ -1472,6 +1591,13 @@
         }
 
         setTimeout(initLocationMaps, 400);
+
+        // Auto-switch to delivery tab for drivers, hide sales input
+        if (USER_ROLE === 'delivery') {
+            switchChatChannel('delivery');
+            const salesInput = document.getElementById('salesChatInput');
+            if (salesInput) salesInput.style.display = 'none';
+        }
 
         // Poll messages every 3 seconds & driver GPS every 3.5 seconds
         setInterval(pollMessages, 3000);
