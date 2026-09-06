@@ -104,32 +104,31 @@
             /* Ferrari-Style Floating Scroll Section Navigator */
             .apex-scroll-navigator {
                 position: fixed;
-                left: 24px;
-                bottom: 32px;
+                left: 28px;
+                bottom: 36px;
                 z-index: 999;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
                 gap: 16px;
                 pointer-events: auto;
                 user-select: none;
             }
+            .nav-section-row {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                cursor: pointer;
+            }
             .nav-ring-wrapper {
                 position: relative;
-                width: 44px;
-                height: 44px;
+                width: 28px;
+                height: 28px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                cursor: pointer;
-                background: rgba(10, 10, 12, 0.75);
-                backdrop-filter: blur(10px);
                 border-radius: 50%;
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-                transition: transform 0.3s ease, border-color 0.3s ease;
-            }
-            .nav-ring-wrapper:hover {
-                transform: scale(1.1);
+                flex-shrink: 0;
             }
             .nav-ring-svg {
                 position: absolute;
@@ -139,156 +138,113 @@
                 transform: rotate(-90deg);
             }
             .nav-ring-bg {
-                stroke: rgba(255, 255, 255, 0.15);
-                stroke-width: 2.5;
+                stroke: rgba(255, 255, 255, 0.2);
+                stroke-width: 2;
             }
             html:not(.dark) .nav-ring-bg {
-                stroke: rgba(0, 0, 0, 0.15);
+                stroke: rgba(0, 0, 0, 0.2);
             }
             .nav-ring-progress {
-                stroke: #e50914;
-                stroke-width: 2.5;
+                stroke: var(--text-heading, #ffffff);
+                stroke-width: 2;
                 stroke-linecap: round;
-                stroke-dasharray: 125.6; /* 2 * PI * 20 */
-                stroke-dashoffset: 125.6;
+                stroke-dasharray: 75.39; /* 2 * PI * 12 */
+                stroke-dashoffset: 75.39;
                 transition: stroke-dashoffset 0.15s ease-out;
             }
+            html:not(.dark) .nav-ring-progress {
+                stroke: #111827;
+            }
             .nav-ring-center-dot {
-                width: 6px;
-                height: 6px;
+                width: 5px;
+                height: 5px;
                 background-color: var(--text-heading, #ffffff);
                 border-radius: 50%;
-                transition: background-color 0.3s ease;
             }
             html:not(.dark) .nav-ring-center-dot {
                 background-color: #111827;
             }
-            .nav-dots-container {
+            .nav-section-label-active {
+                font-family: 'Space Mono', monospace;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: var(--text-heading, #ffffff);
+                white-space: nowrap;
+                transition: opacity 0.3s ease;
+            }
+            html:not(.dark) .nav-section-label-active {
+                color: #111827;
+            }
+            .nav-inactive-dots {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 12px;
-                background: rgba(10, 10, 12, 0.6);
-                backdrop-filter: blur(10px);
-                padding: 10px 8px;
-                border-radius: 20px;
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+                width: 28px;
+                gap: 14px;
             }
-            html:not(.dark) .nav-dots-container {
-                background: rgba(255, 255, 255, 0.85);
-                border-color: rgba(0, 0, 0, 0.1);
-            }
-            .nav-section-dot {
-                width: 7px;
-                height: 7px;
+            .nav-dot-item {
+                width: 5px;
+                height: 5px;
                 border-radius: 50%;
-                background-color: rgba(156, 163, 175, 0.5);
+                background-color: var(--text-heading, #ffffff);
+                opacity: 0.7;
                 cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
+                transition: all 0.25s ease;
             }
-            .nav-section-dot:hover {
-                background-color: #e50914;
+            html:not(.dark) .nav-dot-item {
+                background-color: #111827;
+            }
+            .nav-dot-item:hover {
+                opacity: 1;
                 transform: scale(1.4);
             }
-            .nav-section-dot.active {
-                background-color: #e50914;
-                transform: scale(1.5);
-                box-shadow: 0 0 10px rgba(229, 9, 20, 0.8);
-            }
-            .nav-section-dot .tooltip {
-                position: absolute;
-                left: 20px;
-                top: 50%;
-                transform: translateY(-50%) translateX(10px);
-                opacity: 0;
-                pointer-events: none;
-                background: rgba(10, 10, 12, 0.95);
-                color: #ffffff;
-                font-family: 'Space Mono', monospace;
-                font-size: 10px;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                padding: 4px 10px;
-                border-radius: 4px;
-                border: 1px solid rgba(229, 9, 20, 0.4);
-                white-space: nowrap;
-                transition: all 0.25s ease;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            }
-            html:not(.dark) .nav-section-dot .tooltip {
-                background: #ffffff;
-                color: #111827;
-                border-color: rgba(229, 9, 20, 0.4);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            }
-            .nav-section-dot:hover .tooltip {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0);
-            }
             .nav-back-to-top {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                background: rgba(10, 10, 12, 0.75);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                color: #e5e7eb;
+                width: 28px;
+                height: 20px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 12px;
+                color: var(--text-heading, #ffffff);
+                font-size: 14px;
                 cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                background: transparent;
+                border: none;
+                transition: transform 0.25s ease;
             }
             html:not(.dark) .nav-back-to-top {
-                background: rgba(255, 255, 255, 0.9);
-                border-color: rgba(0, 0, 0, 0.15);
                 color: #111827;
             }
             .nav-back-to-top:hover {
-                background: #e50914;
-                color: #ffffff;
-                border-color: #e50914;
                 transform: translateY(-3px);
-                box-shadow: 0 6px 16px rgba(229, 9, 20, 0.5);
             }
         </style>
     @endif
 </head>
+
 <body class="bg-neutral-50 dark:bg-[#0a0a0c] text-neutral-900 dark:text-neutral-100 font-sans antialiased selection:bg-red-600 selection:text-white min-h-screen flex flex-col transition-colors duration-300">
 
     <!-- FERRARI-STYLE FLOATING SCROLL SECTION NAVIGATOR -->
     <div class="apex-scroll-navigator" id="apexScrollNavigator">
-        <!-- Rotating Progress Ring -->
-        <div class="nav-ring-wrapper" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll Progress">
-            <svg class="nav-ring-svg" viewBox="0 0 44 44">
-                <circle class="nav-ring-bg" cx="22" cy="22" r="20" fill="none"></circle>
-                <circle class="nav-ring-progress" id="scrollProgressRing" cx="22" cy="22" r="20" fill="none"></circle>
-            </svg>
-            <div class="nav-ring-center-dot"></div>
+        <!-- Active Section Row (Ring Progress + Label Inline) -->
+        <div class="nav-section-row" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <div class="nav-ring-wrapper" title="Scroll Progress">
+                <svg class="nav-ring-svg" viewBox="0 0 28 28">
+                    <circle class="nav-ring-bg" cx="14" cy="14" r="12" fill="none"></circle>
+                    <circle class="nav-ring-progress" id="scrollProgressRing" cx="14" cy="14" r="12" fill="none"></circle>
+                </svg>
+                <div class="nav-ring-center-dot"></div>
+            </div>
+            <span class="nav-section-label-active" id="activeSectionLabel">SHOWROOM</span>
         </div>
 
-        <!-- Section Dots Navigator -->
-        <div class="nav-dots-container">
-            <div class="nav-section-dot active" data-target="#hero-carousel" onclick="scrollToSection('#hero-carousel')">
-                <span class="tooltip">01. SHOWROOM</span>
-            </div>
-            <div class="nav-section-dot" data-target="#certified-suggestions" onclick="scrollToSection('#certified-suggestions')">
-                <span class="tooltip">02. PRE-OWNED</span>
-            </div>
-            <div class="nav-section-dot" data-target="#spotlight" onclick="scrollToSection('#spotlight')">
-                <span class="tooltip">03. EXOTIC MODELS</span>
-            </div>
-            <div class="nav-section-dot" data-target="#services" onclick="scrollToSection('#services')">
-                <span class="tooltip">04. AFTER SALES</span>
-            </div>
-            <div class="nav-section-dot" data-target="#dealer-location" onclick="scrollToSection('#dealer-location')">
-                <span class="tooltip">05. DEALER LOCATOR</span>
-            </div>
+        <!-- Inactive Section Dots -->
+        <div class="nav-inactive-dots" id="navInactiveDots">
+            <div class="nav-dot-item" data-target="#certified-suggestions" onclick="scrollToSection('#certified-suggestions')" title="PRE-OWNED"></div>
+            <div class="nav-dot-item" data-target="#spotlight" onclick="scrollToSection('#spotlight')" title="EXOTIC MODELS"></div>
+            <div class="nav-dot-item" data-target="#services" onclick="scrollToSection('#services')" title="AFTER SALES"></div>
+            <div class="nav-dot-item" data-target="#dealer-location" onclick="scrollToSection('#dealer-location')" title="DEALER LOCATOR"></div>
         </div>
 
         <!-- Back to Top Chevron Button -->
@@ -296,6 +252,7 @@
             <i class="fa-solid fa-chevron-up"></i>
         </button>
     </div>
+
 
     <!-- ==========================================
          0. CINEMATIC BLACK INTRO SCREEN WITH LOGO FLICKER
@@ -2735,25 +2692,25 @@
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
 
-            // 1. Update SVG Progress Ring
+            // 1. Update SVG Progress Ring (Radius 12 => Circumference ~ 75.39)
             const ring = document.getElementById('scrollProgressRing');
             if (ring) {
-                const circumference = 125.6; // 2 * PI * 20
+                const circumference = 75.39;
                 const offset = circumference - (scrollPercent * circumference);
                 ring.style.strokeDashoffset = offset;
             }
 
-            // 2. Active Section Dot Sync
+            // 2. Dynamic Section Detection & Inline Active Label Sync
             const sections = [
-                { id: '#hero-carousel', dot: document.querySelector('.nav-section-dot[data-target="#hero-carousel"]') },
-                { id: '#certified-suggestions', dot: document.querySelector('.nav-section-dot[data-target="#certified-suggestions"]') },
-                { id: '#spotlight', dot: document.querySelector('.nav-section-dot[data-target="#spotlight"]') },
-                { id: '#services', dot: document.querySelector('.nav-section-dot[data-target="#services"]') },
-                { id: '#dealer-location', dot: document.querySelector('.nav-section-dot[data-target="#dealer-location"]') }
+                { id: '#hero-carousel', label: 'SHOWROOM' },
+                { id: '#certified-suggestions', label: 'PRE-OWNED' },
+                { id: '#spotlight', label: 'EXOTIC MODELS' },
+                { id: '#services', label: 'AFTER SALES' },
+                { id: '#dealer-location', label: 'DEALER LOCATOR' }
             ];
 
             let currentActiveIndex = 0;
-            const viewThreshold = window.innerHeight * 0.4;
+            const viewThreshold = window.innerHeight * 0.35;
 
             sections.forEach((sec, idx) => {
                 const el = document.querySelector(sec.id);
@@ -2765,16 +2722,24 @@
                 }
             });
 
-            sections.forEach((sec, idx) => {
-                if (sec.dot) {
-                    if (idx === currentActiveIndex) {
-                        sec.dot.classList.add('active');
-                    } else {
-                        sec.dot.classList.remove('active');
-                    }
-                }
-            });
+            // Update Active Inline Label
+            const activeLabelEl = document.getElementById('activeSectionLabel');
+            if (activeLabelEl) {
+                activeLabelEl.innerText = sections[currentActiveIndex].label;
+            }
+
+            // Re-render inactive dots list
+            const dotsContainer = document.getElementById('navInactiveDots');
+            if (dotsContainer) {
+                dotsContainer.innerHTML = sections
+                    .map((sec, idx) => {
+                        if (idx === currentActiveIndex) return ''; // Active section is displayed next to progress ring
+                        return `<div class="nav-dot-item" onclick="scrollToSection('${sec.id}')" title="${sec.label}"></div>`;
+                    })
+                    .join('');
+            }
         });
+
     </script>
 </body>
 </html>
