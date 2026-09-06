@@ -41,6 +41,9 @@ class ConsultationController extends Controller
             $senderType = 'rm';
         } else {
             $senderType = 'buyer';
+            if ($request->input('channel') === 'delivery') {
+                $senderType = 'buyer_delivery';
+            }
         }
 
         $message = ConsultationMessage::create([
@@ -94,10 +97,16 @@ class ConsultationController extends Controller
                 ->where('sender_type', 'buyer')
                 ->where('is_read', false)
                 ->update(['is_read' => true]);
-        } elseif (! $isStaff) {
-            // Buyer marks RM messages as read
+        } elseif ($isStaff && $user->isDelivery()) {
+            // Delivery driver marks buyer_delivery messages as read
             ConsultationMessage::where('inquiry_id', $inquiry->id)
-                ->where('sender_type', 'rm')
+                ->where('sender_type', 'buyer_delivery')
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+        } elseif (! $isStaff) {
+            // Buyer marks RM and Driver messages as read
+            ConsultationMessage::where('inquiry_id', $inquiry->id)
+                ->whereIn('sender_type', ['rm', 'driver'])
                 ->where('is_read', false)
                 ->update(['is_read' => true]);
         }
