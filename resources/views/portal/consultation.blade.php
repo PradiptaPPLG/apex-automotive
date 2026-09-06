@@ -995,6 +995,10 @@
                     </button>
                 </div>
             </div>
+
+            {{-- Driver Chat Input (shown to delivery driver in delivery tab) --}}
+            @if(auth()->user()->isDelivery())
+            <div id="driverChatInput" class="chat-input-area" style="display: {{ auth()->user()->isDelivery() ? 'flex' : 'none' }}; border-top-color: rgba(249,115,22,0.3); background: rgba(8,8,16,0.95);">
                 <div id="driverAttachmentPreview" class="attachment-preview">
                     <span id="driverAttachmentFileName"><i class="fa-solid fa-paperclip"></i> File terlampir</span>
                     <button type="button" onclick="removeDriverAttachment()"><i class="fa-solid fa-xmark"></i> Batal</button>
