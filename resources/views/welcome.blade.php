@@ -1665,16 +1665,28 @@
                         </div>
                     </div>
 
-                    <!-- FULL PERFORMANCE SPECS GRID -->
+                    <!-- FULL PERFORMANCE SPECS GRID WITH ALL INFO LINK -->
                     <div class="space-y-2 pt-1 border-t border-neutral-200 dark:border-white/10">
-                        <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
+                            <a id="inspectAllInfoBtn" href="#" class="text-[10px] font-mono font-bold text-red-500 hover:text-red-400 uppercase tracking-widest flex items-center gap-1 hover:underline">
+                                <i class="fa-solid fa-file-lines text-xs"></i> ALL INFO & FULL DOCS <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </a>
+                        </div>
                         <div id="inspectSpecsGrid" class="grid grid-cols-2 gap-2 text-[11px] font-mono">
                             <!-- Dynamic specs injected by JS -->
                         </div>
                     </div>
 
-                    <!-- ACTION BUTTONS -->
-                    <div class="pt-2 w-full">
+                    <!-- ACTION BUTTONS INCLUDING MODIFY GARAGE BUTTON -->
+                    <div class="pt-2 w-full space-y-2">
+                        <!-- CUSTOMIZE / MODIFY GARAGE BUTTON -->
+                        <button id="inspectModifyGarageBtn" onclick="openGarageStudio()" class="w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 border border-amber-400/40">
+                            <i class="fa-solid fa-wrench text-amber-300"></i>
+                            <span>MODIFY / CUSTOMIZE WHEELS (GARAGE STUDIO)</span>
+                            <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+
                         @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery()))
                             <button type="button" disabled class="w-full py-3.5 bg-neutral-900/90 text-neutral-400 font-bold text-xs tracking-widest uppercase cursor-not-allowed flex items-center justify-center border border-red-900/50 shadow-lg">
                                 <i class="fa-solid fa-lock mr-2 text-red-500"></i> BOOKING DINONAKTIFKAN (AKUN STAFF)
@@ -1690,6 +1702,7 @@
                             </div>
                         @endif
                     </div>
+
 
                 </div>
 

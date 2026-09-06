@@ -23,6 +23,14 @@ Route::get('/faq', function () {
     return view('faq');
 })->name('faq');
 
+Route::get('/garage', function () {
+    return view('garage');
+})->name('garage');
+
+Route::get('/car-info/{car?}', function ($car = 'bmw_m4') {
+    return view('car_info', ['carKey' => $car]);
+})->name('car.info');
+
 // Inquiry — VIP Viewing Request (works for guests & authenticated users)
 Route::post('/inquire', [InquiryController::class, 'store'])->name('inquire.store');
 
