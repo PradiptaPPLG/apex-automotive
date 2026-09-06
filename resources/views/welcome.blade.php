@@ -980,7 +980,54 @@
                     </div>
 
 
-                    <!-- CAR CARD 7: BUGATTI CHIRON PUR SPORT (NEW CAR) -->
+                    <!-- CAR CARD 7: FERRARI SF90 XX STRADALE -->
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Ferrari" data-price="24500" data-condition="NEW" onclick="openCarInspector('ferrari_sf90')">
+                        <div class="relative h-64 overflow-hidden bg-neutral-900">
+                            <img src="{{ asset('images/brand/ferarri_f90xx_Rosso_Corsa.webp') }}" alt="Ferrari SF90 XX Stradale" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md">
+                                HYPERCAR SPECIAL
+                            </div>
+                            <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
+                                2025
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
+                                    <i class="fa-solid fa-eye text-red-500 mr-2"></i> INSPECT COLORS & BODYKITS
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-4 bg-white dark:bg-transparent">
+                            <div>
+                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • FERRARI</span>
+                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                    SF90 XX STRADALE
+                                </h4>
+                            </div>
+
+                            <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
+                                <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
+                                <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">IDR 24,500,000,000</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
+                                <div><i class="fa-solid fa-fire mr-1 text-red-600"></i> 1,030 HP V8 HYBRID</div>
+                                <div><i class="fa-solid fa-bolt mr-1 text-red-600"></i> 0-100: 2.3S</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-2">
+                                <button onclick="event.stopPropagation(); openCarInspector('ferrari_sf90');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    EXPLORE & INSPECT
+                                </button>
+                                <button onclick="event.stopPropagation(); toggleModal('inquireModal');" class="w-full py-2.5 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                    INQUIRE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- CAR CARD 8: BUGATTI CHIRON PUR SPORT (NEW CAR) -->
                     <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="Bugatti" data-price="52000" data-condition="NEW" onclick="openCarInspector('bugatti_chiron')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
                             <img src="{{ asset('images/brand/buggati_chiron_le_mans_blue.png') }}" alt="Bugatti Chiron" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -1510,24 +1557,21 @@
                             <span id="inspectYear">2025</span>
                         </div>
 
+                        <!-- SUBTLE ENGINE BAY PREVIEW OVERLAY BOTTOM LEFT -->
+                        <div class="absolute bottom-3 left-4 pointer-events-none border border-white/20 rounded-md overflow-hidden bg-black shadow-lg" style="width: 100px; height: 60px;">
+                            <img id="inspectEngineImg" src="" alt="Engine Spec" class="w-full h-full object-cover opacity-90">
+                            <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-center py-0.5">
+                                <span class="text-[7px] font-mono font-bold text-white tracking-widest">ENGINE BAY</span>
+                            </div>
+                        </div>
 
                     </div>
 
-                    <!-- INTERIOR PREVIEW DIRECTLY BELOW THE MAIN CAR CARD WITH COLOR SPEC BADGE -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
-                        <div class="sm:col-span-7 rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-2 space-y-1">
-                            <div class="h-28 sm:h-32 rounded overflow-hidden relative">
-                                <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                        <div class="sm:col-span-5 rounded-lg border border-neutral-300 dark:border-white/10 bg-neutral-950 p-3.5 flex flex-col justify-center font-mono space-y-2">
-                            <div class="text-[11px] font-bold text-neutral-300 tracking-wider">
-                                COLOR: <span id="inspectColorSideBadge" class="text-red-500 font-extrabold uppercase">--</span>
-                            </div>
-                            <div class="text-[10px] text-amber-500 font-extrabold flex items-center tracking-widest">
-                                <i class="fa-solid fa-xmark mr-1.5 text-xs text-red-500"></i>
-                                <span id="inspectSpecSideBadge">FACTORY STOCK SPEC</span>
-                            </div>
+                    <!-- INTERIOR PREVIEW CARD BELOW MAIN CAR CARD -->
+                    <div class="rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-2 mt-3">
+                        <div class="h-32 sm:h-40 rounded overflow-hidden relative">
+                            <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
+                            <span class="absolute bottom-2 left-3 text-[10px] font-mono font-bold text-white/90 bg-black/70 px-2 py-1 rounded shadow-md border border-white/10">INTERIOR CABIN</span>
                         </div>
                     </div>
                 </div>
@@ -1809,6 +1853,7 @@
                 discountPct: '10%',
                 condition: 'BRAND NEW',
                 interior: "{{ asset('images/interior/interior_bmw.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_bmw.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '3.0L Twin-Turbo Inline-6' },
                     { label: 'POWER', val: '510 HP @ 6,250 RPM' },
@@ -1835,6 +1880,7 @@
                 discountPct: '7%',
                 condition: 'BRAND NEW',
                 interior: "{{ asset('images/interior/interior_lamborghini.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_ferarri.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '6.5L V12 NA + 3 E-Motors' },
                     { label: 'POWER', val: '1,015 HP Total Output' },
@@ -1861,6 +1907,7 @@
                 discountPct: null,
                 condition: 'APEX CERTIFIED',
                 interior: "{{ asset('images/interior/interior_mclaren.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_porsche.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '4.0L Twin-Turbo V8' },
                     { label: 'POWER', val: '825 HP / 800 Nm' },
@@ -1879,6 +1926,33 @@
                     { num: 'KIT 03', name: 'HARRODS MOTORSPORT EDITION', img: "{{ asset('images/brand/bodykit_mclaren_senna_gtr_harrods.png') }}" }
                 ]
             },
+            'ferrari_sf90': {
+                brand: 'FERRARI',
+                model: 'SF90 XX STRADALE',
+                year: '2025',
+                originalPriceNum: null,
+                finalPriceNum: 24500000000,
+                discountPct: null,
+                condition: 'HYPERCAR SPECIAL',
+                interior: "{{ asset('images/interior/interior_ferarri.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_ferarri.webp') }}",
+                specs: [
+                    { label: 'ENGINE', val: '4.0L Twin-Turbo V8 + 3 E-Motors' },
+                    { label: 'POWER', val: '1,030 HP Total Output' },
+                    { label: 'ACCELERATION', val: '0-100 KM/H in 2.3s' },
+                    { label: 'TOP SPEED', val: '320 KM/H' },
+                    { label: 'DOWNFORCE', val: '530 KG @ 250 KM/H' }
+                ],
+                colors: [
+                    { name: 'ROSSO CORSA', hex: '#d50000', img: "{{ asset('images/brand/ferarri_f90xx_Rosso_Corsa.webp') }}" },
+                    { name: 'AZZURRO DINO', hex: '#0088cc', img: "{{ asset('images/brand/ferarri_f90xx_Azzurro_Dino.webp') }}" },
+                    { name: 'BIANCO ARTICO', hex: '#ffffff', img: "{{ asset('images/brand/ferarri_f90xx_Bianco_Artico.webp') }}" },
+                    { name: 'SPIDER EDITION', hex: '#cc0000', img: "{{ asset('images/brand/ferarri_f90xx_spider.webp') }}" }
+                ],
+                bodykits: [
+                    { num: 'KIT 01', name: 'MANSORY F9XX TEMPESTA EDITION', img: "{{ asset('images/brand/bodykit_ferarri_f90xx_Mansory_F9XX_Tempesta_.webp') }}" }
+                ]
+            },
             'porsche_911': {
                 brand: 'PORSCHE',
                 model: '911 GT3 RS (992)',
@@ -1888,6 +1962,7 @@
                 discountPct: null,
                 condition: 'APEX CERTIFIED',
                 interior: "{{ asset('images/interior/interior_porsche.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_porsche.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '4.0L Naturally Aspirated Flat-6' },
                     { label: 'POWER', val: '525 HP @ 9,000 RPM' },
@@ -1917,6 +1992,7 @@
                 discountPct: null,
                 condition: 'PRE-OWNED',
                 interior: "{{ asset('images/interior/interior_audi.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_audi.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.2L Naturally Aspirated V10' },
                     { label: 'POWER', val: '620 HP @ 8,000 RPM' },
@@ -1945,6 +2021,7 @@
                 discountPct: null,
                 condition: 'HYPERCAR SPECIAL',
                 interior: "{{ asset('images/interior/interior_koeningseg.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_jesko.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.0L Twin-Turbo Flat-Plane V8' },
                     { label: 'POWER', val: '1,600 HP (E85 Biofuel)' },
@@ -1969,6 +2046,7 @@
                 discountPct: null,
                 condition: 'BRAND NEW',
                 interior: "{{ asset('images/interior/interior_bugatti.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_bugatti.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '8.0L Quad-Turbocharged W16' },
                     { label: 'POWER', val: '1,500 HP / 1,600 Nm' },
@@ -1996,6 +2074,7 @@
                 discountPct: null,
                 condition: 'BRAND NEW',
                 interior: "{{ asset('images/interior/interior_corvette.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_corvette.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.5L Flat-Plane LT6 V8' },
                     { label: 'POWER', val: '670 HP @ 8,400 RPM' },
@@ -2024,6 +2103,7 @@
                 discountPct: null,
                 condition: 'APEX CERTIFIED',
                 interior: "{{ asset('images/interior/interior_pagani.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_pagani.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '6.0L Mercedes-AMG Twin-Turbo V12' },
                     { label: 'POWER', val: '800 HP / 1,050 Nm' },
@@ -2047,6 +2127,7 @@
                 discountPct: null,
                 condition: 'HYPERCAR SPECIAL',
                 interior: "{{ asset('images/interior/interior_zenvo.webp') }}",
+                engine: "{{ asset('images/mesin/mesin_zenvo.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.8L Twin-Centrifugal V8' },
                     { label: 'POWER', val: '1,177 HP @ 8,500 RPM' },
@@ -2189,10 +2270,14 @@
                 }
             }
 
-            // Set Interior Image Preview directly below main car card
+            // Set Interior & Engine Image Preview directly below main car card
             const interiorImg = document.getElementById('inspectInteriorImg');
             if (interiorImg && car.interior) {
                 interiorImg.src = car.interior;
+            }
+            const engineImg = document.getElementById('inspectEngineImg');
+            if (engineImg && car.engine) {
+                engineImg.src = car.engine;
             }
 
             // Set Handle Discount & Strikethrough Price in Modal
@@ -2287,8 +2372,6 @@
             currentSelectedBodykitName = null; // Clear Bodykit mode
 
             const img = document.getElementById('inspectCarImg');
-            const colorBadge = document.getElementById('inspectColorBadge');
-            const kitBadge = document.getElementById('inspectBodykitBadge');
 
             if (img) {
                 img.style.opacity = '0.2';
@@ -2300,15 +2383,15 @@
                 }, 150);
             }
 
-            const sideColorBadge = document.getElementById('inspectColorSideBadge');
-            const sideSpecBadge = document.getElementById('inspectSpecSideBadge');
+            const colorOverlay = document.getElementById('inspectColorOverlay');
+            const specOverlay = document.getElementById('inspectSpecOverlay');
 
-            if (sideColorBadge) {
-                sideColorBadge.innerText = selectedColor.name;
+            if (colorOverlay) {
+                colorOverlay.innerText = selectedColor.name;
             }
 
-            if (sideSpecBadge) {
-                sideSpecBadge.innerText = 'FACTORY STOCK SPEC';
+            if (specOverlay) {
+                specOverlay.innerText = 'FACTORY STOCK SPEC';
             }
 
             // Highlight active color dot, DEACTIVATE/CLEAR all bodykit buttons
@@ -2347,15 +2430,15 @@
                 }, 150);
             }
 
-            const sideColorBadge = document.getElementById('inspectColorSideBadge');
-            const sideSpecBadge = document.getElementById('inspectSpecSideBadge');
+            const colorOverlay = document.getElementById('inspectColorOverlay');
+            const specOverlay = document.getElementById('inspectSpecOverlay');
 
-            if (sideSpecBadge) {
-                sideSpecBadge.innerText = `${selectedKit.num}: ${selectedKit.name}`;
+            if (specOverlay) {
+                specOverlay.innerText = `${selectedKit.num}: ${selectedKit.name}`;
             }
 
-            if (sideColorBadge) {
-                sideColorBadge.innerText = 'MODIFIED AERO FINISH';
+            if (colorOverlay) {
+                colorOverlay.innerText = 'MODIFIED AERO FINISH';
             }
 
             // Highlight active bodykit button, DEACTIVATE/CLEAR all color dots
