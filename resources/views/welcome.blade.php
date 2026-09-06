@@ -728,10 +728,6 @@
                                         M4 COMPETITION COUPE
                                     </h4>
                                 </div>
-                                <div class="shrink-0 group/int relative" title="Interior View">
-                                    <img src="{{ asset('images/interior/interior_bmw.webp') }}" alt="BMW Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
-                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
-                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3 space-y-0.5">
@@ -788,10 +784,6 @@
                                         REVUELTO V12 HYBRID
                                     </h4>
                                 </div>
-                                <div class="shrink-0 group/int relative" title="Interior View">
-                                    <img src="{{ asset('images/interior/interior_lamborghini.webp') }}" alt="Lamborghini Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
-                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
-                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3 space-y-0.5">
@@ -847,10 +839,6 @@
                                         SENNA GTR EDITION
                                     </h4>
                                 </div>
-                                <div class="shrink-0 group/int relative" title="Interior View">
-                                    <img src="{{ asset('images/interior/interior_mclaren.webp') }}" alt="McLaren Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
-                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
-                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
@@ -900,10 +888,6 @@
                                         911 GT3 RS (992)
                                     </h4>
                                 </div>
-                                <div class="shrink-0 group/int relative" title="Interior View">
-                                    <img src="{{ asset('images/interior/interior_porsche.webp') }}" alt="Porsche Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
-                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
-                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
@@ -952,10 +936,6 @@
                                     <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
                                         R8 V10 PERFORMANCE
                                     </h4>
-                                </div>
-                                <div class="shrink-0 group/int relative" title="Interior View">
-                                    <img src="{{ asset('images/interior/interior_audi.webp') }}" alt="Audi Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
-                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
                                 </div>
                             </div>
 
