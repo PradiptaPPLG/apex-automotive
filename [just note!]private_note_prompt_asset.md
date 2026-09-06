@@ -58,3 +58,7 @@ ingat, jangan sampe berubah
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+/interior @Create image kayak foto ke 2 tapi versi foto pertama mobilnya, buggati, coba interior buggati ini, harus mirip interiornya sama buggati chiron asli
+
+sekarang versi corvette seperti biasa kalo di belakang tunjukin di belakang, kalo di depan, tunjukin yang di depan, /inspect kap mesin
+harus mirip banget sama [mobil]

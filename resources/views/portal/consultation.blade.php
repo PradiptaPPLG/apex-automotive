@@ -356,10 +356,17 @@
 </head>
 <body>
     <nav class="portal-nav">
+        @if(auth()->user()->isDelivery())
+        <a href="{{ route('delivery.portal') }}" class="nav-back">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Portal Driver</span>
+        </a>
+        @else
         <a href="{{ route('portal.dashboard') }}" class="nav-back">
             <i class="fa-solid fa-arrow-left"></i>
             <span>Portal Saya</span>
         </a>
+        @endif
         <div class="nav-title">
             Konsultasi VIP &nbsp;·&nbsp; <strong>{{ (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()) ? $inquiry->name . ' (' . $inquiry->phone . ')' : ($inquiry->car_model ?? 'Kendaraan VIP') }}</strong>
         </div>
@@ -849,11 +856,13 @@
             {{-- Chat Channel Tabs (Sales RM vs Delivery Escort) --}}
             <div style="background: rgba(12, 12, 20, 0.95); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
                 <div style="display: flex; gap: 8px;">
+                    @if(!auth()->user()->isDelivery())
                     <button id="tabSalesBtn" onclick="switchChatChannel('sales')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.15); color: #eab308; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
                         <i class="fa-solid fa-sack-dollar"></i>
                         <span>CHAT SALES RM</span>
                         <span id="salesDot" style="display: none; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
                     </button>
+                    @endif
                     <button id="tabDeliveryBtn" onclick="switchChatChannel('delivery')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #9ca3af; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
                         <i class="fa-solid fa-box-archive" style="color: #f97316;"></i>
                         <span>CHAT DELIVERY ESCORT</span>

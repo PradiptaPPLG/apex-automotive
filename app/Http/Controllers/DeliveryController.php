@@ -59,9 +59,10 @@ class DeliveryController extends Controller
         if ($request->filled('status')) {
             $delivery->update(['status' => $request->input('status')]);
             if ($request->input('status') === 'delivered') {
-                $delivery->inquiry->update(['status' => 'handover_completed']);
+                $delivery->inquiry->update(['status' => 'delivered_completed']);
             } elseif ($request->input('status') === 'in_transit') {
-                $delivery->inquiry->update(['status' => 'delivery_in_transit']);
+                // Keep the delivery phase active
+                $delivery->inquiry->update(['status' => 'scheduled_delivery']);
             }
         }
 
