@@ -1557,11 +1557,24 @@
                             <span id="inspectYear">2025</span>
                         </div>
 
-                        <!-- SUBTLE ENGINE BAY PREVIEW OVERLAY BOTTOM LEFT -->
-                        <div class="absolute bottom-3 left-4 pointer-events-none border border-white/20 rounded-md overflow-hidden bg-black shadow-lg" style="width: 100px; height: 60px;">
-                            <img id="inspectEngineImg" src="" alt="Engine Spec" class="w-full h-full object-cover opacity-90">
-                            <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-center py-0.5">
-                                <span class="text-[7px] font-mono font-bold text-white tracking-widest">ENGINE BAY</span>
+                        <!-- ENGINE PREVIEW & COLOR/SPEC OVERLAY BOTTOM LEFT -->
+                        <div class="absolute bottom-3 left-4 pointer-events-none flex items-center space-x-2">
+                            <!-- ENGINE BAY PIC -->
+                            <div class="border border-white/20 rounded-md overflow-hidden bg-black shadow-lg relative" style="width: 80px; height: 45px;">
+                                <img id="inspectEngineImg" src="" alt="Engine Spec" class="w-full h-full object-cover opacity-90">
+                                <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-center py-[1px]">
+                                    <span class="text-[6px] font-mono font-bold text-white tracking-widest">ENGINE BAY</span>
+                                </div>
+                            </div>
+                            <!-- COLOR & SPEC INFO -->
+                            <div class="bg-black/60 backdrop-blur-sm px-2.5 py-1.5 border border-white/10 rounded font-mono text-[8px] leading-tight space-y-0.5">
+                                <div class="text-neutral-300 font-semibold tracking-wider">
+                                    COLOR: <span id="inspectColorOverlay" class="text-red-400 font-bold uppercase">--</span>
+                                </div>
+                                <div class="text-amber-400 font-semibold tracking-wider flex items-center">
+                                    <i class="fa-solid fa-xmark mr-1 text-[7px] text-red-500"></i>
+                                    <span id="inspectSpecOverlay">FACTORY STOCK SPEC</span>
+                                </div>
                             </div>
                         </div>
 
