@@ -2253,7 +2253,13 @@
                 }
             }
 
-            // Handle Discount & Strikethrough Price in Modal
+            // Set Interior Image Preview directly below main car card
+            const interiorImg = document.getElementById('inspectInteriorImg');
+            if (interiorImg && car.interior) {
+                interiorImg.src = car.interior;
+            }
+
+            // Set Handle Discount & Strikethrough Price in Modal
             const origPriceRow = document.getElementById('inspectOriginalPriceRow');
             const discountBadge = document.getElementById('inspectDiscountBadge');
 
