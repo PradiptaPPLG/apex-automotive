@@ -995,19 +995,6 @@
                     </button>
                 </div>
             </div>
-            {{-- Delivery Read-only Notice (shown to buyers in delivery tab) --}}
-            @if(!auth()->user()->isDelivery())
-            <div id="deliveryChatNotice" style="display: none; border-top: 1px solid rgba(249,115,22,0.25); padding: 14px 24px; background: rgba(249,115,22,0.05); flex-direction: column; gap: 6px; flex-shrink: 0;">
-                <div style="display: flex; align-items: center; gap: 10px; font-family: 'Space Mono', monospace; font-size: 10px; color: #f97316; text-transform: uppercase; letter-spacing: 0.08em;">
-                    <i class="fa-solid fa-truck-fast"></i>
-                    <span>Sesi Chat Driver Escort — Read Only</span>
-                </div>
-                <p style="font-size: 12px; color: #6b7280; font-family: 'Inter', sans-serif;">Chat ini hanya menampilkan pesan dari Driver Escort Anda. Untuk berkomunikasi dengan Sales RM, gunakan tab <strong style="color: #eab308;">CHAT SALES RM</strong>.</p>
-            </div>
-            @endif
-            {{-- Driver Chat Input (shown to delivery driver in delivery tab) --}}
-            @if(auth()->user()->isDelivery())
-            <div id="driverChatInput" class="chat-input-area" style="display: {{ auth()->user()->isDelivery() ? 'flex' : 'none' }}; border-top-color: rgba(249,115,22,0.3); background: rgba(8,8,16,0.95);">
                 <div id="driverAttachmentPreview" class="attachment-preview">
                     <span id="driverAttachmentFileName"><i class="fa-solid fa-paperclip"></i> File terlampir</span>
                     <button type="button" onclick="removeDriverAttachment()"><i class="fa-solid fa-xmark"></i> Batal</button>
@@ -1073,10 +1060,14 @@
         function renderMessage(msg) {
             const group = document.createElement('div');
             // Apply a 'self' class if this message belongs to the current viewer
-            const isSelf = msg.sender_type === SELF_SENDER;
-            group.className = `message-group ${msg.sender_type}${isSelf ? ' self' : ''}`;
+            const isSelf = (msg.sender_type === SELF_SENDER) || (USER_ROLE === 'buyer' && msg.sender_type === 'buyer_delivery');
+            
+            // Normalize buyer_delivery to just buyer for CSS classes
+            const cssSenderType = msg.sender_type === 'buyer_delivery' ? 'buyer' : msg.sender_type;
+            group.className = `message-group ${cssSenderType}${isSelf ? ' self' : ''}`;
+            
             group.dataset.id = msg.id;
-            group.dataset.channel = (msg.sender_type === 'driver') ? 'delivery' : 'sales';
+            group.dataset.channel = (msg.sender_type === 'driver' || msg.sender_type === 'buyer_delivery') ? 'delivery' : 'sales';
             
             let senderIcon = '<img src="/images/logo/profile_user.webp" style="width:20px; height:20px; border-radius:50%; object-fit:cover;"> <span>PEMBELI</span> &mdash; ';
             let senderLabel = msg.sender_name;
@@ -1164,6 +1155,7 @@
             const formData = new FormData();
             if (text) formData.append('message', text);
             if (selectedFile) formData.append('attachment', selectedFile);
+            formData.append('channel', currentChannel);
 
             try {
                 const res = await fetch(SEND_URL, {
@@ -1480,7 +1472,7 @@
                 if (salesSidebar) salesSidebar.style.display = 'flex';
                 if (deliverySidebar) deliverySidebar.style.display = 'none';
                 if (salesInput) salesInput.style.display = USER_ROLE === 'delivery' ? 'none' : 'flex';
-                if (deliveryNotice) deliveryNotice.style.display = 'none';
+                
                 const driverIn = document.getElementById('driverChatInput');
                 if (driverIn) driverIn.style.display = 'none';
             } else {
@@ -1499,8 +1491,10 @@
 
                 if (salesSidebar) salesSidebar.style.display = 'none';
                 if (deliverySidebar) deliverySidebar.style.display = 'flex';
-                if (salesInput) salesInput.style.display = 'none';
-                if (deliveryNotice) deliveryNotice.style.display = USER_ROLE === 'delivery' ? 'none' : 'flex';
+                
+                // Allow buyers to use the salesInput to chat in the delivery tab
+                if (salesInput) salesInput.style.display = USER_ROLE === 'delivery' ? 'none' : 'flex';
+                
                 const driverIn = document.getElementById('driverChatInput');
                 if (driverIn) driverIn.style.display = USER_ROLE === 'delivery' ? 'flex' : 'none';
             }
