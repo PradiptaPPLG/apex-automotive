@@ -35,3 +35,26 @@ ayo!
 6. graphic pixel jangan sampe berubah   
 
 7. gausah dibuka juga pintunya, cukup ambil decal sama modifan bodykitsnya aja
+
+//////////////////////////////////////////////////////////////////////
+
+aku pengen di desain mobil itu pakai velg yang aku kirim, pastikan velgnya 101% sesuai dan mirip, dan jangan mengubah apapun selain itu walaupun hanya se pixel
+ingat, jangan sampe berubah
+
+1. !important, paling penting : POSISI POV MOBIL, pov derajat nya, arahnya
+2. desain background, lightning, lantai, dinding, picture belakang jangan sampe ada yang berubah
+3. hanya merubah velg aja, jangan sampe merubah apapun lagi
+4. rasio aspek jangan dirubah, begitu juga dengan resolusi pixel graphic nya
+
+///////////////////////////////////////////////////////////////////////////////////////////
+sekarang coba terapkan velg ini, aturannya masih sama, pastikan velgnya 101% sesuai dan mirip, dan jangan mengubah apapun selain itu walaupun hanya se pixel
+
+ingat, jangan sampe berubah
+
+1. !important, paling penting : POSISI POV MOBIL, pov derajat nya, arahnya
+2. desain background, lightning, lantai, dinding, picture belakang jangan sampe ada yang berubah
+3. hanya merubah velg aja, jangan sampe merubah apapun lagi
+4. rasio aspek jangan dirubah, begitu juga dengan resolusi pixel graphic nya
+
+
+///////////////////////////////////////////////////////////////////////////////////////////

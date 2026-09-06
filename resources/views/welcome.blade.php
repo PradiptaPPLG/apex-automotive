@@ -101,10 +101,201 @@
             .car-inspect-img {
                 transition: opacity 0.25s ease, transform 0.4s ease;
             }
+            /* Ferrari-Style Floating Scroll Section Navigator */
+            .apex-scroll-navigator {
+                position: fixed;
+                left: 24px;
+                bottom: 32px;
+                z-index: 999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                pointer-events: auto;
+                user-select: none;
+            }
+            .nav-ring-wrapper {
+                position: relative;
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                background: rgba(10, 10, 12, 0.75);
+                backdrop-filter: blur(10px);
+                border-radius: 50%;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+                transition: transform 0.3s ease, border-color 0.3s ease;
+            }
+            .nav-ring-wrapper:hover {
+                transform: scale(1.1);
+            }
+            .nav-ring-svg {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                transform: rotate(-90deg);
+            }
+            .nav-ring-bg {
+                stroke: rgba(255, 255, 255, 0.15);
+                stroke-width: 2.5;
+            }
+            html:not(.dark) .nav-ring-bg {
+                stroke: rgba(0, 0, 0, 0.15);
+            }
+            .nav-ring-progress {
+                stroke: #e50914;
+                stroke-width: 2.5;
+                stroke-linecap: round;
+                stroke-dasharray: 125.6; /* 2 * PI * 20 */
+                stroke-dashoffset: 125.6;
+                transition: stroke-dashoffset 0.15s ease-out;
+            }
+            .nav-ring-center-dot {
+                width: 6px;
+                height: 6px;
+                background-color: var(--text-heading, #ffffff);
+                border-radius: 50%;
+                transition: background-color 0.3s ease;
+            }
+            html:not(.dark) .nav-ring-center-dot {
+                background-color: #111827;
+            }
+            .nav-dots-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                background: rgba(10, 10, 12, 0.6);
+                backdrop-filter: blur(10px);
+                padding: 10px 8px;
+                border-radius: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            }
+            html:not(.dark) .nav-dots-container {
+                background: rgba(255, 255, 255, 0.85);
+                border-color: rgba(0, 0, 0, 0.1);
+            }
+            .nav-section-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background-color: rgba(156, 163, 175, 0.5);
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+            }
+            .nav-section-dot:hover {
+                background-color: #e50914;
+                transform: scale(1.4);
+            }
+            .nav-section-dot.active {
+                background-color: #e50914;
+                transform: scale(1.5);
+                box-shadow: 0 0 10px rgba(229, 9, 20, 0.8);
+            }
+            .nav-section-dot .tooltip {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%) translateX(10px);
+                opacity: 0;
+                pointer-events: none;
+                background: rgba(10, 10, 12, 0.95);
+                color: #ffffff;
+                font-family: 'Space Mono', monospace;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 4px 10px;
+                border-radius: 4px;
+                border: 1px solid rgba(229, 9, 20, 0.4);
+                white-space: nowrap;
+                transition: all 0.25s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            }
+            html:not(.dark) .nav-section-dot .tooltip {
+                background: #ffffff;
+                color: #111827;
+                border-color: rgba(229, 9, 20, 0.4);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+            .nav-section-dot:hover .tooltip {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+            .nav-back-to-top {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: rgba(10, 10, 12, 0.75);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: #e5e7eb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+            html:not(.dark) .nav-back-to-top {
+                background: rgba(255, 255, 255, 0.9);
+                border-color: rgba(0, 0, 0, 0.15);
+                color: #111827;
+            }
+            .nav-back-to-top:hover {
+                background: #e50914;
+                color: #ffffff;
+                border-color: #e50914;
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(229, 9, 20, 0.5);
+            }
         </style>
     @endif
 </head>
 <body class="bg-neutral-50 dark:bg-[#0a0a0c] text-neutral-900 dark:text-neutral-100 font-sans antialiased selection:bg-red-600 selection:text-white min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- FERRARI-STYLE FLOATING SCROLL SECTION NAVIGATOR -->
+    <div class="apex-scroll-navigator" id="apexScrollNavigator">
+        <!-- Rotating Progress Ring -->
+        <div class="nav-ring-wrapper" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll Progress">
+            <svg class="nav-ring-svg" viewBox="0 0 44 44">
+                <circle class="nav-ring-bg" cx="22" cy="22" r="20" fill="none"></circle>
+                <circle class="nav-ring-progress" id="scrollProgressRing" cx="22" cy="22" r="20" fill="none"></circle>
+            </svg>
+            <div class="nav-ring-center-dot"></div>
+        </div>
+
+        <!-- Section Dots Navigator -->
+        <div class="nav-dots-container">
+            <div class="nav-section-dot active" data-target="#hero-carousel" onclick="scrollToSection('#hero-carousel')">
+                <span class="tooltip">01. SHOWROOM</span>
+            </div>
+            <div class="nav-section-dot" data-target="#certified-suggestions" onclick="scrollToSection('#certified-suggestions')">
+                <span class="tooltip">02. PRE-OWNED</span>
+            </div>
+            <div class="nav-section-dot" data-target="#spotlight" onclick="scrollToSection('#spotlight')">
+                <span class="tooltip">03. EXOTIC MODELS</span>
+            </div>
+            <div class="nav-section-dot" data-target="#services" onclick="scrollToSection('#services')">
+                <span class="tooltip">04. AFTER SALES</span>
+            </div>
+            <div class="nav-section-dot" data-target="#dealer-location" onclick="scrollToSection('#dealer-location')">
+                <span class="tooltip">05. DEALER LOCATOR</span>
+            </div>
+        </div>
+
+        <!-- Back to Top Chevron Button -->
+        <button class="nav-back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Kembali ke Atas">
+            <i class="fa-solid fa-chevron-up"></i>
+        </button>
+    </div>
 
     <!-- ==========================================
          0. CINEMATIC BLACK INTRO SCREEN WITH LOGO FLICKER
@@ -573,11 +764,17 @@
                         </div>
 
                         <div class="p-6 space-y-4 bg-white dark:bg-transparent">
-                            <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • BMW MOTORSPORT</span>
-                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    M4 COMPETITION COUPE
-                                </h4>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • BMW MOTORSPORT</span>
+                                    <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                        M4 COMPETITION COUPE
+                                    </h4>
+                                </div>
+                                <div class="shrink-0 group/int relative" title="Interior View">
+                                    <img src="{{ asset('images/interior/interior_bmw.webp') }}" alt="BMW Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
+                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
+                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3 space-y-0.5">
@@ -627,11 +824,17 @@
                         </div>
 
                         <div class="p-6 space-y-4 bg-white dark:bg-transparent">
-                            <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • LAMBORGHINI</span>
-                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    REVUELTO V12 HYBRID
-                                </h4>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2025 • LAMBORGHINI</span>
+                                    <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                        REVUELTO V12 HYBRID
+                                    </h4>
+                                </div>
+                                <div class="shrink-0 group/int relative" title="Interior View">
+                                    <img src="{{ asset('images/interior/interior_lamborghini.webp') }}" alt="Lamborghini Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
+                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
+                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3 space-y-0.5">
@@ -680,11 +883,17 @@
                         </div>
 
                         <div class="p-6 space-y-4 bg-white dark:bg-transparent">
-                            <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • MCLAREN</span>
-                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    SENNA GTR EDITION
-                                </h4>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • MCLAREN</span>
+                                    <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                        SENNA GTR EDITION
+                                    </h4>
+                                </div>
+                                <div class="shrink-0 group/int relative" title="Interior View">
+                                    <img src="{{ asset('images/interior/interior_mclaren.webp') }}" alt="McLaren Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
+                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
+                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
@@ -727,11 +936,17 @@
                         </div>
 
                         <div class="p-6 space-y-4 bg-white dark:bg-transparent">
-                            <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • PORSCHE</span>
-                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    911 GT3 RS (992)
-                                </h4>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • PORSCHE</span>
+                                    <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                        911 GT3 RS (992)
+                                    </h4>
+                                </div>
+                                <div class="shrink-0 group/int relative" title="Interior View">
+                                    <img src="{{ asset('images/interior/interior_porsche.webp') }}" alt="Porsche Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
+                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
+                                </div>
                             </div>
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
@@ -774,12 +989,19 @@
                         </div>
 
                         <div class="p-6 space-y-4 bg-white dark:bg-transparent">
-                            <div>
-                                <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • AUDI</span>
-                                <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                    R8 V10 PERFORMANCE
-                                </h4>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">2024 • AUDI</span>
+                                    <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
+                                        R8 V10 PERFORMANCE
+                                    </h4>
+                                </div>
+                                <div class="shrink-0 group/int relative" title="Interior View">
+                                    <img src="{{ asset('images/interior/interior_audi.webp') }}" alt="Audi Interior" class="w-14 h-10 object-cover rounded border border-neutral-300 dark:border-white/20 shadow-sm transition-transform group-hover/int:scale-110">
+                                    <span class="absolute bottom-0 left-0 right-0 bg-black/75 text-[7px] font-mono text-white text-center py-0.2 uppercase">INTERIOR</span>
+                                </div>
                             </div>
+
 
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
                                 <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">STARTING FROM</div>
@@ -2455,6 +2677,61 @@
                 if (chevron) chevron.style.transform = 'rotate(0deg)';
             }
         });
+
+        // 10. FERRARI-STYLE SCROLL SECTION NAVIGATOR JS
+        function scrollToSection(selector) {
+            const el = document.querySelector(selector);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
+
+            // 1. Update SVG Progress Ring
+            const ring = document.getElementById('scrollProgressRing');
+            if (ring) {
+                const circumference = 125.6; // 2 * PI * 20
+                const offset = circumference - (scrollPercent * circumference);
+                ring.style.strokeDashoffset = offset;
+            }
+
+            // 2. Active Section Dot Sync
+            const sections = [
+                { id: '#hero-carousel', dot: document.querySelector('.nav-section-dot[data-target="#hero-carousel"]') },
+                { id: '#certified-suggestions', dot: document.querySelector('.nav-section-dot[data-target="#certified-suggestions"]') },
+                { id: '#spotlight', dot: document.querySelector('.nav-section-dot[data-target="#spotlight"]') },
+                { id: '#services', dot: document.querySelector('.nav-section-dot[data-target="#services"]') },
+                { id: '#dealer-location', dot: document.querySelector('.nav-section-dot[data-target="#dealer-location"]') }
+            ];
+
+            let currentActiveIndex = 0;
+            const viewThreshold = window.innerHeight * 0.4;
+
+            sections.forEach((sec, idx) => {
+                const el = document.querySelector(sec.id);
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top <= viewThreshold && rect.bottom >= 0) {
+                        currentActiveIndex = idx;
+                    }
+                }
+            });
+
+            sections.forEach((sec, idx) => {
+                if (sec.dot) {
+                    if (idx === currentActiveIndex) {
+                        sec.dot.classList.add('active');
+                    } else {
+                        sec.dot.classList.remove('active');
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
+
