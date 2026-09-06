@@ -1637,18 +1637,23 @@
                         </div>
                     </div>
 
-                    <!-- FULL PERFORMANCE SPECS GRID WITH ALL INFO LINK -->
+                    <!-- FULL PERFORMANCE SPECS GRID WITH ALL INFO LINK AT BOTTOM -->
                     <div class="space-y-2 pt-1 border-t border-neutral-200 dark:border-white/10">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
-                            <a id="inspectAllInfoBtn" href="#" class="text-[10px] font-mono font-bold text-red-500 hover:text-red-400 uppercase tracking-widest flex items-center gap-1 hover:underline">
-                                <i class="fa-solid fa-file-lines text-xs"></i> ALL INFO & FULL DOCS <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                            </a>
-                        </div>
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
                         <div id="inspectSpecsGrid" class="grid grid-cols-2 gap-2 text-[11px] font-mono">
                             <!-- Dynamic specs injected by JS -->
                         </div>
+                        
+                        <!-- ALL INFO FULL READ BUTTON AT BOTTOM OF SPECS BOX -->
+                        <div class="pt-1">
+                            <a id="inspectAllInfoBtn" href="#" class="w-full py-2.5 bg-neutral-900 hover:bg-neutral-800 border border-red-600/40 text-red-500 hover:text-red-400 font-mono text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm transition-all shadow-md">
+                                <i class="fa-solid fa-file-lines text-xs"></i>
+                                <span>ALL INFO & FULL TECHNICAL DOCUMENTATION</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
+                            </a>
+                        </div>
                     </div>
+
 
                     <!-- ACTION BUTTONS INCLUDING MODIFY GARAGE BUTTON -->
                     <div class="pt-2 w-full space-y-2">
