@@ -164,19 +164,7 @@
             html:not(.dark) .nav-ring-center-dot {
                 background-color: #111827;
             }
-            .nav-section-label-active {
-                font-family: 'Space Mono', monospace;
-                font-size: 11px;
-                font-weight: 700;
-                letter-spacing: 0.18em;
-                text-transform: uppercase;
-                color: var(--text-heading, #ffffff);
-                white-space: nowrap;
-                transition: opacity 0.3s ease;
-            }
-            html:not(.dark) .nav-section-label-active {
-                color: #111827;
-            }
+
             .nav-inactive-dots {
                 display: flex;
                 flex-direction: column;
@@ -236,7 +224,6 @@
                 </svg>
                 <div class="nav-ring-center-dot"></div>
             </div>
-            <span class="nav-section-label-active" id="activeSectionLabel">SHOWROOM</span>
         </div>
 
         <!-- Inactive Section Dots -->
@@ -2738,19 +2725,14 @@
                 }
             });
 
-            // Update Active Inline Label
-            const activeLabelEl = document.getElementById('activeSectionLabel');
-            if (activeLabelEl) {
-                activeLabelEl.innerText = sections[currentActiveIndex].label;
-            }
-
-            // Re-render inactive dots list
+            // Re-render dots list, highlighting active
             const dotsContainer = document.getElementById('navInactiveDots');
             if (dotsContainer) {
                 dotsContainer.innerHTML = sections
                     .map((sec, idx) => {
-                        if (idx === currentActiveIndex) return ''; // Active section is displayed next to progress ring
-                        return `<div class="nav-dot-item" onclick="scrollToSection('${sec.id}')" title="${sec.label}"></div>`;
+                        const isActive = idx === currentActiveIndex;
+                        const opacityStyle = isActive ? 'opacity: 1; transform: scale(1.4); background-color: #dc2626;' : '';
+                        return `<div class="nav-dot-item" style="${opacityStyle}" onclick="scrollToSection('${sec.id}')" title="${sec.label}"></div>`;
                     })
                     .join('');
             }
