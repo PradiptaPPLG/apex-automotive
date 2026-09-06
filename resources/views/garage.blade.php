@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('partials.theme-head')
     <style>
         body {
@@ -19,29 +20,25 @@
             flex-direction: column;
             overflow-x: hidden;
         }
-        .garage-canvas-box {
-            position: relative;
-            width: 100%;
-            height: calc(100vh - 70px);
-            background: radial-gradient(circle at center, rgba(30, 30, 45, 0.4) 0%, rgba(8, 8, 16, 0.98) 100%);
+        .garage-wrapper {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
+            background: radial-gradient(circle at 50% 30%, rgba(30, 30, 45, 0.4) 0%, rgba(8, 8, 16, 0.98) 100%);
         }
         .garage-topbar {
-            padding: 16px 28px;
+            padding: 16px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             z-index: 20;
-            background: rgba(12, 12, 20, 0.6);
-            backdrop-filter: blur(12px);
+            background: rgba(12, 12, 20, 0.85);
+            backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
         }
         .garage-title {
             font-family: 'Cinzel', serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 900;
             color: var(--text-heading);
             letter-spacing: 0.05em;
@@ -54,37 +51,38 @@
             text-transform: uppercase;
             font-weight: 700;
         }
-        .car-viewport {
+        .car-stage-container {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            padding: 20px;
+            padding: 24px;
+            min-height: 480px;
         }
         .car-stage-img {
-            max-width: 90%;
-            max-height: 65vh;
+            max-width: 82%;
+            max-height: 60vh;
             object-fit: contain;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+            filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.9));
             transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .rim-badge-overlay {
             position: absolute;
-            top: 24px;
-            left: 32px;
-            background: rgba(12, 12, 20, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 12px 18px;
+            top: 28px;
+            left: 36px;
+            background: rgba(12, 12, 20, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 14px 20px;
             border: 1px solid var(--border);
-            border-left: 3px solid #ef4444;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-left: 4px solid #ef4444;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
             z-index: 10;
         }
         .garage-bottom-panel {
-            padding: 20px 32px;
-            background: rgba(12, 12, 20, 0.92);
-            backdrop-filter: blur(16px);
+            padding: 24px 36px;
+            background: rgba(12, 12, 20, 0.95);
+            backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
             z-index: 20;
         }
@@ -105,20 +103,20 @@
             background: #ef4444;
             color: #ffffff;
             border-color: #ef4444;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
         }
         .category-tab-btn.disabled {
-            opacity: 0.4;
+            opacity: 0.35;
             cursor: not-allowed;
             background: transparent;
         }
         .rim-thumb-card {
-            width: 130px;
-            height: 105px;
+            width: 140px;
+            height: 115px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 8px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -131,69 +129,66 @@
         .rim-thumb-card:hover {
             border-color: #ef4444;
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 8px 22px rgba(239, 68, 68, 0.25);
         }
         .rim-thumb-card.active {
             border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.08);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
         }
         .rim-thumb-card img {
-            width: 58px;
-            height: 58px;
+            width: 64px;
+            height: 64px;
             object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
         }
     </style>
 </head>
-<body>
+<body class="bg-neutral-950 text-neutral-100 antialiased selection:bg-red-600 selection:text-white">
 
-    <div class="garage-canvas-box">
+    <div class="garage-wrapper">
         <!-- TOPBAR NAV -->
-        <div class="garage-topbar">
-            <div class="flex items-center gap-4">
-                <a href="{{ route('home') }}" class="px-3.5 py-1.5 border border-neutral-300 dark:border-white/20 hover:border-red-500 rounded text-xs font-mono font-bold text-neutral-300 hover:text-white transition-colors flex items-center gap-2">
+        <header class="garage-topbar flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+                <a href="{{ route('home') }}" class="px-4 py-2 border border-red-600 text-red-500 hover:bg-red-600 hover:text-white shrink-0 text-xs font-mono font-bold uppercase tracking-widest transition-all inline-flex items-center gap-2" style="text-decoration: none;">
                     <i class="fa-solid fa-arrow-left"></i> LANDING SHOWROOM
                 </a>
-                <div>
-                    <span class="garage-subtitle"><i class="fa-solid fa-screwdriver-wrench mr-1"></i> APEX GARAGE STUDIO</span>
-                    <h1 class="garage-title">AUDI R8 GT4 CUSTOMIZATION</h1>
+                <div class="space-y-0.5">
+                    <span class="garage-subtitle block"><i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> APEX GARAGE STUDIO</span>
+                    <h1 class="garage-title leading-tight">AUDI R8 GT4 CUSTOMIZATION</h1>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
-                <button onclick="toggleGlobalTheme()" class="apex-theme-btn">
-                    <i class="fa-solid fa-moon"></i> THEME
-                </button>
-                <a href="{{ route('car.info', ['car' => 'audi_r8']) }}" class="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 border border-white/20 text-white text-xs font-mono font-bold uppercase rounded flex items-center gap-2">
+                <a href="{{ route('car.info', ['car' => 'audi_r8']) }}" class="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 border border-white/20 text-white text-xs font-mono font-bold uppercase rounded flex items-center gap-2" style="text-decoration: none;">
                     <i class="fa-solid fa-circle-info text-red-500"></i> ALL INFO & DOCS
                 </a>
             </div>
-        </div>
+        </header>
 
         <!-- MAIN CAR VIEWPORT -->
-        <div class="car-viewport">
+        <main class="car-stage-container">
             <div class="rim-badge-overlay">
                 <div class="text-[9px] font-mono text-neutral-400 uppercase tracking-widest font-bold">SELECTED WHEELS</div>
-                <div id="activeRimTitle" class="font-bold text-base text-white tracking-wide font-mono mt-0.5">3SDM 3.33 FX2</div>
-                <div id="activeRimSpec" class="text-[10px] font-mono text-red-400 mt-0.5">20" FORGED COMPETITION SPEC</div>
+                <div id="activeRimTitle" class="font-bold text-base text-white tracking-wide font-mono mt-0.5">3SDM 3.33 FX2 FORGED</div>
+                <div id="activeRimSpec" class="text-[10px] font-mono text-red-400 mt-0.5">20" SILVER / GUNMETAL COMPETITION</div>
             </div>
 
             <!-- AUDI R8 CAR STAGE -->
             <img id="garageCarStage" src="{{ asset('images/brand/velg_3SDM_3.33_fx2_audi_r8_gt4.webp') }}" alt="Audi R8 GT4 Custom Rims" class="car-stage-img">
-        </div>
+        </main>
 
         <!-- BOTTOM CUSTOMIZATION TOOLBAR -->
-        <div class="garage-bottom-panel space-y-4">
+        <footer class="garage-bottom-panel space-y-4">
             <!-- CATEGORY SELECTOR TABS -->
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center justify-between border-b border-white/10 pb-3 gap-3">
+                <div class="flex flex-wrap items-center gap-3">
                     <button class="category-tab-btn active"><i class="fa-solid fa-dharmachakra mr-1.5"></i> CUSTOM WHEELS / VELG (7)</button>
-                    <button class="category-tab-btn disabled" title="Modifikasi Aero Kit hanya pada Audi R8 GT4"><i class="fa-solid fa-wing mr-1.5"></i> SPOILERS (UNAVAILABLE)</button>
+                    <button class="category-tab-btn disabled" title="Modifikasi Aero Kit hanya pada Audi R8 GT4"><i class="fa-solid fa-feather-pointed mr-1.5"></i> SPOILERS (UNAVAILABLE)</button>
                     <button class="category-tab-btn disabled" title="Modifikasi Exhaust"><i class="fa-solid fa-fire mr-1.5"></i> EXHAUST SYSTEM (UNAVAILABLE)</button>
-                    <button class="category-tab-btn disabled" title="Modifikasi Suspens"><i class="fa-solid fa-sliders mr-1.5"></i> SUSPENSION (UNAVAILABLE)</button>
+                    <button class="category-tab-btn disabled" title="Modifikasi Suspensi"><i class="fa-solid fa-sliders mr-1.5"></i> SUSPENSION (UNAVAILABLE)</button>
                 </div>
-                <span class="text-[11px] font-mono text-neutral-400 font-bold uppercase">MODEL: AUDI R8 GT4 COMPETITION</span>
+                <span class="text-[11px] font-mono text-neutral-400 font-bold uppercase tracking-wider">MODEL: AUDI R8 GT4 COMPETITION</span>
             </div>
 
             <!-- RIMS CAROUSEL / GRID -->
@@ -240,7 +235,7 @@
                     <span class="text-[9px] font-mono font-bold text-neutral-200 text-center uppercase truncate w-full">GLOSS BLACK</span>
                 </div>
             </div>
-        </div>
+        </footer>
     </div>
 
     <script>

@@ -82,12 +82,9 @@
     <div class="doc-container">
         <!-- BACK NAV -->
         <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <a href="{{ route('home') }}" class="px-4 py-2 border border-neutral-300 dark:border-white/20 hover:border-red-500 rounded text-xs font-mono font-bold text-neutral-300 hover:text-white transition-colors inline-flex items-center gap-2 no-underline" style="text-decoration: none;">
+            <a href="{{ route('home') }}" class="px-4 py-2 border border-red-600 text-red-500 hover:bg-red-600 hover:text-white rounded-none text-xs font-mono font-bold uppercase tracking-widest transition-all inline-flex items-center gap-2 no-underline" style="text-decoration: none;">
                 <i class="fa-solid fa-arrow-left"></i> KEMBALI KE SHOWROOM
             </a>
-            <button onclick="toggleGlobalTheme()" class="apex-theme-btn">
-                <i class="fa-solid fa-sun"></i> MODE
-            </button>
         </div>
 
         @php

@@ -15,33 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Tailwind / Vite -->
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                darkMode: 'class',
-                theme: {
-                    extend: {
-                        colors: {
-                            apex: {
-                                red: '#e50914',
-                                dark: '#0a0a0c',
-                                card: '#121216',
-                                border: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        fontFamily: {
-                            sans: ['Outfit', 'Inter', 'sans-serif'],
-                            serif: ['Cinzel', 'serif']
-                        }
-                    }
-                }
-            }
-        </script>
-        @if(request()->is('/'))
-        <style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
             .reveal-on-scroll {
                 opacity: 0;
                 transform: translateY(30px);
@@ -210,7 +185,6 @@
                 transform: translateY(-3px);
             }
         </style>
-    @endif
 </head>
 
 <body class="bg-neutral-50 dark:bg-[#0a0a0c] text-neutral-900 dark:text-neutral-100 font-sans antialiased selection:bg-red-600 selection:text-white min-h-screen flex flex-col transition-colors duration-300">
@@ -1357,27 +1331,27 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
                     <!-- LEFT COLUMN: ADDRESS & DETAILS -->
-                    <div class="space-y-8 glass-card p-8 border border-white/10 reveal-on-scroll">
+                    <div class="space-y-8 glass-card p-8 border border-neutral-200 dark:border-white/10 reveal-on-scroll">
                         <div class="space-y-4">
-                            <h3 class="text-xl font-bold font-serif text-white tracking-wide flex items-center">
-                                <i class="fa-solid fa-location-dot text-red-500 mr-3"></i> APEX AUTOMOTIVE CIJEUNGJING
+                            <h3 class="text-xl font-bold font-serif text-neutral-900 dark:text-white tracking-wide flex items-center">
+                                <i class="fa-solid fa-location-dot text-red-600 dark:text-red-500 mr-3"></i> APEX AUTOMOTIVE CIJEUNGJING
                             </h3>
-                            <p class="text-xs text-neutral-300 font-mono leading-relaxed">
+                            <p class="text-xs text-neutral-700 dark:text-neutral-300 font-mono leading-relaxed">
                                 Jl. Raya Banjar - Dsn. Kidul RT09 RW 04 Desa Cijeungjing Kecamatan Cijeungjing Kabupaten Ciamis<br>
                                 Jawa Barat, Indonesia
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/10 text-xs font-mono">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-neutral-200 dark:border-white/10 text-xs font-mono">
                             <div>
-                                <span class="text-neutral-400 block mb-1 font-semibold">OPERATING HOURS:</span>
-                                <span class="text-white font-bold block">Mon - Sat: 08:30 - 20:00 WIB</span>
-                                <span class="text-neutral-400 block">Sunday: By Private Appointment</span>
+                                <span class="text-neutral-600 dark:text-neutral-400 block mb-1 font-semibold">OPERATING HOURS:</span>
+                                <span class="text-neutral-900 dark:text-white font-bold block">Mon - Sat: 08:30 - 20:00 WIB</span>
+                                <span class="text-neutral-600 dark:text-neutral-400 block">Sunday: By Private Appointment</span>
                             </div>
                             <div>
-                                <span class="text-neutral-400 block mb-1 font-semibold">HOTLINE & WHATSAPP:</span>
-                                <span class="text-red-500 font-bold block">+62 21 555 9988</span>
-                                <span class="text-white font-bold block">+62 811 8888 999</span>
+                                <span class="text-neutral-600 dark:text-neutral-400 block mb-1 font-semibold">HOTLINE & WHATSAPP:</span>
+                                <span class="text-red-600 dark:text-red-500 font-bold block">+62 21 555 9988</span>
+                                <span class="text-neutral-900 dark:text-white font-bold block">+62 811 8888 999</span>
                             </div>
                         </div>
 
@@ -1528,17 +1502,7 @@
                             <span id="inspectYear">2025</span>
                         </div>
 
-                        <!-- ACTIVE COLOR & BODYKIT BADGE BOTTOM LEFT -->
-                        <div class="absolute bottom-4 left-4 bg-black/85 backdrop-blur-md text-white text-xs font-mono px-3 py-2 border border-white/20 uppercase tracking-widest space-y-1">
-                            <div class="flex items-center space-x-2">
-                                <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                                <span>COLOR: <strong id="inspectColorBadge" class="text-red-500 font-extrabold">--</strong></span>
-                            </div>
-                            <div id="inspectBodykitBadgeRow" class="text-[10px] text-amber-400 font-bold border-t border-white/10 pt-1 flex items-center">
-                                <i class="fa-solid fa-screwdriver-wrench mr-1.5 text-xs text-red-500"></i>
-                                <span id="inspectBodykitBadge">STANDARD FACTORY SPEC</span>
-                            </div>
-                        </div>
+
                     </div>
 
                     <!-- INTERIOR PREVIEW DIRECTLY BELOW THE MAIN CAR CARD WITH COLOR SPEC BADGE -->
@@ -1622,9 +1586,9 @@
                     <!-- ACTION BUTTONS INCLUDING MODIFY GARAGE BUTTON -->
                     <div class="pt-2 w-full space-y-2">
                         <!-- CUSTOMIZE / MODIFY GARAGE BUTTON -->
-                        <button id="inspectModifyGarageBtn" onclick="openGarageStudio()" class="w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 border border-amber-400/40">
-                            <i class="fa-solid fa-wrench text-amber-300"></i>
-                            <span>MODIFY / CUSTOMIZE WHEELS (GARAGE STUDIO)</span>
+                        <button id="inspectModifyGarageBtn" onclick="openGarageStudio()" class="w-full py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 border border-neutral-700 dark:border-white/20">
+                            <i class="fa-solid fa-wrench text-neutral-400"></i>
+                            <span>MODIFY (GARAGE STUDIO)</span>
                             <i class="fa-solid fa-arrow-right ml-1"></i>
                         </button>
 
@@ -2207,12 +2171,12 @@
             const garageBtn = document.getElementById('inspectModifyGarageBtn');
             if (garageBtn) {
                 if (carKey === 'audi_r8') {
-                    garageBtn.innerHTML = '<i class="fa-solid fa-wrench text-amber-300"></i> <span>MODIFY / CUSTOMIZE WHEELS (GARAGE STUDIO)</span> <i class="fa-solid fa-arrow-right ml-1"></i>';
-                    garageBtn.className = "w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 border border-amber-400/40 cursor-pointer";
+                    garageBtn.innerHTML = '<i class="fa-solid fa-wrench text-neutral-400"></i> <span>MODIFY (GARAGE STUDIO)</span> <i class="fa-solid fa-arrow-right ml-1"></i>';
+                    garageBtn.className = "w-full py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 border border-neutral-700 dark:border-white/20 cursor-pointer";
                     garageBtn.disabled = false;
                 } else {
-                    garageBtn.innerHTML = '<i class="fa-solid fa-lock text-neutral-400"></i> <span>MODIFY WHEELS (UNAVAILABLE FOR THIS MODEL)</span>';
-                    garageBtn.className = "w-full py-3 bg-neutral-900 text-neutral-500 font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-2 border border-white/5 cursor-not-allowed opacity-60";
+                    garageBtn.innerHTML = '<i class="fa-solid fa-lock text-neutral-500"></i> <span>MODIFY WHEELS (UNAVAILABLE FOR THIS MODEL)</span>';
+                    garageBtn.className = "w-full py-3 bg-neutral-950 text-neutral-500 font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-2 border border-white/5 cursor-not-allowed opacity-60";
                     garageBtn.disabled = true;
                 }
             }
@@ -2331,18 +2295,8 @@
             const sideColorBadge = document.getElementById('inspectColorSideBadge');
             const sideSpecBadge = document.getElementById('inspectSpecSideBadge');
 
-            if (colorBadge) {
-                colorBadge.innerText = selectedColor.name;
-                colorBadge.classList.remove('opacity-40');
-            }
-
             if (sideColorBadge) {
                 sideColorBadge.innerText = selectedColor.name;
-            }
-
-            if (kitBadge) {
-                kitBadge.innerText = 'FACTORY STOCK SPEC';
-                kitBadge.classList.add('opacity-40');
             }
 
             if (sideSpecBadge) {
@@ -2375,9 +2329,6 @@
             currentSelectedColorName = null; // Clear Color mode
 
             const img = document.getElementById('inspectCarImg');
-            const colorBadge = document.getElementById('inspectColorBadge');
-            const kitBadge = document.getElementById('inspectBodykitBadge');
-
             if (img) {
                 img.style.opacity = '0.2';
                 img.style.transform = 'scale(0.97)';
@@ -2391,18 +2342,8 @@
             const sideColorBadge = document.getElementById('inspectColorSideBadge');
             const sideSpecBadge = document.getElementById('inspectSpecSideBadge');
 
-            if (kitBadge) {
-                kitBadge.innerText = `${selectedKit.num}: ${selectedKit.name}`;
-                kitBadge.classList.remove('opacity-40');
-            }
-
             if (sideSpecBadge) {
                 sideSpecBadge.innerText = `${selectedKit.num}: ${selectedKit.name}`;
-            }
-
-            if (colorBadge) {
-                colorBadge.innerText = 'MODIFIED AERO FINISH';
-                colorBadge.classList.add('opacity-40');
             }
 
             if (sideColorBadge) {

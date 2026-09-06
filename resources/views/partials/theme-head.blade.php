@@ -49,24 +49,25 @@
     .apex-theme-btn {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 5px 12px;
-        border-radius: 20px;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 4px;
         border: 1px solid var(--border);
         background: var(--bg-input);
-        color: var(--text-muted);
+        color: var(--text-heading);
         font-family: 'Space Mono', monospace;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         cursor: pointer;
         text-transform: uppercase;
-        transition: all 0.2s;
+        transition: all 0.2s ease;
         white-space: nowrap;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
     .apex-theme-btn:hover {
         border-color: #ef4444;
-        color: #ef4444;
+        background: var(--bg-hover);
     }
 </style>
 <script>
