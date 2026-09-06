@@ -198,37 +198,49 @@
             gap: 6px;
         }
         .message-bubble .msg-text { white-space: pre-wrap; }
-        /* Buyer bubble: red tint */
+        /* Buyer bubble: red tint (default) */
         .message-group.buyer .message-bubble {
             background: rgba(220, 38, 38, 0.15);
             border-color: rgba(220, 38, 38, 0.3);
             color: #fecaca;
         }
-        /* RM bubble: white/grey tint */
+        /* RM bubble: light blue tint */
         .message-group.rm .message-bubble {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.1);
-            color: #e5e7eb;
+            background: rgba(56, 189, 248, 0.15);
+            border-color: rgba(56, 189, 248, 0.35);
+            color: #e0f2fe;
         }
-        /* Driver bubble: cyan tint */
+        /* Driver bubble: purple tint */
         .message-group.driver .message-bubble {
-            background: rgba(34, 211, 238, 0.12);
-            border-color: rgba(34, 211, 238, 0.35);
-            color: #cffafe;
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.35);
+            color: #f3e8ff;
         }
         @php $viewerRole = auth()->user()->role; @endphp
         @if($viewerRole === 'rm' || $viewerRole === 'manager')
-        /* RM/Manager POV: rm=right (self), buyer=left (other) */
+        /* RM/Manager POV: self=rm (light blue), buyer=left */
         .message-group.rm { align-self: flex-end !important; align-items: flex-end !important; }
-        .message-group.rm .message-bubble { background: rgba(220, 38, 38, 0.15); border-color: rgba(220, 38, 38, 0.3); color: #fecaca; }
+        .message-group.rm .message-bubble { background: rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.45); color: #e0f2fe; }
         .message-group.buyer { align-self: flex-start !important; align-items: flex-start !important; }
-        .message-group.buyer .message-bubble { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
+        .message-group.buyer .message-bubble { background: rgba(220, 38, 38, 0.12); border-color: rgba(220, 38, 38, 0.25); color: #fecaca; }
+        .chat-input:focus { border-color: rgba(56, 189, 248, 0.5) !important; }
+        .chat-send-btn { background: #0284c7 !important; }
+        .chat-send-btn:hover { background: #0369a1 !important; }
+        ::-webkit-scrollbar-thumb { background: #0284c7 !important; }
+        ::-webkit-scrollbar-thumb:hover { background: #0369a1 !important; }
+        * { scrollbar-color: #0284c7 #080810 !important; }
         @elseif($viewerRole === 'delivery')
-        /* Delivery Driver POV: driver=right (self), others=left */
+        /* Delivery Driver POV: self=driver (purple), buyer=left */
         .message-group.driver { align-self: flex-end !important; align-items: flex-end !important; }
-        .message-group.driver .message-bubble { background: rgba(249, 115, 22, 0.2); border-color: rgba(249, 115, 22, 0.45); color: #fed7aa; }
+        .message-group.driver .message-bubble { background: rgba(168, 85, 247, 0.25); border-color: rgba(168, 85, 247, 0.5); color: #f3e8ff; }
         .message-group.buyer { align-self: flex-start !important; align-items: flex-start !important; }
-        .message-group.buyer .message-bubble { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
+        .message-group.buyer .message-bubble { background: rgba(220, 38, 38, 0.12); border-color: rgba(220, 38, 38, 0.25); color: #fecaca; }
+        .chat-input:focus { border-color: rgba(168, 85, 247, 0.5) !important; }
+        .chat-send-btn { background: #9333ea !important; }
+        .chat-send-btn:hover { background: #7e22ce !important; }
+        ::-webkit-scrollbar-thumb { background: #9333ea !important; }
+        ::-webkit-scrollbar-thumb:hover { background: #7e22ce !important; }
+        * { scrollbar-color: #9333ea #080810 !important; }
         @endif
         .message-time {
             font-size: 10px;
