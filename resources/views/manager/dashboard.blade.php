@@ -10,18 +10,16 @@
         <div class="card-panel" style="border-left: 4px solid #ef4444;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">
-                        TOTAL UNIT MOBIL SHOWROOM
-                    </div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; font-family: 'Playfair Display', serif;">
-                        {{ $totalCars }} <span style="font-size: 12px; color: #9ca3af; font-family: 'Inter', sans-serif; font-weight: 400;">Unit</span>
+                    <div class="mgr-stat-label">TOTAL UNIT MOBIL SHOWROOM</div>
+                    <div class="mgr-metric-num">
+                        {{ $totalCars }} <span style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 400;">Unit</span>
                     </div>
                 </div>
                 <div style="background: rgba(239,68,68,0.12); color: #ef4444; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;">
                     <i class="fa-solid fa-car"></i>
                 </div>
             </div>
-            <div style="margin-top: 10px; font-size: 11px; color: #9ca3af; display: flex; gap: 10px; font-family: 'Space Mono', monospace;">
+            <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); display: flex; gap: 10px; font-family: 'Space Mono', monospace;">
                 <span style="color: #4ade80;"><i class="fa-solid fa-circle text-[8px]"></i> {{ $carStats['available'] }} Ready</span>
                 <span style="color: #f87171;"><i class="fa-solid fa-circle text-[8px]"></i> {{ $carStats['sold'] }} Sold Out</span>
             </div>
@@ -30,18 +28,16 @@
         <div class="card-panel" style="border-left: 4px solid #eab308;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">
-                        ANGGOTA SALES RM
-                    </div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; font-family: 'Playfair Display', serif;">
-                        {{ $totalRm }} <span style="font-size: 12px; color: #9ca3af; font-family: 'Inter', sans-serif; font-weight: 400;">Personel</span>
+                    <div class="mgr-stat-label">ANGGOTA SALES RM</div>
+                    <div class="mgr-metric-num">
+                        {{ $totalRm }} <span style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 400;">Personel</span>
                     </div>
                 </div>
                 <div style="background: rgba(234,179,8,0.12); color: #eab308; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;">
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
             </div>
-            <div style="margin-top: 10px; font-size: 11px; color: #9ca3af; font-family: 'Space Mono', monospace;">
+            <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace;">
                 <span>Tim Relationship Manager</span>
             </div>
         </div>
@@ -49,18 +45,16 @@
         <div class="card-panel" style="border-left: 4px solid #22d3ee;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">
-                        DELIVERY DRIVERS
-                    </div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; font-family: 'Playfair Display', serif;">
-                        {{ $totalDelivery }} <span style="font-size: 12px; color: #9ca3af; font-family: 'Inter', sans-serif; font-weight: 400;">Personel</span>
+                    <div class="mgr-stat-label">DELIVERY DRIVERS</div>
+                    <div class="mgr-metric-num">
+                        {{ $totalDelivery }} <span style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 400;">Personel</span>
                     </div>
                 </div>
                 <div style="background: rgba(34,211,238,0.12); color: #22d3ee; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;">
                     <i class="fa-solid fa-truck-fast"></i>
                 </div>
             </div>
-            <div style="margin-top: 10px; font-size: 11px; color: #9ca3af; font-family: 'Space Mono', monospace;">
+            <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace;">
                 <span>Armada Escort Specialist</span>
             </div>
         </div>
@@ -68,18 +62,16 @@
         <div class="card-panel" style="border-left: 4px solid #10b981;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">
-                        TOTAL PERMINTAAN INQUIRY
-                    </div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; font-family: 'Playfair Display', serif;">
-                        {{ $totalInquiries }} <span style="font-size: 12px; color: #9ca3af; font-family: 'Inter', sans-serif; font-weight: 400;">Inquiries</span>
+                    <div class="mgr-stat-label">TOTAL PERMINTAAN INQUIRY</div>
+                    <div class="mgr-metric-num">
+                        {{ $totalInquiries }} <span style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 400;">Inquiries</span>
                     </div>
                 </div>
                 <div style="background: rgba(16,185,129,0.12); color: #10b981; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;">
                     <i class="fa-solid fa-headset"></i>
                 </div>
             </div>
-            <div style="margin-top: 10px; font-size: 11px; color: #9ca3af; font-family: 'Space Mono', monospace;">
+            <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace;">
                 <span>Total Permintaan VIP Viewing</span>
             </div>
         </div>
@@ -91,8 +83,8 @@
         <div class="card-panel" style="display: flex; flex-direction: column; gap: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #fff;">Diagram Pipeline Sales &amp; Konsultasi</h3>
-                    <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Distribusi inquiry buyer berdasarkan tahap transaksi</p>
+                    <h3 class="mgr-card-heading">Diagram Pipeline Sales &amp; Konsultasi</h3>
+                    <p class="mgr-card-sub">Distribusi inquiry buyer berdasarkan tahap transaksi</p>
                 </div>
                 <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 8px; background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.3); color: #ef4444; border-radius: 4px;">
                     LIVE ANALYTICS
@@ -106,8 +98,8 @@
         <!-- Donut Chart Panel -->
         <div class="card-panel" style="display: flex; flex-direction: column; gap: 16px;">
             <div>
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #fff;">Status Showroom Mobil</h3>
-                <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Perbandingan unit Ready vs Sold Out</p>
+                <h3 class="mgr-card-heading">Status Showroom Mobil</h3>
+                <p class="mgr-card-sub">Perbandingan unit Ready vs Sold Out</p>
             </div>
             <div style="height: 200px; position: relative; display: flex; items-center; justify-content: center;">
                 <canvas id="carStatusDoughnut"></canvas>
@@ -119,15 +111,15 @@
     <div class="card-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
             <div>
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #fff;">Inquiry Transaksi Terbaru</h3>
-                <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Permintaan konsultasi terkini dari buyer</p>
+                <h3 class="mgr-card-heading">Inquiry Transaksi Terbaru</h3>
+                <p class="mgr-card-sub">Permintaan konsultasi terkini dari buyer</p>
             </div>
         </div>
 
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
                 <thead>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #9ca3af; font-family: 'Space Mono', monospace; font-size: 11px;">
+                    <tr class="mgr-table-header-row">
                         <th style="padding: 10px;">ID &amp; PEMBELI</th>
                         <th style="padding: 10px;">UNIT MOBIL</th>
                         <th style="padding: 10px;">SALES RM</th>
@@ -136,13 +128,13 @@
                 </thead>
                 <tbody>
                     @forelse($recentInquiries as $inquiry)
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #d1d5db;">
+                        <tr class="mgr-table-body-row">
                             <td style="padding: 12px 10px;">
-                                <div style="font-weight: 600; color: #fff;">{{ $inquiry->name }}</div>
+                                <div class="mgr-cell-heading">{{ $inquiry->name }}</div>
                                 <div style="font-size: 11px; font-family: 'Space Mono', monospace; color: #ef4444;">#APX-{{ str_pad($inquiry->id, 5, '0', STR_PAD_LEFT) }}</div>
                             </td>
-                            <td style="padding: 12px 10px;">{{ $inquiry->car_model }}</td>
-                            <td style="padding: 12px 10px;">{{ $inquiry->assigned_rm_name ?? 'Belum Diassigned' }}</td>
+                            <td style="padding: 12px 10px; color: var(--text-base);">{{ $inquiry->car_model }}</td>
+                            <td style="padding: 12px 10px; color: var(--text-base);">{{ $inquiry->assigned_rm_name ?? 'Belum Diassigned' }}</td>
                             <td style="padding: 12px 10px;">
                                 <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 8px; border-radius: 2px; text-transform: uppercase; font-weight: 700;" class="{{ $inquiry->statusColor() }}">
                                     {{ $inquiry->statusLabel() }}
@@ -151,7 +143,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" style="padding: 24px; text-align: center; color: #6b7280;">Belum ada inquiry transaksi.</td>
+                            <td colspan="4" style="padding: 24px; text-align: center; color: var(--text-dim);">Belum ada inquiry transaksi.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -162,6 +154,12 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const isLight = document.documentElement.classList.contains('light');
+        const gridColor  = isLight ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.05)';
+        const tickColor  = isLight ? '#6b7280'           : '#9ca3af';
+        const legendColor= isLight ? '#374151'           : '#d1d5db';
+        const doughnutBorder = isLight ? '#f3f4f6'       : '#080810';
+
         // Bar Chart - Pipeline Sales
         const ctxBar = document.getElementById('pipelineBarChart').getContext('2d');
         new Chart(ctxBar, {
@@ -200,17 +198,15 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { color: '#9ca3af', precision: 0 },
-                        grid: { color: 'rgba(255,255,255,0.05)' }
+                        ticks: { color: tickColor, precision: 0 },
+                        grid: { color: gridColor }
                     },
                     x: {
-                        ticks: { color: '#9ca3af', font: { size: 10 } },
+                        ticks: { color: tickColor, font: { size: 10 } },
                         grid: { display: false }
                     }
                 }
@@ -231,7 +227,7 @@
                     ],
                     backgroundColor: ['#4ade80', '#fbbf24', '#f87171'],
                     borderWidth: 2,
-                    borderColor: '#080810'
+                    borderColor: doughnutBorder
                 }]
             },
             options: {
@@ -240,7 +236,7 @@
                 plugins: {
                     legend: {
                         position: 'bottom',
-                        labels: { color: '#d1d5db', font: { size: 11 } }
+                        labels: { color: legendColor, font: { size: 11 } }
                     }
                 }
             }
