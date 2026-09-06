@@ -105,11 +105,12 @@
             .apex-scroll-navigator {
                 position: fixed;
                 left: 28px;
-                bottom: 36px;
+                top: 50%;
+                transform: translateY(-50%);
                 z-index: 999;
                 display: flex;
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
                 gap: 16px;
                 pointer-events: auto;
                 user-select: none;
@@ -1545,7 +1546,7 @@
                             <span><i class="fa-solid fa-couch text-red-500 mr-1"></i> INTERIOR CABIN SPECIFICATION</span>
                             <span class="text-neutral-500 font-normal">OEM FACTORY CABIN</span>
                         </div>
-                        <div class="h-28 sm:h-32 rounded overflow-hidden relative">
+                        <div class="h-16 sm:h-20 rounded overflow-hidden relative">
                             <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
                             <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur-md text-[9px] font-mono text-neutral-300 px-2 py-0.5 border border-white/10 uppercase font-bold">
                                 FIXED OEM CABIN PREVIEW
@@ -1609,15 +1610,6 @@
                         <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
                         <div id="inspectSpecsGrid" class="grid grid-cols-2 gap-2 text-[11px] font-mono">
                             <!-- Dynamic specs injected by JS -->
-                        </div>
-                        
-                        <!-- ALL INFO FULL READ BUTTON AT BOTTOM OF SPECS BOX -->
-                        <div class="pt-1">
-                            <a id="inspectAllInfoBtn" href="#" class="w-full py-2.5 bg-neutral-900 hover:bg-neutral-800 border border-red-600/40 text-red-500 hover:text-red-400 font-mono text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm transition-all shadow-md">
-                                <i class="fa-solid fa-file-lines text-xs"></i>
-                                <span>ALL INFO & FULL TECHNICAL DOCUMENTATION</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
-                            </a>
                         </div>
                     </div>
 
@@ -2258,11 +2250,17 @@
             // Populate Specs Grid
             const specsGrid = document.getElementById('inspectSpecsGrid');
             specsGrid.innerHTML = car.specs.map(s => `
-                <div class="bg-neutral-100 dark:bg-neutral-900/60 p-2 border border-neutral-200 dark:border-white/5">
-                    <span class="text-neutral-500 text-[9px] block uppercase">${s.label}</span>
-                    <span class="font-bold text-neutral-900 dark:text-neutral-200">${s.val}</span>
+                <div class="bg-neutral-100 dark:bg-neutral-900/50 p-2 border border-neutral-200 dark:border-white/10 rounded-sm">
+                    <span class="text-[9px] text-neutral-500 uppercase tracking-widest block mb-1">${s.label}</span>
+                    <span class="font-semibold text-neutral-900 dark:text-neutral-300 text-xs">${s.val}</span>
                 </div>
             `).join('');
+            
+            specsGrid.innerHTML += `
+                <a href="/car-info/${carKey}" class="bg-neutral-100 dark:bg-neutral-800/40 p-2 border border-neutral-200 dark:border-white/10 rounded-sm flex items-center justify-center text-neutral-500 hover:text-neutral-300 transition-colors opacity-70 hover:opacity-100 no-underline">
+                    <span class="text-[10px] uppercase font-bold tracking-widest">Read All ...</span>
+                </a>
+            `;
 
             // Populate Color Dots
             document.getElementById('inspectColorCount').innerText = `${car.colors.length} VARIANTS`;
