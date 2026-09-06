@@ -1542,10 +1542,10 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 
-                <!-- LEFT COLUMN: LARGE CAR PREVIEW CANVAS WITH ACTIVE COLOR BADGE -->
-                <div class="lg:col-span-7 space-y-4">
-                    <div class="relative h-72 sm:h-96 rounded-lg overflow-hidden bg-neutral-950 border border-neutral-300 dark:border-white/10 group shadow-2xl">
-                        <!-- MAIN INSPECT CAR IMAGE -->
+                <!-- LEFT COLUMN: CAR EXTERIOR PREVIEW CANVAS & INTERIOR PREVIEW BELOW IT -->
+                <div class="lg:col-span-7 space-y-3">
+                    <!-- MAIN INSPECT CAR IMAGE CANVAS -->
+                    <div class="relative h-64 sm:h-80 rounded-lg overflow-hidden bg-neutral-950 border border-neutral-300 dark:border-white/10 group shadow-2xl">
                         <img id="inspectCarImg" src="" alt="Car Inspection Preview" class="car-inspect-img w-full h-full object-cover">
                         
                         <!-- BADGE TOP LEFT -->
@@ -1571,7 +1571,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- INTERIOR PREVIEW DIRECTLY BELOW THE MAIN CAR CARD -->
+                    <div class="rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-2 space-y-1">
+                        <div class="flex items-center justify-between text-[10px] font-mono text-neutral-400 font-bold px-1 uppercase tracking-widest">
+                            <span><i class="fa-solid fa-couch text-red-500 mr-1"></i> INTERIOR CABIN SPECIFICATION</span>
+                            <span class="text-neutral-500 font-normal">OEM FACTORY CABIN</span>
+                        </div>
+                        <div class="h-28 sm:h-32 rounded overflow-hidden relative">
+                            <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
+                            <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur-md text-[9px] font-mono text-neutral-300 px-2 py-0.5 border border-white/10 uppercase font-bold">
+                                FIXED OEM CABIN PREVIEW
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
 
                 <!-- RIGHT COLUMN: CAR SPECS & INTERACTIVE COLOR/BODYKIT TOGGLES -->
                 <div class="lg:col-span-5 space-y-5 text-neutral-900 dark:text-white">
@@ -1852,6 +1867,7 @@
                 finalPriceNum: 7650000000,
                 discountPct: '10%',
                 condition: 'BRAND NEW',
+                interior: "{{ asset('images/interior/interior_bmw.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '3.0L Twin-Turbo Inline-6' },
                     { label: 'POWER', val: '510 HP @ 6,250 RPM' },
@@ -1877,6 +1893,7 @@
                 finalPriceNum: 20460000000,
                 discountPct: '7%',
                 condition: 'BRAND NEW',
+                interior: "{{ asset('images/interior/interior_lamborghini.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '6.5L V12 NA + 3 E-Motors' },
                     { label: 'POWER', val: '1,015 HP Total Output' },
@@ -1902,6 +1919,7 @@
                 finalPriceNum: 28000000000,
                 discountPct: null,
                 condition: 'APEX CERTIFIED',
+                interior: "{{ asset('images/interior/interior_mclaren.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '4.0L Twin-Turbo V8' },
                     { label: 'POWER', val: '825 HP / 800 Nm' },
@@ -1928,6 +1946,7 @@
                 finalPriceNum: 11500000000,
                 discountPct: null,
                 condition: 'APEX CERTIFIED',
+                interior: "{{ asset('images/interior/interior_porsche.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '4.0L Naturally Aspirated Flat-6' },
                     { label: 'POWER', val: '525 HP @ 9,000 RPM' },
@@ -1956,6 +1975,7 @@
                 finalPriceNum: 7800000000,
                 discountPct: null,
                 condition: 'PRE-OWNED',
+                interior: "{{ asset('images/interior/interior_audi.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.2L Naturally Aspirated V10' },
                     { label: 'POWER', val: '620 HP @ 8,000 RPM' },
@@ -1983,6 +2003,7 @@
                 finalPriceNum: 45000000000,
                 discountPct: null,
                 condition: 'HYPERCAR SPECIAL',
+                interior: "{{ asset('images/interior/interior_koeningseg.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.0L Twin-Turbo Flat-Plane V8' },
                     { label: 'POWER', val: '1,600 HP (E85 Biofuel)' },
@@ -2006,6 +2027,7 @@
                 finalPriceNum: 52000000000,
                 discountPct: null,
                 condition: 'BRAND NEW',
+                interior: "{{ asset('images/interior/interior_bugatti.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '8.0L Quad-Turbocharged W16' },
                     { label: 'POWER', val: '1,500 HP / 1,600 Nm' },
@@ -2032,6 +2054,7 @@
                 finalPriceNum: 6800000000,
                 discountPct: null,
                 condition: 'BRAND NEW',
+                interior: "{{ asset('images/interior/interior_corvette.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.5L Flat-Plane LT6 V8' },
                     { label: 'POWER', val: '670 HP @ 8,400 RPM' },
@@ -2059,6 +2082,7 @@
                 finalPriceNum: 48000000000,
                 discountPct: null,
                 condition: 'APEX CERTIFIED',
+                interior: "{{ asset('images/interior/interior_pagani.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '6.0L Mercedes-AMG Twin-Turbo V12' },
                     { label: 'POWER', val: '800 HP / 1,050 Nm' },
@@ -2081,6 +2105,7 @@
                 finalPriceNum: 38000000000,
                 discountPct: null,
                 condition: 'HYPERCAR SPECIAL',
+                interior: "{{ asset('images/interior/interior_zenvo.webp') }}",
                 specs: [
                     { label: 'ENGINE', val: '5.8L Twin-Centrifugal V8' },
                     { label: 'POWER', val: '1,177 HP @ 8,500 RPM' },
