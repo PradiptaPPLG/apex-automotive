@@ -40,6 +40,7 @@
                 }
             }
         </script>
+        @if(request()->is('/'))
         <style>
             .reveal-on-scroll {
                 opacity: 0;
@@ -105,9 +106,9 @@
             .apex-scroll-navigator {
                 position: fixed;
                 left: 28px;
-                top: 50%;
-                transform: translateY(-50%);
-                z-index: 999;
+                top: auto;
+                bottom: 20px;
+                z-index: 999999;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -1546,7 +1547,7 @@
                             <span><i class="fa-solid fa-couch text-red-500 mr-1"></i> INTERIOR CABIN SPECIFICATION</span>
                             <span class="text-neutral-500 font-normal">OEM FACTORY CABIN</span>
                         </div>
-                        <div class="h-16 sm:h-20 rounded overflow-hidden relative">
+                        <div class="h-24 sm:h-28 rounded overflow-hidden relative">
                             <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
                             <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur-md text-[9px] font-mono text-neutral-300 px-2 py-0.5 border border-white/10 uppercase font-bold">
                                 FIXED OEM CABIN PREVIEW
@@ -2247,18 +2248,17 @@
                 animatePriceDrop(modalPriceEl);
             }, 150);
 
-            // Populate Specs Grid
             const specsGrid = document.getElementById('inspectSpecsGrid');
             specsGrid.innerHTML = car.specs.map(s => `
-                <div class="bg-neutral-100 dark:bg-neutral-900/50 p-2 border border-neutral-200 dark:border-white/10 rounded-sm">
-                    <span class="text-[9px] text-neutral-500 uppercase tracking-widest block mb-1">${s.label}</span>
-                    <span class="font-semibold text-neutral-900 dark:text-neutral-300 text-xs">${s.val}</span>
+                <div class="bg-neutral-100 dark:bg-neutral-900/60 p-2 border border-neutral-200 dark:border-white/5">
+                    <span class="text-neutral-500 text-[9px] block uppercase">${s.label}</span>
+                    <span class="font-bold text-neutral-900 dark:text-neutral-200">${s.val}</span>
                 </div>
             `).join('');
             
             specsGrid.innerHTML += `
-                <a href="/car-info/${carKey}" class="bg-neutral-100 dark:bg-neutral-800/40 p-2 border border-neutral-200 dark:border-white/10 rounded-sm flex items-center justify-center text-neutral-500 hover:text-neutral-300 transition-colors opacity-70 hover:opacity-100 no-underline">
-                    <span class="text-[10px] uppercase font-bold tracking-widest">Read All ...</span>
+                <a href="/car-info/${carKey}" class="bg-neutral-200/50 dark:bg-neutral-900/30 p-2 border border-neutral-300/50 dark:border-white/5 flex items-center justify-center text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors opacity-75 hover:opacity-100" style="text-decoration: none;">
+                    <span class="text-[10px] font-bold tracking-widest text-neutral-500">Read all</span>
                 </a>
             `;
 
