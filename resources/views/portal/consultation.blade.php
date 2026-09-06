@@ -856,18 +856,18 @@
             {{-- Chat Channel Tabs (Sales RM vs Delivery Escort) --}}
             <div style="background: rgba(12, 12, 20, 0.95); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 20px; height: 50px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
                 <div style="display: flex; gap: 8px;">
-                    @if(!auth()->user()->isDelivery())
+                    @if(auth()->user()->isBuyer())
                     <button id="tabSalesBtn" onclick="switchChatChannel('sales')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.15); color: #eab308; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
                         <i class="fa-solid fa-sack-dollar"></i>
                         <span>CHAT SALES RM</span>
                         <span id="salesDot" style="display: none; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
                     </button>
-                    @endif
                     <button id="tabDeliveryBtn" onclick="switchChatChannel('delivery')" style="padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #9ca3af; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
                         <i class="fa-solid fa-box-archive" style="color: #f97316;"></i>
                         <span>CHAT DELIVERY ESCORT</span>
                         <span id="deliveryDot" style="display: none; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 6px #ef4444;"></span>
                     </button>
+                    @endif
                 </div>
                 <div id="channelBadgeInfo" style="font-family: 'Space Mono', monospace; font-size: 10px; color: #eab308; display: flex; align-items: center; gap: 6px; background: rgba(234, 179, 8, 0.1); padding: 4px 10px; border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 2px;">
                     <i class="fa-solid fa-headset"></i> Sesi Konsultasi Sales RM
@@ -918,7 +918,7 @@
                 @else
                     @foreach($messages as $msg)
                         @php $isLoc = $msg->message && str_starts_with($msg->message, '__LOCATION__:'); @endphp
-                        <div class="message-group {{ $msg->sender_type }}" data-id="{{ $msg->id }}" data-channel="{{ in_array($msg->sender_type, ['driver']) ? 'delivery' : 'sales' }}">
+                        <div class="message-group {{ $msg->sender_type === 'buyer_delivery' ? 'buyer' : $msg->sender_type }}" data-id="{{ $msg->id }}" data-channel="{{ in_array($msg->sender_type, ['driver', 'buyer_delivery']) ? 'delivery' : 'sales' }}">
                             <span class="message-sender" style="display:flex; align-items:center; gap:6px;">
                                 @if($msg->sender_type === 'rm')
                                     <img src="{{ asset('images/logo/profile_sales.webp') }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
@@ -1135,6 +1135,7 @@
                         }
                     });
                     scrollBottom();
+                    filterMessagesByChannel();
                     setTimeout(initLocationMaps, 120);
                 }
 
@@ -1182,6 +1183,7 @@
                     input.value = '';
                     input.style.height = 'auto';
                     removeAttachment();
+                    filterMessagesByChannel();
                     scrollBottom();
                 }
             } catch (e) {
@@ -1391,7 +1393,11 @@
             } catch(e) {}
         }
 
-        let currentChannel = (USER_ROLE === 'delivery') ? 'delivery' : 'sales';
+        // Forced channel per role (RM forced to sales, Driver forced to delivery, Buyer remembers choice)
+        const savedChannel = localStorage.getItem('apex_active_chat_channel_' + INQUIRY_ID);
+        let currentChannel = (USER_ROLE === 'delivery') ? 'delivery' 
+                          : (USER_ROLE === 'rm' || USER_ROLE === 'manager') ? 'sales'
+                          : (savedChannel || 'sales');
 
         // Driver-specific file attachment
         let selectedDriverFile = null;
@@ -1451,6 +1457,7 @@
 
         function switchChatChannel(channel) {
             currentChannel = channel;
+            localStorage.setItem('apex_active_chat_channel_' + INQUIRY_ID, channel);
             const tabSales = document.getElementById('tabSalesBtn');
             const tabDelivery = document.getElementById('tabDeliveryBtn');
             const badgeInfo = document.getElementById('channelBadgeInfo');
@@ -1599,12 +1606,8 @@
 
         setTimeout(initLocationMaps, 400);
 
-        // Auto-switch to delivery tab for drivers, hide sales input
-        if (USER_ROLE === 'delivery') {
-            switchChatChannel('delivery');
-            const salesInput = document.getElementById('salesChatInput');
-            if (salesInput) salesInput.style.display = 'none';
-        }
+        // Auto-switch tab based on currentChannel (saved or role default)
+        switchChatChannel(currentChannel);
 
         // Poll messages every 3 seconds & driver GPS every 3.5 seconds
         setInterval(pollMessages, 3000);

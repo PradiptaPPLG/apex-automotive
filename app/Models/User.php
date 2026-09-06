@@ -109,6 +109,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Determine whether the user is a Buyer.
+     */
+    public function isBuyer(): bool
+    {
+        return $this->role === 'buyer';
+    }
+
+    /**
      * Get all inquiries belonging to this user.
      */
     public function inquiries(): HasMany
