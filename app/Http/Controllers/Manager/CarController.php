@@ -34,38 +34,44 @@ class CarController extends Controller
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',
             'description' => 'nullable|string',
             'status' => 'required|in:available,reserved,sold',
-            'spec_keys' => 'nullable|array',
-            'spec_keys.*' => 'nullable|string|max:100',
-            'spec_values' => 'nullable|array',
-            'spec_values.*' => 'nullable|string|max:255',
+            'color_names' => 'nullable|array',
+            'color_names.*' => 'nullable|string|max:100',
+            'color_hexes' => 'nullable|array',
+            'color_hexes.*' => 'nullable|string|max:30',
         ]);
 
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
             $uploadDir = public_path('uploads/cars');
-            if (!file_exists($uploadDir)) {
+            if (! file_exists($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
             $file->move($uploadDir, $filename);
-            $validated['image_url'] = asset('uploads/cars/' . $filename);
+            $validated['image_url'] = asset('uploads/cars/'.$filename);
         }
 
-        // Process dynamic specs array (e.g. Warna, Bodykit, etc.)
-        $specs = [];
-        if (!empty($request->spec_keys) && !empty($request->spec_values)) {
-            foreach ($request->spec_keys as $index => $key) {
-                $val = $request->spec_values[$index] ?? null;
-                if (!empty(trim($key)) && !empty(trim($val))) {
-                    $specs[] = [
-                        'label' => trim($key),
-                        'value' => trim($val),
+        // Process Color Palette Variants
+        $colors = [];
+        if (! empty($request->color_names) && ! empty($request->color_hexes)) {
+            foreach ($request->color_names as $index => $name) {
+                $hex = $request->color_hexes[$index] ?? '#111827';
+                if (! empty(trim($name))) {
+                    $colors[] = [
+                        'name' => trim($name),
+                        'hex' => trim($hex),
                     ];
                 }
             }
         }
+
+        $specs = [
+            'colors' => $colors,
+            'Warna' => ! empty($colors) ? implode(', ', array_column($colors, 'name')) : 'Standard Color',
+        ];
         $validated['specs'] = $specs;
-        unset($validated['image_file'], $validated['spec_keys'], $validated['spec_values']);
+
+        unset($validated['image_file'], $validated['color_names'], $validated['color_hexes']);
 
         Car::create($validated);
 
@@ -91,38 +97,46 @@ class CarController extends Controller
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',
             'description' => 'nullable|string',
             'status' => 'required|in:available,reserved,sold',
-            'spec_keys' => 'nullable|array',
-            'spec_keys.*' => 'nullable|string|max:100',
-            'spec_values' => 'nullable|array',
-            'spec_values.*' => 'nullable|string|max:255',
+            'color_names' => 'nullable|array',
+            'color_names.*' => 'nullable|string|max:100',
+            'color_hexes' => 'nullable|array',
+            'color_hexes.*' => 'nullable|string|max:30',
         ]);
 
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
             $uploadDir = public_path('uploads/cars');
-            if (!file_exists($uploadDir)) {
+            if (! file_exists($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
             $file->move($uploadDir, $filename);
-            $validated['image_url'] = asset('uploads/cars/' . $filename);
+            $validated['image_url'] = asset('uploads/cars/'.$filename);
         }
 
-        // Process dynamic specs array
-        $specs = [];
-        if (!empty($request->spec_keys) && !empty($request->spec_values)) {
-            foreach ($request->spec_keys as $index => $key) {
-                $val = $request->spec_values[$index] ?? null;
-                if (!empty(trim($key)) && !empty(trim($val))) {
-                    $specs[] = [
-                        'label' => trim($key),
-                        'value' => trim($val),
+        // Process Color Palette Variants
+        $colors = [];
+        if (! empty($request->color_names) && ! empty($request->color_hexes)) {
+            foreach ($request->color_names as $index => $name) {
+                $hex = $request->color_hexes[$index] ?? '#111827';
+                if (! empty(trim($name))) {
+                    $colors[] = [
+                        'name' => trim($name),
+                        'hex' => trim($hex),
                     ];
                 }
             }
         }
+
+        $specs = $car->specs ?? [];
+        if (! is_array($specs)) {
+            $specs = [];
+        }
+        $specs['colors'] = $colors;
+        $specs['Warna'] = ! empty($colors) ? implode(', ', array_column($colors, 'name')) : 'Standard Color';
         $validated['specs'] = $specs;
-        unset($validated['image_file'], $validated['spec_keys'], $validated['spec_values']);
+
+        unset($validated['image_file'], $validated['color_names'], $validated['color_hexes']);
 
         $car->update($validated);
 

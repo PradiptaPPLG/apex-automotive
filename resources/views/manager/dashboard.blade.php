@@ -107,6 +107,88 @@
         </div>
     </div>
 
+    <!-- Unit Mobil Terbaru di Showroom Panel -->
+    <div class="card-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <div>
+                <h3 class="mgr-card-heading">Unit Mobil Terbaru di Showroom</h3>
+                <p class="mgr-card-sub">Daftar unit hypercar &amp; supercar yang baru ditambahkan</p>
+            </div>
+            <a href="{{ route('manager.cars.index') }}" style="font-family: 'Space Mono', monospace; font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 700;">
+                LIHAT SEMUA MOBIL <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                <thead>
+                    <tr class="mgr-table-header-row">
+                        <th style="padding: 10px;">FOTO</th>
+                        <th style="padding: 10px;">MOBIL / BRAND</th>
+                        <th style="padding: 10px;">SPESIFIKASI / FIELD</th>
+                        <th style="padding: 10px;">HARGA EST.</th>
+                        <th style="padding: 10px;">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($recentCars as $car)
+                        <tr class="mgr-table-body-row">
+                            <td style="padding: 10px;">
+                                <div style="width: 50px; height: 35px; border-radius: 4px; overflow: hidden; background: var(--bg-hover); border: 1px solid var(--border);">
+                                    @if($car->image_url)
+                                        <img src="{{ $car->image_url }}" alt="{{ $car->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    @else
+                                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color: var(--text-dim); font-size:14px;">
+                                            <i class="fa-solid fa-car"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div class="mgr-cell-heading">{{ $car->name }}</div>
+                                <div class="mgr-cell-muted">{{ $car->brand ?? '—' }} ({{ $car->year ?? date('Y') }})</div>
+                            </td>
+                            <td style="padding: 10px;">
+                                @if(!empty($car->specs['colors']) && is_array($car->specs['colors']))
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <div style="display: flex; gap: 4px; align-items: center;">
+                                            @foreach($car->specs['colors'] as $col)
+                                                <div title="{{ $col['name'] ?? '' }}" style="width: 14px; height: 14px; border-radius: 50%; background-color: {{ $col['hex'] ?? '#000' }}; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+                                            @endforeach
+                                        </div>
+                                        <span style="font-size: 10px; color: var(--text-muted); font-family: 'Space Mono', monospace;">
+                                            {{ count($car->specs['colors']) }} Varian Warna
+                                        </span>
+                                    </div>
+                                @elseif(!empty($car->specs['Warna']))
+                                    <span style="font-size: 11px; color: var(--text-base); font-family: 'Space Mono', monospace;">🎨 {{ $car->specs['Warna'] }}</span>
+                                @else
+                                    <span style="font-size: 11px; color: var(--text-dim);">Standard Spec</span>
+                                @endif
+                            </td>
+                            <td style="padding: 10px; font-family: 'Space Mono', monospace; color: #4ade80; font-weight: 700;">
+                                Rp {{ number_format($car->price, 0, ',', '.') }}
+                            </td>
+                            <td style="padding: 10px;">
+                                @if($car->status === 'available')
+                                    <span style="color: #4ade80; background: rgba(74, 222, 128, 0.15); border: 1px solid rgba(74, 222, 128, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">AVAILABLE</span>
+                                @elseif($car->status === 'reserved')
+                                    <span style="color: #fbbf24; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">RESERVED</span>
+                                @else
+                                    <span style="color: #f87171; background: rgba(248, 113, 113, 0.15); border: 1px solid rgba(248, 113, 113, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">SOLD OUT</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" style="padding: 24px; text-align: center; color: var(--text-dim);">Belum ada unit mobil.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Recent Inquiries Table -->
     <div class="card-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">

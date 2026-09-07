@@ -45,7 +45,23 @@
                             </td>
                             <td style="padding: 12px 10px;">
                                 <div class="mgr-cell-heading">{{ $car->name }}</div>
-                                <div class="mgr-cell-muted">{{ $car->brand ?? '—' }} ({{ $car->year ?? '—' }})</div>
+                                <div class="mgr-cell-muted" style="margin-bottom: 4px;">{{ $car->brand ?? '—' }} ({{ $car->year ?? '—' }})</div>
+                                @if(!empty($car->specs['colors']) && is_array($car->specs['colors']))
+                                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px;">
+                                        <div style="display: flex; gap: 4px; align-items: center;">
+                                            @foreach($car->specs['colors'] as $col)
+                                                <div title="{{ $col['name'] ?? '' }}" style="width: 14px; height: 14px; border-radius: 50%; background-color: {{ $col['hex'] ?? '#000' }}; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+                                            @endforeach
+                                        </div>
+                                        <span style="font-size: 10px; color: var(--text-muted); font-family: 'Space Mono', monospace;">
+                                            {{ count($car->specs['colors']) }} Varian Warna
+                                        </span>
+                                    </div>
+                                @elseif(!empty($car->specs['Warna']))
+                                    <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px; font-family: 'Space Mono', monospace;">
+                                        🎨 {{ $car->specs['Warna'] }}
+                                    </div>
+                                @endif
                             </td>
                             <td style="padding: 12px 10px;">
                                 <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted);">

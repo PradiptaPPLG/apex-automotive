@@ -73,7 +73,7 @@
             <!-- Upload Gambar Section -->
             <div style="background: var(--bg-hover); border: 1px dashed var(--border); padding: 18px; border-radius: 6px;">
                 <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 700;">
-                    <i class="fa-solid fa-image" style="color: #ef4444; margin-right: 4px;"></i> Upload Foto Kendaraan
+                    <i class="fa-solid fa-image" style="color: #ef4444; margin-right: 4px;"></i> Upload Foto Utama Kendaraan
                 </label>
                 
                 <div style="display: grid; grid-template-columns: 1fr 140px; gap: 16px; align-items: start;">
@@ -109,49 +109,63 @@
                 </div>
             </div>
 
-            <!-- Custom Dynamic Specs Section -->
+            <!-- Varian Warna & Palet Warna Section -->
             <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px; border-radius: 6px; margin-top: 4px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div>
+                <div style="margin-bottom: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
                         <label style="font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-heading); text-transform: uppercase; font-weight: 700;">
-                            <i class="fa-solid fa-sliders" style="color: #ef4444; margin-right: 6px;"></i> Spesifikasi & Custom Field
+                            <i class="fa-solid fa-palette" style="color: #ef4444; margin-right: 6px;"></i> Palet Warna & Varian Warna Kendaraan
                         </label>
-                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Default menyertakan field <strong>Warna</strong>. Anda juga dapat menambahkan field <strong>Bodykit</strong>, Velg, Interior, dll.</p>
+                        <button type="button" onclick="addColorRow('', '#dc2626')" style="padding: 6px 14px; background: #dc2626; color: #fff; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: 700;">
+                            <i class="fa-solid fa-plus"></i> Tambah Warna
+                        </button>
                     </div>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Kelola pilihan varian warna mobil. Palet warna ini akan otomatis muncul sebagai tombol lingkaran warna interaktif pada popup inspector buyer.</p>
 
-                    <div style="display: flex; gap: 8px;">
-                        <button type="button" onclick="addSpecField('Bodykit', 'Mansory Carbon Package')" style="padding: 6px 12px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">
-                            <i class="fa-solid fa-plus"></i> Field Bodykit
-                        </button>
-                        <button type="button" onclick="addSpecField('', '')" style="padding: 6px 12px; background: var(--bg-hover); border: 1px solid var(--border); color: var(--text-base); border-radius: 4px; font-size: 11px; cursor: pointer;">
-                            <i class="fa-solid fa-plus"></i> Tambah Field Custom
-                        </button>
+                    <!-- Quick Preset Buttons -->
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
+                        <span style="font-size: 10px; font-family: 'Space Mono', monospace; color: var(--text-muted); align-self: center; margin-right: 4px;">PRESET WARNA:</span>
+                        <button type="button" onclick="addColorRow('Rosso Corsa Red', '#dc2626')" style="padding: 3px 8px; background: rgba(220,38,38,0.2); border: 1px solid #dc2626; color: #f87171; border-radius: 3px; font-size: 10px; cursor: pointer;">🔴 Rosso Corsa</button>
+                        <button type="button" onclick="addColorRow('Obsidian Black', '#111827')" style="padding: 3px 8px; background: rgba(17,24,39,0.5); border: 1px solid #4b5563; color: #d1d5db; border-radius: 3px; font-size: 10px; cursor: pointer;">⚫ Obsidian Black</button>
+                        <button type="button" onclick="addColorRow('Pearl White', '#f9fafb')" style="padding: 3px 8px; background: rgba(249,250,251,0.1); border: 1px solid #e5e7eb; color: #ffffff; border-radius: 3px; font-size: 10px; cursor: pointer;">⚪ Pearl White</button>
+                        <button type="button" onclick="addColorRow('Giallo Auge Yellow', '#f59e0b')" style="padding: 3px 8px; background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; border-radius: 3px; font-size: 10px; cursor: pointer;">🟡 Giallo Yellow</button>
+                        <button type="button" onclick="addColorRow('Blu Nethuns', '#2563eb')" style="padding: 3px 8px; background: rgba(37,99,235,0.2); border: 1px solid #2563eb; color: #60a5fa; border-radius: 3px; font-size: 10px; cursor: pointer;">🔵 Blu Nethuns</button>
+                        <button type="button" onclick="addColorRow('Verde Mantis Green', '#16a34a')" style="padding: 3px 8px; background: rgba(22,163,74,0.2); border: 1px solid #16a34a; color: #4ade80; border-radius: 3px; font-size: 10px; cursor: pointer;">🟢 Verde Green</button>
                     </div>
                 </div>
 
-                <div id="specsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+                <div id="colorsContainer" style="display: flex; flex-direction: column; gap: 10px;">
                     @php
-                        $existingSpecs = old('spec_keys') 
-                            ? array_map(function($k, $v) { return ['label' => $k, 'value' => $v]; }, old('spec_keys'), old('spec_values'))
-                            : ($car->specs ?? []);
+                        $existingColors = old('color_names')
+                            ? array_map(function($n, $h) { return ['name' => $n, 'hex' => $h]; }, old('color_names'), old('color_hexes'))
+                            : ($car->specs['colors'] ?? []);
 
-                        // Ensure default Warna field exists if empty
-                        if (empty($existingSpecs)) {
-                            $existingSpecs = [
-                                ['label' => 'Warna', 'value' => '']
+                        // Default sample color if none exist
+                        if (empty($existingColors)) {
+                            $existingColors = [
+                                ['name' => 'Rosso Corsa Red', 'hex' => '#dc2626'],
+                                ['name' => 'Obsidian Black', 'hex' => '#111827'],
                             ];
                         }
                     @endphp
 
-                    @foreach($existingSpecs as $spec)
-                        <div class="spec-row" style="display: grid; grid-template-columns: 180px 1fr 40px; gap: 10px; align-items: center;">
-                            <input type="text" name="spec_keys[]" value="{{ is_array($spec) ? ($spec['label'] ?? '') : '' }}" placeholder="Nama Field (misal: Warna)" class="mgr-input" style="font-family: 'Space Mono', monospace; font-size: 12px;">
-                            <input type="text" name="spec_values[]" value="{{ is_array($spec) ? ($spec['value'] ?? '') : '' }}" placeholder="Nilai / Detail (misal: Obsidian Black Metallic)" class="mgr-input">
-                            <button type="button" onclick="removeSpecRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    @foreach($existingColors as $c)
+                        <div class="color-row" style="display: grid; grid-template-columns: 50px 1fr 40px; gap: 10px; align-items: center;">
+                            <input type="color" name="color_hexes[]" value="{{ $c['hex'] ?? '#dc2626' }}" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
+                            <input type="text" name="color_names[]" value="{{ $c['name'] ?? '' }}" oninput="updatePalettePreview()" placeholder="Nama Warna (misal: Rosso Corsa Red)" class="mgr-input">
+                            <button type="button" onclick="removeColorRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
                     @endforeach
+                </div>
+
+                <!-- Live Color Palette Dots Preview -->
+                <div style="margin-top: 14px; padding-top: 12px; border-top: 1px border-dashed var(--border); display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 10px; font-family: 'Space Mono', monospace; color: var(--text-muted);">PREVIEW PALET DI POPUP:</span>
+                    <div id="livePalettePreview" style="display: flex; gap: 8px; align-items: center;">
+                        <!-- Injected live by JS -->
+                    </div>
                 </div>
             </div>
 
@@ -195,30 +209,51 @@
         }
     }
 
-    function addSpecField(keyName = '', valueName = '') {
-        const container = document.getElementById('specsContainer');
+    function addColorRow(colorName = '', hexCode = '#dc2626') {
+        const container = document.getElementById('colorsContainer');
         const row = document.createElement('div');
-        row.className = 'spec-row';
-        row.style.cssText = 'display: grid; grid-template-columns: 180px 1fr 40px; gap: 10px; align-items: center; margin-top: 2px;';
+        row.className = 'color-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 50px 1fr 40px; gap: 10px; align-items: center;';
         row.innerHTML = `
-            <input type="text" name="spec_keys[]" value="${keyName}" placeholder="Nama Field (misal: Bodykit)" class="mgr-input" style="font-family: 'Space Mono', monospace; font-size: 12px;">
-            <input type="text" name="spec_values[]" value="${valueName}" placeholder="Nilai / Detail (misal: Mansory Aero Package)" class="mgr-input">
-            <button type="button" onclick="removeSpecRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <input type="color" name="color_hexes[]" value="${hexCode}" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
+            <input type="text" name="color_names[]" value="${colorName}" oninput="updatePalettePreview()" placeholder="Nama Warna (misal: Rosso Corsa)" class="mgr-input">
+            <button type="button" onclick="removeColorRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         `;
         container.appendChild(row);
+        updatePalettePreview();
     }
 
-    function removeSpecRow(button) {
-        const rows = document.querySelectorAll('.spec-row');
+    function removeColorRow(button) {
+        const rows = document.querySelectorAll('.color-row');
         if (rows.length > 1) {
-            button.closest('.spec-row').remove();
+            button.closest('.color-row').remove();
         } else {
-            // Clears inputs instead of removing if it's the last row
-            const inputs = button.closest('.spec-row').querySelectorAll('input');
-            inputs.forEach(i => i.value = '');
+            const inputs = button.closest('.color-row').querySelectorAll('input');
+            inputs[0].value = '#dc2626';
+            inputs[1].value = '';
         }
+        updatePalettePreview();
     }
+
+    function updatePalettePreview() {
+        const previewContainer = document.getElementById('livePalettePreview');
+        if (!previewContainer) return;
+
+        const hexInputs = document.querySelectorAll('input[name="color_hexes[]"]');
+        const nameInputs = document.querySelectorAll('input[name="color_names[]"]');
+        
+        let html = '';
+        hexInputs.forEach((hexIn, idx) => {
+            const nameVal = nameInputs[idx] ? nameInputs[idx].value : 'Warna';
+            const hexVal = hexIn.value;
+            html += `<div title="${nameVal}" style="width: 22px; height: 22px; border-radius: 50%; background-color: ${hexVal}; border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`;
+        });
+        
+        previewContainer.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', updatePalettePreview);
 </script>
 @endsection
