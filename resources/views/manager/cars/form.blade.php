@@ -4,9 +4,9 @@
 @section('page_header', $car->exists ? 'Edit Mobil: '.$car->name : 'Tambah Mobil Showroom Baru')
 
 @section('content')
-<div style="max-width: 800px;">
+<div style="max-width: 850px;">
     <div class="card-panel">
-        <form method="POST" action="{{ $car->exists ? route('manager.cars.update', $car) : route('manager.cars.store') }}" style="display: flex; flex-direction: column; gap: 20px;">
+        <form method="POST" action="{{ $car->exists ? route('manager.cars.update', $car) : route('manager.cars.store') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 20px;">
             @csrf
             @if($car->exists)
                 @method('PUT')
@@ -70,9 +70,89 @@
                 </div>
             </div>
 
-            <div>
-                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">URL Gambar Kendaraan</label>
-                <input type="url" name="image_url" value="{{ old('image_url', $car->image_url) }}" placeholder="https://..." class="mgr-input">
+            <!-- Upload Gambar Section -->
+            <div style="background: var(--bg-hover); border: 1px dashed var(--border); padding: 18px; border-radius: 6px;">
+                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 700;">
+                    <i class="fa-solid fa-image" style="color: #ef4444; margin-right: 4px;"></i> Upload Foto Kendaraan
+                </label>
+                
+                <div style="display: grid; grid-template-columns: 1fr 140px; gap: 16px; align-items: start;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Option 1: Upload File Berkas Gambar</span>
+                            <input type="file" name="image_file" accept="image/*" class="mgr-input" onchange="previewImageFile(this)" style="padding: 8px;">
+                            @error('image_file')
+                                <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Option 2: Atau Tautkan URL Gambar Direct (Opsional)</span>
+                            <input type="url" name="image_url" id="imageUrlInput" value="{{ old('image_url', $car->image_url) }}" placeholder="https://..." class="mgr-input" oninput="previewImageUrl(this.value)">
+                        </div>
+                    </div>
+
+                    <div>
+                        <span style="font-size: 10px; font-family: 'Space Mono', monospace; color: var(--text-muted); display: block; margin-bottom: 4px;">PREVIEW FOTO:</span>
+                        <div id="imagePreviewContainer" style="width: 140px; height: 95px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative;">
+                            @if($car->image_url)
+                                <img id="imagePreviewImg" src="{{ $car->image_url }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <div id="imagePreviewPlaceholder" style="text-align: center; color: var(--text-dim); font-size: 11px;">
+                                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 20px; display: block; margin-bottom: 4px; color: #ef4444;"></i>
+                                    Format JPG/PNG/WEBP
+                                </div>
+                                <img id="imagePreviewImg" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Dynamic Specs Section -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px; border-radius: 6px; margin-top: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                        <label style="font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-heading); text-transform: uppercase; font-weight: 700;">
+                            <i class="fa-solid fa-sliders" style="color: #ef4444; margin-right: 6px;"></i> Spesifikasi & Custom Field
+                        </label>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Default menyertakan field <strong>Warna</strong>. Anda juga dapat menambahkan field <strong>Bodykit</strong>, Velg, Interior, dll.</p>
+                    </div>
+
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" onclick="addSpecField('Bodykit', 'Mansory Carbon Package')" style="padding: 6px 12px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">
+                            <i class="fa-solid fa-plus"></i> Field Bodykit
+                        </button>
+                        <button type="button" onclick="addSpecField('', '')" style="padding: 6px 12px; background: var(--bg-hover); border: 1px solid var(--border); color: var(--text-base); border-radius: 4px; font-size: 11px; cursor: pointer;">
+                            <i class="fa-solid fa-plus"></i> Tambah Field Custom
+                        </button>
+                    </div>
+                </div>
+
+                <div id="specsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+                    @php
+                        $existingSpecs = old('spec_keys') 
+                            ? array_map(function($k, $v) { return ['label' => $k, 'value' => $v]; }, old('spec_keys'), old('spec_values'))
+                            : ($car->specs ?? []);
+
+                        // Ensure default Warna field exists if empty
+                        if (empty($existingSpecs)) {
+                            $existingSpecs = [
+                                ['label' => 'Warna', 'value' => '']
+                            ];
+                        }
+                    @endphp
+
+                    @foreach($existingSpecs as $spec)
+                        <div class="spec-row" style="display: grid; grid-template-columns: 180px 1fr 40px; gap: 10px; align-items: center;">
+                            <input type="text" name="spec_keys[]" value="{{ is_array($spec) ? ($spec['label'] ?? '') : '' }}" placeholder="Nama Field (misal: Warna)" class="mgr-input" style="font-family: 'Space Mono', monospace; font-size: 12px;">
+                            <input type="text" name="spec_values[]" value="{{ is_array($spec) ? ($spec['value'] ?? '') : '' }}" placeholder="Nilai / Detail (misal: Obsidian Black Metallic)" class="mgr-input">
+                            <button type="button" onclick="removeSpecRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
             </div>
 
             <div>
@@ -89,4 +169,56 @@
         </form>
     </div>
 </div>
+
+<script>
+    function previewImageFile(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('imagePreviewImg');
+                const placeholder = document.getElementById('imagePreviewPlaceholder');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                if (placeholder) placeholder.style.display = 'none';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewImageUrl(url) {
+        if (url && url.trim() !== '') {
+            const img = document.getElementById('imagePreviewImg');
+            const placeholder = document.getElementById('imagePreviewPlaceholder');
+            img.src = url;
+            img.style.display = 'block';
+            if (placeholder) placeholder.style.display = 'none';
+        }
+    }
+
+    function addSpecField(keyName = '', valueName = '') {
+        const container = document.getElementById('specsContainer');
+        const row = document.createElement('div');
+        row.className = 'spec-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 180px 1fr 40px; gap: 10px; align-items: center; margin-top: 2px;';
+        row.innerHTML = `
+            <input type="text" name="spec_keys[]" value="${keyName}" placeholder="Nama Field (misal: Bodykit)" class="mgr-input" style="font-family: 'Space Mono', monospace; font-size: 12px;">
+            <input type="text" name="spec_values[]" value="${valueName}" placeholder="Nilai / Detail (misal: Mansory Aero Package)" class="mgr-input">
+            <button type="button" onclick="removeSpecRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        `;
+        container.appendChild(row);
+    }
+
+    function removeSpecRow(button) {
+        const rows = document.querySelectorAll('.spec-row');
+        if (rows.length > 1) {
+            button.closest('.spec-row').remove();
+        } else {
+            // Clears inputs instead of removing if it's the last row
+            const inputs = button.closest('.spec-row').querySelectorAll('input');
+            inputs.forEach(i => i.value = '');
+        }
+    }
+</script>
 @endsection
