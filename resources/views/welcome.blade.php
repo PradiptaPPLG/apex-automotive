@@ -1544,47 +1544,55 @@
                 <div class="lg:col-span-7 space-y-3">
                     <!-- MAIN INSPECT CAR IMAGE CANVAS -->
                     <div class="relative h-64 sm:h-80 rounded-lg overflow-hidden bg-neutral-950 border border-neutral-300 dark:border-white/10 group shadow-2xl">
-                        <img id="inspectCarImg" src="" alt="Car Inspection Preview" class="car-inspect-img w-full h-full object-cover">
+                        <img id="inspectCarImg" src="" alt="Car Inspection Preview" class="car-inspect-img w-full h-full object-cover cursor-zoom-in transition-transform duration-300" onclick="openZoomModal(this.src, 'CAR EXTERIOR INSPECTION')">
                         
                         <!-- BADGE TOP LEFT -->
-                        <div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg flex items-center space-x-1.5">
+                        <div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg flex items-center space-x-1.5 z-10">
                             <span id="inspectCondition">BRAND NEW</span>
                             <span id="inspectDiscountBadge" class="bg-black/50 text-amber-300 px-1.5 py-0.5 rounded text-[9px] font-extrabold hidden">-10% OFF</span>
                         </div>
 
-                        <!-- BADGE TOP RIGHT (YEAR) -->
-                        <div class="absolute top-4 right-4 bg-black/80 backdrop-blur-md text-neutral-200 text-xs font-mono px-3 py-1 border border-white/20">
-                            <span id="inspectYear">2025</span>
+                        <!-- BADGE TOP RIGHT (YEAR ONLY) -->
+                        <div class="absolute top-4 right-4 z-10 font-mono text-xs">
+                            <span id="inspectYear" class="bg-black/80 backdrop-blur-md text-neutral-200 px-3 py-1 border border-white/20 rounded">2025</span>
                         </div>
 
-                        <!-- ENGINE PREVIEW & COLOR/SPEC OVERLAY BOTTOM LEFT -->
-                        <div class="absolute bottom-3 left-4 pointer-events-none flex items-center space-x-2">
-                            <!-- ENGINE BAY PIC -->
-                            <div class="border border-white/20 rounded-md overflow-hidden bg-black shadow-lg relative" style="width: 80px; height: 45px;">
-                                <img id="inspectEngineImg" src="" alt="Engine Spec" class="w-full h-full object-cover opacity-90">
-                                <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-center py-[1px]">
-                                    <span class="text-[6px] font-mono font-bold text-white tracking-widest">ENGINE BAY</span>
-                                </div>
+                        <!-- COLOR & SPEC OVERLAY BOTTOM LEFT (SUBTLE) -->
+                        <div class="absolute bottom-3 left-3 pointer-events-none bg-black/40 backdrop-blur-sm px-2.5 py-1.5 border border-white/10 rounded font-mono text-[9px] leading-relaxed space-y-0.5 z-10 max-w-[220px]">
+                            <div class="text-neutral-300 tracking-wider truncate">
+                                COLOR: <span id="inspectColorOverlay" class="font-bold uppercase text-white/90">--</span>
                             </div>
-                            <!-- COLOR & SPEC INFO -->
-                            <div class="bg-black/60 backdrop-blur-sm px-2.5 py-1.5 border border-white/10 rounded font-mono text-[8px] leading-tight space-y-0.5">
-                                <div class="text-neutral-300 font-semibold tracking-wider">
-                                    COLOR: <span id="inspectColorOverlay" class="text-red-400 font-bold uppercase">--</span>
-                                </div>
-                                <div class="text-amber-400 font-semibold tracking-wider flex items-center">
-                                    <i class="fa-solid fa-xmark mr-1 text-[7px] text-red-500"></i>
-                                    <span id="inspectSpecOverlay">FACTORY STOCK SPEC</span>
-                                </div>
+                            <div class="text-neutral-400 tracking-wider truncate">
+                                SPEC: <span id="inspectSpecOverlay" class="font-bold uppercase text-white/90">FACTORY STOCK SPEC</span>
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- INTERIOR PREVIEW CARD BELOW MAIN CAR CARD -->
-                    <div class="rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-2 mt-3">
-                        <div class="h-32 sm:h-40 rounded overflow-hidden relative">
-                            <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover">
-                            <span class="absolute bottom-2 left-3 text-[10px] font-mono font-bold text-white/90 bg-black/70 px-2 py-1 rounded shadow-md border border-white/10">INTERIOR CABIN</span>
+                    <!-- GRID COLLAGE BELOW MAIN CAR: INTERIOR & ENGINE -->
+                    <div class="grid grid-cols-2 gap-3 mt-3">
+                        <!-- INTERIOR CABIN -->
+                        <div class="rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-1.5 relative">
+                            <div class="h-28 sm:h-36 rounded overflow-hidden relative cursor-zoom-in">
+                                <img id="inspectInteriorImg" src="" alt="Interior View" class="w-full h-full object-cover" onclick="openZoomModal(this.src, 'INTERIOR CABIN')">
+                                <span class="absolute bottom-1.5 left-2 text-[9px] font-mono font-bold text-white/90 bg-black/70 px-1.5 py-0.5 rounded shadow-md border border-white/10 uppercase tracking-wider pointer-events-none">INTERIOR CABIN</span>
+                            </div>
+                        </div>
+
+                        <!-- ENGINE BAY -->
+                        <div class="rounded-lg overflow-hidden border border-neutral-300 dark:border-white/10 bg-neutral-950 p-1.5 relative">
+                            <div class="h-28 sm:h-36 rounded overflow-hidden relative cursor-zoom-in">
+                                <img id="inspectEngineImg" src="" alt="Engine Bay View" class="w-full h-full object-cover" onclick="openZoomModal(this.src, 'ENGINE BAY')">
+                                <span class="absolute bottom-1.5 left-2 text-[9px] font-mono font-bold text-white/90 bg-black/70 px-1.5 py-0.5 rounded shadow-md border border-white/10 uppercase tracking-wider pointer-events-none">ENGINE BAY</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FULL PERFORMANCE SPECS GRID WITH ALL INFO LINK AT BOTTOM -->
+                    <div class="space-y-2 pt-3 border-t border-neutral-200 dark:border-white/10">
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
+                        <div id="inspectSpecsGrid" class="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                            <!-- Dynamic specs injected by JS -->
                         </div>
                     </div>
                 </div>
@@ -1639,13 +1647,7 @@
                         </div>
                     </div>
 
-                    <!-- FULL PERFORMANCE SPECS GRID WITH ALL INFO LINK AT BOTTOM -->
-                    <div class="space-y-2 pt-1 border-t border-neutral-200 dark:border-white/10">
-                        <span class="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 block">KEY PERFORMANCE SPECS:</span>
-                        <div id="inspectSpecsGrid" class="grid grid-cols-2 gap-2 text-[11px] font-mono">
-                            <!-- Dynamic specs injected by JS -->
-                        </div>
-                    </div>
+
 
 
                     <!-- ACTION BUTTONS INCLUDING MODIFY GARAGE BUTTON -->
@@ -1674,9 +1676,13 @@
                     </div>
 
 
-                </div>
-
-            </div>
+    <!-- ==========================================
+         FULLSCREEN IMAGE ZOOM & INSPECT LIGHTBOX MODAL (SIMPLE LIGHTBOX)
+         ========================================== -->
+    <div id="imageZoomModal" onclick="closeZoomModal()" class="fixed inset-0 hidden flex flex-col items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 cursor-pointer select-none overflow-hidden" style="z-index: 99999;">
+        <!-- IMAGE CANVAS CONTAINER -->
+        <div class="w-full h-full flex items-center justify-center p-2 sm:p-6">
+            <img id="zoomModalImg" src="" alt="Inspect Preview" class="max-w-full max-h-[90vh] object-contain shadow-2xl rounded-lg border border-white/20 transition-transform duration-200">
         </div>
     </div>
 
@@ -2834,6 +2840,62 @@
         // Initialize visibility on page load
         document.addEventListener('DOMContentLoaded', updateScrollNavVisibility);
         updateScrollNavVisibility();
+
+        // 11. FULLSCREEN IMAGE ZOOM & INSPECT LIGHTBOX SCRIPT WITH MOUSE WHEEL ZOOM & PAN
+        // 11. FULLSCREEN LIGHTBOX IMAGE PREVIEW (SIMPLE WHATSAPP / IDE STYLE WITH ZOOM)
+        let modalZoomScale = 1;
+
+        function openZoomModal(imageSrc) {
+            if (!imageSrc) return;
+            const modal = document.getElementById('imageZoomModal');
+            const img = document.getElementById('zoomModalImg');
+
+            if (img) {
+                img.src = imageSrc;
+                modalZoomScale = 1; // Reset scale
+                img.style.transform = `scale(${modalZoomScale})`;
+            }
+
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeZoomModal() {
+            const modal = document.getElementById('imageZoomModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Mouse Wheel Zoom
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('imageZoomModal');
+            if (!modal) return;
+
+            modal.addEventListener('wheel', function(e) {
+                // Prevent page scroll when modal is open
+                if (!modal.classList.contains('hidden')) {
+                    e.preventDefault();
+                    
+                    const img = document.getElementById('zoomModalImg');
+                    if (img) {
+                        const delta = e.deltaY < 0 ? 0.2 : -0.2;
+                        modalZoomScale = Math.min(Math.max(0.5, modalZoomScale + delta), 4.0);
+                        img.style.transform = `scale(${modalZoomScale})`;
+                    }
+                }
+            }, { passive: false });
+        });
+
+        // Close on ESC key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeZoomModal();
+            }
+        });
 
     </script>
 </body>
