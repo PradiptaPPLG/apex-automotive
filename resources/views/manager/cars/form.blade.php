@@ -362,6 +362,12 @@
             { model: "Mercedes-SL 63 AMG", brand: "Mercedes-Benz" },
 
             // BMW
+            { model: "BMW M4 Competition Coupe", brand: "BMW" },
+            { model: "BMW M2 Coupe (G87)", brand: "BMW" },
+            { model: "BMW M3 Sedan (G80)", brand: "BMW" },
+            { model: "BMW M4 Coupe", brand: "BMW" },
+            { model: "BMW M2 Competition", brand: "BMW" },
+            { model: "BMW M5 Competition", brand: "BMW" },
             { model: "BMW M5 CS", brand: "BMW" },
             { model: "BMW M4 CSL", brand: "BMW" },
             { model: "BMW M3 Competition xDrive", brand: "BMW" },
@@ -369,47 +375,82 @@
             { model: "BMW M8 Competition Coupe", brand: "BMW" },
             { model: "BMW i8 Roadster", brand: "BMW" },
 
+            // Lamborghini
+            { model: "Lamborghini Revuelto V12 Hybrid", brand: "Lamborghini" },
+            { model: "Lamborghini Aventador SVJ", brand: "Lamborghini" },
+            { model: "Lamborghini Huracan EVO", brand: "Lamborghini" },
+            { model: "Lamborghini Urus Performante", brand: "Lamborghini" },
+            { model: "Lamborghini Sian FKP 37", brand: "Lamborghini" },
+            { model: "Lamborghini Countach LPI 800-4", brand: "Lamborghini" },
+
+            // McLaren
+            { model: "McLaren Senna GTR Edition", brand: "McLaren Automotive" },
+            { model: "McLaren 720S", brand: "McLaren Automotive" },
+            { model: "McLaren 765LT", brand: "McLaren Automotive" },
+            { model: "McLaren P1", brand: "McLaren Automotive" },
+            { model: "McLaren Artura", brand: "McLaren Automotive" },
+            { model: "McLaren Speedtail", brand: "McLaren Automotive" },
+
+            // Porsche
+            { model: "Porsche 911 GT3 RS (992)", brand: "Porsche" },
+            { model: "Porsche 911 Turbo S", brand: "Porsche" },
+            { model: "Porsche Taycan Turbo S", brand: "Porsche" },
+            { model: "Porsche 918 Spyder", brand: "Porsche" },
+
             // Audi
-            { model: "Audi R8 V10 Performance quattro", brand: "Audi" },
+            { model: "Audi R8 V10 Performance", brand: "Audi" },
             { model: "Audi RS6 Avant GT", brand: "Audi" },
             { model: "Audi RS e-tron GT", brand: "Audi" },
             { model: "Audi RS7 Sportback", brand: "Audi" },
-            { model: "Audi RS Q8", brand: "Audi" },
+
+            // Koenigsegg
+            { model: "Koenigsegg Jesko Absolut", brand: "Koenigsegg" },
+            { model: "Koenigsegg Jesko Attack", brand: "Koenigsegg" },
+            { model: "Koenigsegg Gemera", brand: "Koenigsegg" },
+            { model: "Koenigsegg Regera", brand: "Koenigsegg" },
+
+            // Ferrari
+            { model: "Ferrari SF90 XX Stradale", brand: "Ferrari" },
+            { model: "Ferrari SF90 Stradale", brand: "Ferrari" },
+            { model: "Ferrari F8 Tributo", brand: "Ferrari" },
+            { model: "Ferrari 812 Superfast", brand: "Ferrari" },
+            { model: "Ferrari LaFerrari", brand: "Ferrari" },
+
+            // Bugatti
+            { model: "Bugatti Chiron Pur Sport W16", brand: "Bugatti" },
+            { model: "Bugatti Chiron Super Sport 300+", brand: "Bugatti" },
+            { model: "Bugatti Divo", brand: "Bugatti" },
+            { model: "Bugatti Tourbillon", brand: "Bugatti" },
+
+            // Chevrolet
+            { model: "Chevrolet Corvette C8 Z06 GT3", brand: "Chevrolet" },
+            { model: "Chevrolet Corvette Stingray", brand: "Chevrolet" },
+
+            // Pagani
+            { model: "Pagani Huayra BC Benny Caiola", brand: "Pagani" },
+            { model: "Pagani Zonda Cinque", brand: "Pagani" },
+            { model: "Pagani Utopia", brand: "Pagani" },
+
+            // Zenvo
+            { model: "Zenvo TSR-S Centripetal Wing", brand: "Zenvo Automotive" },
+            { model: "Zenvo Aurora Agil", brand: "Zenvo Automotive" },
+
+            // Mercedes-Benz / AMG
+            { model: "Mercedes-AMG GT Black Series", brand: "Mercedes-Benz" },
+            { model: "Mercedes-AMG ONE", brand: "Mercedes-Benz" },
+            { model: "Mercedes-AMG G63 Brabus", brand: "Mercedes-Benz" },
+            { model: "Mercedes-Maybach S680", brand: "Mercedes-Benz" },
 
             // Nissan
             { model: "Nissan GT-R Nismo (R35)", brand: "Nissan" },
-            { model: "Nissan GT-R T-Spec", brand: "Nissan" },
-            { model: "Nissan Z Nismo", brand: "Nissan" },
             { model: "Nissan Skyline GT-R R34 V-Spec II", brand: "Nissan" },
 
-            // Lexus & Toyota
+            // Lexus & Toyota & Ford & Others
             { model: "Lexus LFA Nurburgring Package", brand: "Lexus" },
-            { model: "Lexus LC 500 Convertible", brand: "Lexus" },
             { model: "Toyota GR Supra 3.0", brand: "Toyota" },
-            { model: "Toyota GR Yaris Morizo Edition", brand: "Toyota" },
-
-            // Ford & Chevrolet & Dodge
             { model: "Ford GT Heritage Edition", brand: "Ford" },
-            { model: "Ford Mustang Shelby GT500", brand: "Ford" },
-            { model: "Chevrolet Corvette Z06 (C8)", brand: "Chevrolet" },
-            { model: "Chevrolet Corvette ZR1", brand: "Chevrolet" },
-            { model: "Dodge Challenger SRT Demon 170", brand: "Dodge" },
-            { model: "Dodge Viper ACR", brand: "Dodge" },
-
-            // Rimac & Lotus & Tesla
             { model: "Rimac Nevera", brand: "Rimac Automobili" },
-            { model: "Lotus Evija", brand: "Lotus" },
-            { model: "Lotus Emira", brand: "Lotus" },
-            { model: "Tesla Roadster Sport", brand: "Tesla" },
-            { model: "Tesla Model S Plaid", brand: "Tesla" },
-
-            // Maserati & Alfa Romeo & Land Rover
-            { model: "Maserati MC20 Cielo", brand: "Maserati" },
-            { model: "Maserati GranTurismo Folgore", brand: "Maserati" },
-            { model: "Alfa Romeo 33 Stradale", brand: "Alfa Romeo" },
-            { model: "Alfa Romeo Giulia GTA", brand: "Alfa Romeo" },
-            { model: "Range Rover SV Autobiography", brand: "Land Rover" },
-            { model: "Range Rover Sport SV", brand: "Land Rover" }
+            { model: "Range Rover SV Autobiography", brand: "Land Rover" }
         ];
 
         const nameInput = document.getElementById('carNameInput');
