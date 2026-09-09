@@ -2328,11 +2328,25 @@
                 animatePriceDrop(modalPriceEl);
             }, 150);
 
+            const getIconForSpec = (label) => {
+                const l = label.toLowerCase();
+                if (l.includes('engine')) return '<i class="fa-solid fa-gears text-neutral-400 mr-1.5 text-[10px]"></i>';
+                if (l.includes('power')) return '<i class="fa-solid fa-bolt text-amber-500 mr-1.5 text-[10px]"></i>';
+                if (l.includes('acceleration') || l.includes('speed')) return '<i class="fa-solid fa-gauge-high text-red-500 mr-1.5 text-[10px]"></i>';
+                if (l.includes('gearbox') || l.includes('transmission')) return '<i class="fa-solid fa-code-merge text-neutral-400 mr-1.5 text-[10px]"></i>';
+                if (l.includes('drivetrain')) return '<i class="fa-solid fa-truck-monster text-neutral-400 mr-1.5 text-[10px]"></i>';
+                if (l.includes('weight')) return '<i class="fa-solid fa-weight-hanging text-neutral-400 mr-1.5 text-[10px]"></i>';
+                if (l.includes('downforce') || l.includes('aerodynamics') || l.includes('drag')) return '<i class="fa-solid fa-wind text-blue-400 mr-1.5 text-[10px]"></i>';
+                if (l.includes('rpm')) return '<i class="fa-solid fa-tachometer-alt text-red-500 mr-1.5 text-[10px]"></i>';
+                if (l.includes('production') || l.includes('units')) return '<i class="fa-solid fa-industry text-neutral-400 mr-1.5 text-[10px]"></i>';
+                return '<i class="fa-solid fa-circle-info text-neutral-400 mr-1.5 text-[10px]"></i>';
+            };
+
             const specsGrid = document.getElementById('inspectSpecsGrid');
             specsGrid.innerHTML = car.specs.map(s => `
                 <div class="bg-neutral-100 dark:bg-neutral-900/60 p-2 border border-neutral-200 dark:border-white/5">
-                    <span class="text-neutral-500 text-[9px] block uppercase">${s.label}</span>
-                    <span class="font-bold text-neutral-900 dark:text-neutral-200">${s.val}</span>
+                    <span class="text-neutral-500 text-[9px] flex items-center uppercase">${getIconForSpec(s.label)}${s.label}</span>
+                    <span class="font-bold text-neutral-900 dark:text-neutral-200 mt-0.5 block">${s.val}</span>
                 </div>
             `).join('');
             
