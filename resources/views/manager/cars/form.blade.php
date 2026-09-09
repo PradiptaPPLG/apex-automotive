@@ -16,7 +16,7 @@
                 <div style="position: relative;">
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Nama Unit / Model <span style="color:#ef4444;">*</span></label>
                     <input type="text" name="name" id="carNameInput" value="{{ old('name', $car->name) }}" required placeholder="Contoh: McLaren Senna GTR" class="mgr-input" autocomplete="off">
-                    <div id="carSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #1f2937; border: 1px solid #374151; border-radius: 4px; z-index: 50; display: none; max-height: 200px; overflow-y: auto; margin-top: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"></div>
+                    <div id="carSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-panel, #ffffff); border: 1px solid var(--border); border-radius: 4px; z-index: 50; display: none; max-height: 200px; overflow-y: auto; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
                     @error('name')
                         <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</span>
                     @enderror
@@ -332,9 +332,9 @@
                         modelHtml = car.model.replace(regex, '<span style="color: #ef4444; font-weight: 700;">$1</span>');
                     }
                     
-                    item.innerHTML = `<span>${modelHtml}</span> <span style="font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">${car.brand}</span>`;
+                    item.innerHTML = `<span>${modelHtml}</span> <span style="font-size: 11px; color: var(--text-muted); background: var(--bg-hover, rgba(0,0,0,0.05)); padding: 2px 6px; border-radius: 4px;">${car.brand}</span>`;
                     
-                    item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-panel)');
+                    item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-hover, rgba(0,0,0,0.05))');
                     item.addEventListener('mouseleave', () => item.style.background = 'transparent');
                     
                     item.addEventListener('click', (e) => {
