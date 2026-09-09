@@ -13,9 +13,10 @@
             @endif
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div>
+                <div style="position: relative;">
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Nama Unit / Model <span style="color:#ef4444;">*</span></label>
-                    <input type="text" name="name" value="{{ old('name', $car->name) }}" required placeholder="Contoh: McLaren Senna GTR" class="mgr-input">
+                    <input type="text" name="name" id="carNameInput" value="{{ old('name', $car->name) }}" required placeholder="Contoh: McLaren Senna GTR" class="mgr-input" autocomplete="off">
+                    <div id="carSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #1f2937; border: 1px solid #374151; border-radius: 4px; z-index: 50; display: none; max-height: 200px; overflow-y: auto; margin-top: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"></div>
                     @error('name')
                         <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</span>
                     @enderror
@@ -23,7 +24,7 @@
 
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Brand / Manufacturer</label>
-                    <input type="text" name="brand" value="{{ old('brand', $car->brand) }}" placeholder="Contoh: McLaren Automotive" class="mgr-input">
+                    <input type="text" name="brand" id="carBrandInput" value="{{ old('brand', $car->brand) }}" placeholder="Contoh: McLaren Automotive" class="mgr-input">
                 </div>
             </div>
 
@@ -254,6 +255,117 @@
         previewContainer.innerHTML = html;
     }
 
-    document.addEventListener('DOMContentLoaded', updatePalettePreview);
+    document.addEventListener('DOMContentLoaded', () => {
+        updatePalettePreview();
+        
+        // Autocomplete & Auto-fill Brand Logic
+        const commonCars = [
+            { model: "McLaren Senna GTR", brand: "McLaren Automotive" },
+            { model: "McLaren 720S", brand: "McLaren Automotive" },
+            { model: "McLaren 765LT", brand: "McLaren Automotive" },
+            { model: "McLaren P1", brand: "McLaren Automotive" },
+            { model: "Ferrari SF90 Stradale", brand: "Ferrari" },
+            { model: "Ferrari F8 Tributo", brand: "Ferrari" },
+            { model: "Ferrari 812 Superfast", brand: "Ferrari" },
+            { model: "Ferrari LaFerrari", brand: "Ferrari" },
+            { model: "Lamborghini Aventador SVJ", brand: "Lamborghini" },
+            { model: "Lamborghini Huracan EVO", brand: "Lamborghini" },
+            { model: "Lamborghini Urus", brand: "Lamborghini" },
+            { model: "Lamborghini Revuelto", brand: "Lamborghini" },
+            { model: "Porsche 911 GT3 RS", brand: "Porsche" },
+            { model: "Porsche 911 Turbo S", brand: "Porsche" },
+            { model: "Porsche Taycan Turbo S", brand: "Porsche" },
+            { model: "Porsche 918 Spyder", brand: "Porsche" },
+            { model: "Aston Martin Valkyrie", brand: "Aston Martin" },
+            { model: "Aston Martin DB11", brand: "Aston Martin" },
+            { model: "Aston Martin DBS Superleggera", brand: "Aston Martin" },
+            { model: "Rolls-Royce Phantom", brand: "Rolls-Royce" },
+            { model: "Rolls-Royce Cullinan", brand: "Rolls-Royce" },
+            { model: "Rolls-Royce Ghost", brand: "Rolls-Royce" },
+            { model: "Bentley Continental GT", brand: "Bentley" },
+            { model: "Bentley Bentayga", brand: "Bentley" },
+            { model: "Bugatti Chiron", brand: "Bugatti" },
+            { model: "Bugatti Veyron", brand: "Bugatti" },
+            { model: "Bugatti Divo", brand: "Bugatti" },
+            { model: "Koenigsegg Jesko", brand: "Koenigsegg" },
+            { model: "Koenigsegg Gemera", brand: "Koenigsegg" },
+            { model: "Pagani Huayra", brand: "Pagani" },
+            { model: "Pagani Zonda", brand: "Pagani" },
+            { model: "Mercedes-AMG GT Black Series", brand: "Mercedes-Benz" },
+            { model: "Mercedes-Benz G63 AMG", brand: "Mercedes-Benz" },
+            { model: "BMW M5 CS", brand: "BMW" },
+            { model: "BMW M4 Competition", brand: "BMW" },
+            { model: "Audi R8 V10 Plus", brand: "Audi" },
+            { model: "Nissan GT-R Nismo", brand: "Nissan" },
+            { model: "Maserati MC20", brand: "Maserati" },
+            { model: "Lexus LFA", brand: "Lexus" },
+            { model: "Ford GT", brand: "Ford" }
+        ];
+
+        const nameInput = document.getElementById('carNameInput');
+        const brandInput = document.getElementById('carBrandInput');
+        const suggestionsBox = document.getElementById('carSuggestions');
+        let selectedFromList = false;
+
+        nameInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            suggestionsBox.innerHTML = '';
+            selectedFromList = false;
+            
+            let filtered = [];
+            if (query.length === 0) {
+                // If empty, show first 15 default options
+                filtered = commonCars.slice(0, 15);
+            } else {
+                filtered = commonCars.filter(car => car.model.toLowerCase().includes(query) || car.brand.toLowerCase().includes(query));
+            }
+
+            if (filtered.length > 0) {
+                suggestionsBox.style.display = 'block';
+                filtered.forEach(car => {
+                    const item = document.createElement('div');
+                    item.style.cssText = 'padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-heading); display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;';
+                    
+                    let modelHtml = car.model;
+                    if (query.length > 0) {
+                        const regex = new RegExp(`(${query})`, 'gi');
+                        modelHtml = car.model.replace(regex, '<span style="color: #ef4444; font-weight: 700;">$1</span>');
+                    }
+                    
+                    item.innerHTML = `<span>${modelHtml}</span> <span style="font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">${car.brand}</span>`;
+                    
+                    item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-panel)');
+                    item.addEventListener('mouseleave', () => item.style.background = 'transparent');
+                    
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        nameInput.value = car.model;
+                        brandInput.value = car.brand;
+                        suggestionsBox.style.display = 'none';
+                        selectedFromList = true;
+                    });
+                    
+                    suggestionsBox.appendChild(item);
+                });
+            } else {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target !== nameInput && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        // Show suggestions on focus or click
+        nameInput.addEventListener('focus', function() {
+            this.dispatchEvent(new Event('input'));
+        });
+        nameInput.addEventListener('click', function() {
+            this.dispatchEvent(new Event('input'));
+        });
+    });
 </script>
 @endsection
