@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.theme-head')
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -33,14 +34,82 @@
             flex-shrink: 0;
             z-index: 50;
         }
-        .nav-back { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #9ca3af; font-size: 13px; transition: color 0.2s; }
-        .nav-back:hover { color: white; }
-        .admin-badge { font-family: 'Space Mono', monospace; font-size: 9px; color: #dc2626; border: 1px solid rgba(220,38,38,0.4); padding: 3px 8px; letter-spacing: 0.15em; font-weight: 700; text-transform: uppercase; }
-        .layout {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
+
+        /* ── Light Mode Responsiveness ── */
+        html.light body {
+            background: var(--bg-main);
+            color: var(--text-base);
         }
+        html.light .admin-nav {
+            background: var(--bg-surface);
+            border-bottom-color: var(--border);
+        }
+        html.light .nav-back { color: var(--text-muted); }
+        html.light .nav-back:hover { color: var(--text-heading); }
+        html.light .sidebar {
+            background: var(--bg-card);
+            border-right-color: var(--border);
+        }
+        html.light .section-label { color: var(--text-dim); }
+        html.light .buyer-name { color: var(--text-heading); }
+        html.light .detail-label { color: var(--text-dim); }
+        html.light .detail-value { color: var(--text-base); }
+        html.light .status-select {
+            background: var(--bg-input);
+            border-color: var(--border);
+            color: var(--text-heading);
+        }
+        html.light .status-select option {
+            background: #ffffff;
+            color: #111827;
+        }
+        html.light .messages-container { background: var(--bg-main); }
+        html.light .chat-input-area,
+        html.light .chat-hint {
+            background: var(--bg-surface);
+            border-top-color: var(--border);
+        }
+        html.light .chat-input {
+            background: var(--bg-card);
+            border-color: var(--border);
+            color: var(--text-heading);
+        }
+        html.light .chat-input::placeholder { color: var(--text-dimmer); }
+        html.light .message-sender { color: var(--text-muted); }
+        html.light .message-time { color: var(--text-muted); }
+
+        /* Light Mode Bubbles */
+        html.light .message-group.rm .message-bubble {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        html.light .message-group.buyer .message-bubble {
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+            color: #1f2937;
+        }
+
+        html.light .attach-btn,
+        html.light .loc-btn {
+            background: var(--bg-input);
+            border-color: var(--border);
+            color: var(--text-muted);
+        }
+        html.light .attach-btn:hover,
+        html.light .loc-btn:hover {
+            color: var(--text-heading);
+            background: var(--bg-hover);
+        }
+        html.light #locationModal > div {
+            background: #ffffff !important;
+            border-color: var(--border) !important;
+            color: var(--text-base) !important;
+        }
+
+        /* Light mode scrollbar */
+        html.light ::-webkit-scrollbar-track { background: var(--bg-main); }
+        html.light * { scrollbar-color: #dc2626 var(--bg-main); }
         .sidebar {
             width: 340px;
             flex-shrink: 0;
@@ -131,6 +200,7 @@
             <i class="fa-solid fa-arrow-left"></i> Semua Inquiry
         </a>
         <div style="display:flex; align-items:center; gap:12px;">
+            <button type="button" onclick="toggleGlobalTheme()" class="apex-theme-btn" title="Toggle Theme"></button>
             <a href="{{ route('admin.profile.show') }}" style="color:#e5e7eb; text-decoration:none; font-family:'Space Mono', monospace; font-size:10px; text-transform:uppercase; border:1px solid rgba(220,38,38,0.4); padding:4px 10px; border-radius:4px; transition:all 0.2s; background:rgba(220,38,38,0.1);">
                 <i class="fa-solid fa-id-card mr-1" style="color:#dc2626;"></i> Profil & ID Card
             </a>

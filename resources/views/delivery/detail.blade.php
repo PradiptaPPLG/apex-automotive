@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.theme-head')
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #080810; color: #e5e7eb; height: 100vh; display: flex; flex-direction: column; }
@@ -30,6 +31,21 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #080810; }
         ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 3px; }
+
+        /* Light Mode Responsiveness */
+        html.light body { background: var(--bg-main); color: var(--text-base); }
+        html.light .nav { background: var(--bg-surface); border-bottom-color: var(--border); }
+        html.light .nav-back { color: var(--text-muted); }
+        html.light .nav-back:hover { color: var(--text-heading); }
+        html.light .sidebar { background: var(--bg-card); border-right-color: var(--border); }
+        html.light .form-select, html.light .form-input {
+            background: var(--bg-input);
+            border-color: var(--border);
+            color: var(--text-heading);
+        }
+        html.light .form-select option { background: #ffffff; color: #111827; }
+        html.light h2 { color: var(--text-heading) !important; }
+        html.light strong { color: var(--text-heading) !important; }
     </style>
 </head>
 <body>
@@ -37,8 +53,11 @@
         <a href="{{ route('delivery.portal') }}" class="nav-back">
             <i class="fa-solid fa-arrow-left"></i> KEMBALI KE PORTAL DRIVER
         </a>
-        <div style="font-family: 'Space Mono', monospace; font-size: 11px; color: #dc2626;">
-            LIVE DRIVER GPS CONSOLE
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" onclick="toggleGlobalTheme()" class="apex-theme-btn" title="Toggle Theme"></button>
+            <div style="font-family: 'Space Mono', monospace; font-size: 11px; color: #dc2626;">
+                LIVE DRIVER GPS CONSOLE
+            </div>
         </div>
     </nav>
 

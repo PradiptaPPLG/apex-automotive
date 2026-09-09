@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.theme-head')
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #080810; color: #e5e7eb; min-height: 100vh; display: flex; flex-direction: column; }
@@ -26,6 +27,14 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #080810; }
         ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 3px; }
+
+        /* Light Mode Responsiveness */
+        html.light body { background: var(--bg-main); color: var(--text-base); }
+        html.light .nav { background: var(--bg-surface); border-bottom-color: var(--border); }
+        html.light .card { background: var(--bg-card); border-color: var(--border); }
+        html.light h1 { color: var(--text-heading) !important; }
+        html.light h2 { color: var(--text-heading) !important; }
+        html.light strong { color: var(--text-heading) !important; }
     </style>
 </head>
 <body>
@@ -33,8 +42,11 @@
         <div class="brand">
             <i class="fa-solid fa-truck-ramp-box"></i> APEX WHITE-GLOVE ESCORT PORTAL
         </div>
-        <div style="font-size: 12px; color: #9ca3af; font-family: 'Space Mono', monospace;">
-            <i class="fa-solid fa-user-gear"></i> {{ auth()->user()->name }} (Driver)
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" onclick="toggleGlobalTheme()" class="apex-theme-btn" title="Toggle Theme"></button>
+            <div style="font-size: 12px; color: var(--text-muted); font-family: 'Space Mono', monospace;">
+                <i class="fa-solid fa-user-gear"></i> {{ auth()->user()->name }} (Driver)
+            </div>
         </div>
     </nav>
 

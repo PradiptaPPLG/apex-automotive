@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.theme-head')
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -33,6 +34,95 @@
             flex-shrink: 0;
             z-index: 50;
         }
+
+        /* ── Light Mode Responsiveness ── */
+        html.light body {
+            background: var(--bg-main);
+            color: var(--text-base);
+        }
+        html.light .portal-nav {
+            background: var(--bg-surface);
+            border-bottom-color: var(--border);
+        }
+        html.light .nav-back { color: var(--text-muted); }
+        html.light .nav-back:hover { color: var(--text-heading); }
+        html.light .nav-title { color: var(--text-dim); }
+        html.light .nav-title strong { color: var(--text-heading); }
+        html.light .sidebar {
+            background: var(--bg-card);
+            border-right-color: var(--border);
+        }
+        html.light .sidebar-section-label { color: var(--text-dim); }
+        html.light .car-title { color: var(--text-heading); }
+        html.light .detail-label { color: var(--text-dim); }
+        html.light .detail-value { color: var(--text-base); }
+        html.light .messages-container { background: var(--bg-main); }
+        html.light .chat-input-area,
+        html.light .chat-hint {
+            background: var(--bg-surface);
+            border-top-color: var(--border);
+        }
+        html.light .chat-input {
+            background: var(--bg-card);
+            border-color: var(--border);
+            color: var(--text-heading);
+        }
+        html.light .chat-input::placeholder { color: var(--text-dimmer); }
+        html.light .message-sender { color: var(--text-muted); }
+        html.light .message-time { color: var(--text-muted); }
+
+        /* Light Mode Message Bubbles Contrast */
+        html.light .message-group.buyer .message-bubble {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        html.light .message-group.rm .message-bubble {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+            color: #075985;
+        }
+        html.light .message-group.driver .message-bubble {
+            background: #faf5ff;
+            border-color: #e9d5ff;
+            color: #6b21a8;
+        }
+
+        html.light .attach-btn,
+        html.light .loc-btn {
+            background: var(--bg-input);
+            border-color: var(--border);
+            color: var(--text-muted);
+        }
+        html.light .attach-btn:hover,
+        html.light .loc-btn:hover {
+            color: var(--text-heading);
+            background: var(--bg-hover);
+        }
+
+        /* Modals Light Mode Styling */
+        html.light #helpModal .glass-card,
+        html.light #contractModal > div,
+        html.light #paymentModal > div,
+        html.light #locationModal > div {
+            background: #ffffff !important;
+            border-color: var(--border) !important;
+            color: var(--text-base) !important;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15) !important;
+        }
+        html.light #helpModal h3,
+        html.light #contractModal h3,
+        html.light #paymentModal h3 {
+            color: var(--text-heading) !important;
+        }
+        html.light #contractModal p,
+        html.light #paymentModal p {
+            color: var(--text-muted) !important;
+        }
+
+        /* Light mode scrollbar */
+        html.light ::-webkit-scrollbar-track { background: var(--bg-main); }
+        html.light * { scrollbar-color: #dc2626 var(--bg-main); }
         .nav-back {
             display: flex;
             align-items: center;
@@ -383,6 +473,7 @@
             Konsultasi VIP &nbsp;·&nbsp; <strong>{{ (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()) ? $inquiry->name . ' (' . $inquiry->phone . ')' : ($inquiry->car_model ?? 'Kendaraan VIP') }}</strong>
         </div>
         <div class="flex items-center gap-3">
+            <button type="button" onclick="toggleGlobalTheme()" class="apex-theme-btn" title="Toggle Theme"></button>
             <button onclick="toggleHelpModal()" class="text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-colors text-xs cursor-pointer" title="Petunjuk Alur Purchase & Dokumen">
                 <i class="fa-solid fa-circle-question text-red-500"></i>
             </button>
