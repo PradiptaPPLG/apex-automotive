@@ -128,3 +128,16 @@ Route::middleware(['auth', 'manager'])->prefix('manager')->name('manager.')->gro
     Route::post('/team', [TeamController::class, 'store'])->name('team.store');
     Route::delete('/team/{user}', [TeamController::class, 'destroy'])->name('team.destroy');
 });
+
+// ──────────────────────────────────────────────
+// MECHANIC / SERVICE ADVISOR ROUTES (endramaulanapradipta@gmail.com)
+// ──────────────────────────────────────────────
+Route::middleware(['auth', 'mechanic'])->prefix('mechanic')->name('mechanic.')->group(function () {
+    Route::get('/', [MechanicServiceController::class, 'dashboard'])->name('dashboard');
+    Route::get('/{booking}', [MechanicServiceController::class, 'show'])->name('show');
+    Route::patch('/{booking}/status', [MechanicServiceController::class, 'updateStatus'])->name('status');
+    Route::post('/{booking}/message', [MechanicServiceController::class, 'sendMessage'])->name('message');
+    Route::get('/{booking}/poll', [MechanicServiceController::class, 'poll'])->name('poll');
+    Route::post('/{booking}/progress', [MechanicServiceController::class, 'addProgress'])->name('progress');
+    Route::post('/{booking}/quote', [MechanicServiceController::class, 'setQuote'])->name('quote');
+});
