@@ -5,11 +5,14 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\GarageController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\Manager\CarController;
 use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Manager\TeamController;
+use App\Http\Controllers\Mechanic\ServiceController as MechanicServiceController;
 use App\Http\Controllers\PortalController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 // ──────────────────────────────────────────────
@@ -68,6 +71,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/portal/inquiry/{inquiry}/sign-contract', [PortalController::class, 'signContract'])->name('portal.contract.sign');
     Route::get('/portal/inquiry/{inquiry}/download-contract', [PortalController::class, 'downloadContract'])->name('portal.contract.download');
     Route::get('/portal/inquiry/{inquiry}/tracking', [DeliveryController::class, 'trackingPoll'])->name('portal.tracking');
+
+    // ── My Garage (customer vehicles) ──────────────────────────────────────────
+    Route::post('/garage/vehicles', [GarageController::class, 'store'])->name('garage.vehicles.store');
+    Route::delete('/garage/vehicles/{vehicle}', [GarageController::class, 'destroy'])->name('garage.vehicles.destroy');
+
+    // ── Service & Modification Bookings ────────────────────────────────────────
+    Route::get('/service', [ServiceController::class, 'index'])->name('service.index');
+    Route::get('/service/book', [ServiceController::class, 'create'])->name('service.create');
+    Route::post('/service/book', [ServiceController::class, 'store'])->name('service.store');
+    Route::get('/service/{booking}', [ServiceController::class, 'show'])->name('service.show');
+    Route::post('/service/{booking}/message', [ServiceController::class, 'message'])->name('service.message');
+    Route::get('/service/{booking}/poll', [ServiceController::class, 'poll'])->name('service.poll');
 });
 
 // ──────────────────────────────────────────────
