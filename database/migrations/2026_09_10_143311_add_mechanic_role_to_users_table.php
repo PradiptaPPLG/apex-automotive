@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        // The 'role' column is already an unrestricted string, so no schema change needed.
+        // The 'mechanic' value is simply stored as a string alongside existing roles.
+        // This migration serves as documentation of the new role's introduction.
     }
 
     /**
@@ -21,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };
