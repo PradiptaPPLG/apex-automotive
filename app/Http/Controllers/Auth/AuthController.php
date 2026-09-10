@@ -120,6 +120,19 @@ class AuthController extends Controller
                 ->with('welcome', true);
         }
 
+        // Role-based redirects
+        if ($user->isRm()) {
+            return redirect()->route('admin.inquiries.index');
+        }
+
+        if ($user->isDelivery()) {
+            return redirect()->route('delivery.portal');
+        }
+
+        if ($user->isMechanic()) {
+            return redirect()->route('mechanic.dashboard');
+        }
+
         return redirect()->intended('/');
     }
 
