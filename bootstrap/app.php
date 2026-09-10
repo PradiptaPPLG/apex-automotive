@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureDelivery;
 use App\Http\Middleware\ManagerMiddleware;
+use App\Http\Middleware\MechanicMiddleware;
 use App\Http\Middleware\RmMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'rm' => RmMiddleware::class,
             'delivery' => EnsureDelivery::class,
             'manager' => ManagerMiddleware::class,
+            'mechanic' => MechanicMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
