@@ -262,6 +262,10 @@
                 <a href="{{ route('delivery.portal') }}" class="logout-btn" style="border-color: rgba(249, 115, 22, 0.4); color: #f97316;">
                     <i class="fa-solid fa-truck-fast mr-1"></i> Delivery Driver Panel
                 </a>
+            @elseif(auth()->user()->isMechanic())
+                <a href="{{ route('mechanic.dashboard') }}" class="logout-btn" style="border-color: rgba(249, 115, 22, 0.4); color: #f97316;">
+                    <i class="fa-solid fa-wrench mr-1"></i> Mechanic Panel
+                </a>
             @endif
             <div class="nav-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
             <span>{{ auth()->user()->name }}</span>
@@ -280,11 +284,29 @@
                 @if(auth()->user()->isRm() || auth()->user()->isManager())
                     Daftar kontak buyer & inquiry konsumen terbaru. Klik kartu untuk merespon chat konsultasi.
                 @else
-                    Lacak seluruh status konsultasi dan pemesanan kendaraan eksklusif Anda.
+                    Lacak seluruh status konsultasi, pemesanan, dan servis kendaraan eksklusif Anda.
                 @endif
             </p>
         </div>
 
+        {{-- Tab Navigation --}}
+        <div style="display:flex; gap:0; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:2rem;">
+            <button id="tab-purchase" onclick="switchTab('purchase')" style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; padding:12px 24px; border:none; background:rgba(220,38,38,0.1); color:#fca5a5; border-bottom:2px solid #dc2626; cursor:pointer; transition:all .2s;">
+                <i class="fa-solid fa-car mr-2"></i> Purchase Inquiry
+                @if($inquiries->isNotEmpty())
+                    <span style="margin-left:6px; background:rgba(220,38,38,.3); padding:2px 7px; font-size:9px; border-radius:10px;">{{ $inquiries->count() }}</span>
+                @endif
+            </button>
+            <button id="tab-service" onclick="switchTab('service')" style="font-family:'Space Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; padding:12px 24px; border:none; background:transparent; color:#6b7280; border-bottom:2px solid transparent; cursor:pointer; transition:all .2s;">
+                <i class="fa-solid fa-screwdriver-wrench mr-2"></i> Service & Modification
+                @if(isset($serviceBookings) && $serviceBookings->isNotEmpty())
+                    <span style="margin-left:6px; background:rgba(249,115,22,.25); color:#f97316; padding:2px 7px; font-size:9px; border-radius:10px;">{{ $serviceBookings->count() }}</span>
+                @endif
+            </button>
+        </div>
+
+        {{-- ── TAB: PURCHASE INQUIRY ── --}}
+        <div id="content-purchase">
         @if($inquiries->isEmpty())
             <div class="empty-state">
                 <div class="empty-state-icon"><i class="fa-solid fa-car-side"></i></div>
@@ -347,6 +369,87 @@
                 @endforeach
             </div>
         @endif
+        </div>
+
+        {{-- ── TAB: SERVICE & MODIFICATION ── --}}
+        <div id="content-service" style="display:none;">
+            <div style="display:flex; justify-content:flex-end; margin-bottom:1.5rem;">
+                <a href="{{ route('service.create') }}" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:#dc2626; color:white; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; transition:background .2s;">
+                    <i class="fa-solid fa-plus"></i> Book New Service
+                </a>
+            </div>
+
+            @if(isset($serviceBookings) && $serviceBookings->isNotEmpty())
+                <div class="inquiries-grid">
+                    @foreach($serviceBookings as $sb)
+                        @php $sbUnread = ($sb->unread_count ?? 0) > 0; @endphp
+                        <a href="{{ route('service.show', $sb) }}" class="inquiry-card" style="position:relative;">
+                            @if($sbUnread)
+                                <span style="position:absolute;top:12px;left:12px;width:10px;height:10px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px #ef4444;z-index:2;"></span>
+                            @endif
+                            <div class="inquiry-icon" style="border-color:rgba(249,115,22,.35);background:rgba(249,115,22,.1);color:#f97316;">
+                                <i class="fa-solid {{ $sb->serviceTypeIcon() }}"></i>
+                            </div>
+                            <div class="inquiry-info">
+                                <div class="inquiry-car" style="display:flex;align-items:center;gap:8px;">
+                                    {{ $sb->title }}
+                                    <span style="font-size:9px;padding:2px 6px;background:rgba(249,115,22,.15);color:#fdba74;border:1px solid rgba(249,115,22,.3);border-radius:2px;">
+                                        {{ strtoupper(str_replace('_',' ',$sb->service_type)) }}
+                                    </span>
+                                </div>
+                                <div class="inquiry-meta">
+                                    Kendaraan: <strong style="color:#e5e7eb;">{{ $sb->vehicle->displayName() }}</strong>
+                                    &nbsp;·&nbsp;
+                                    Jadwal: {{ $sb->preferred_date?->format('d M Y') }}
+                                    @if($sb->assigned_mechanic_name) &nbsp;·&nbsp; Teknisi: {{ $sb->assigned_mechanic_name }} @endif
+                                    &nbsp;·&nbsp; {{ $sb->created_at->diffForHumans() }}
+                                </div>
+                            </div>
+                            <span class="inquiry-status {{ $sb->statusColor() }}">{{ $sb->statusLabel() }}</span>
+                            <div class="inquiry-msgs" style="display:flex;align-items:center;gap:8px;">
+                                <div><span class="inquiry-msgs-count">{{ $sb->messages_count }}</span> pesan</div>
+                                @if($sbUnread)<span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;"></span>@endif
+                            </div>
+                            <i class="fa-solid fa-chevron-right" style="color:#374151;font-size:12px;"></i>
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <h2 class="empty-state-title">Belum Ada Booking Service</h2>
+                    <p class="empty-state-text">Ajukan servis berkala, performance tuning, atau modifikasi kendaraan Anda sekarang.</p>
+                    <a href="{{ route('service.create') }}" class="btn-primary"><i class="fa-solid fa-calendar-plus"></i> Buat Booking Pertama</a>
+                </div>
+            @endif
+        </div>
     </main>
+
+    <script>
+        function switchTab(tab) {
+            const tabs = ['purchase', 'service'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab-' + t);
+                const content = document.getElementById('content-' + t);
+                if (t === tab) {
+                    btn.style.background = 'rgba(220,38,38,0.1)';
+                    btn.style.color = '#fca5a5';
+                    btn.style.borderBottom = '2px solid #dc2626';
+                    if (content) content.style.display = 'block';
+                } else {
+                    btn.style.background = 'transparent';
+                    btn.style.color = '#6b7280';
+                    btn.style.borderBottom = '2px solid transparent';
+                    if (content) content.style.display = 'none';
+                }
+            });
+        }
+
+        // Auto-switch to service tab if ?tab=service in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('tab') === 'service') {
+            switchTab('service');
+        }
+    </script>
 </body>
 </html>

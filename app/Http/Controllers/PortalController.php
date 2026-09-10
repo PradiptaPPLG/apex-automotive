@@ -34,7 +34,18 @@ class PortalController extends Controller
                 ->get();
         }
 
-        return view('portal.dashboard', compact('inquiries'));
+        // Service bookings for the Service & Modification tab (buyer only)
+        $serviceBookings = collect();
+        if (! $user->isRm() && ! $user->isManager() && ! $user->isDelivery() && ! $user->isMechanic()) {
+            $serviceBookings = $user
+                ->serviceBookings()
+                ->with('vehicle')
+                ->withCount(['messages', 'messages as unread_count' => fn ($q) => $q->where('sender_type', 'mechanic')->where('is_read', false)])
+                ->latest()
+                ->get();
+        }
+
+        return view('portal.dashboard', compact('inquiries', 'serviceBookings'));
     }
 
     /**

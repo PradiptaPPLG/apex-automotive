@@ -415,7 +415,7 @@
                 @else
                     {{-- GUEST: Show login button --}}
                     <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs tracking-widest font-bold uppercase border border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300">
-                        <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> MASUK / DAFTAR
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> LOGIN / REGISTER
                     </a>
                 @endauth
             </div>
@@ -1234,7 +1234,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">LIMITED EDITION</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari Roma Spider</h3>
-                            <p class="text-xs text-neutral-300 font-light">La Nuova Dolce Vita in Cijeungjing</p>
+                            <p class="text-xs text-neutral-300 font-light">La Nuova Dolce Vita in Italy</p>
                         </div>
                     </div>
 
