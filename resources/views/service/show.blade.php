@@ -11,90 +11,131 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #080810; color: #e5e7eb; min-height: 100vh; display: flex; flex-direction: column; }
-        .portal-nav {
-            background: rgba(8,8,16,0.96); border-bottom: 1px solid rgba(255,255,255,0.08);
-            padding: 0 2rem; height: 64px; display: flex; align-items: center;
-            justify-content: space-between; position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px);
+        :root {
+            --bg-main: #f8fafc;
+            --text-main: #1f2937;
+            --nav-bg: rgba(255, 255, 255, 0.96);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --panel-bg: rgba(255, 255, 255, 1);
+            --text-muted: #6b7280;
+            --text-title: #111827;
+            --msg-theirs-bg: #f3f4f6;
+            --input-bg: #ffffff;
+            --btn-ghost-hover-bg: rgba(220, 38, 38, 0.05);
         }
+        html.dark {
+            --bg-main: #080810;
+            --text-main: #e5e7eb;
+            --nav-bg: rgba(8, 8, 16, 0.96);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --panel-bg: rgba(255, 255, 255, 0.01);
+            --text-muted: #9ca3af;
+            --text-title: #ffffff;
+            --msg-theirs-bg: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(255, 255, 255, 0.04);
+            --btn-ghost-hover-bg: rgba(239, 68, 68, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.3s, color 0.3s; }
+        .portal-nav {
+            background: var(--nav-bg); border-bottom: 1px solid var(--border-color);
+            padding: 0 1.5rem; height: 64px; display: flex; align-items: center;
+            justify-content: space-between; flex-shrink: 0; z-index: 50; backdrop-filter: blur(12px);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        @media(max-width: 600px) { .portal-nav { padding: 0 1rem; } .nav-badge { display: none; } }
         .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .nav-logo img { height: 32px; }
+        .nav-logo img { height: 28px; }
         .nav-badge { font-family: 'Space Mono', monospace; font-size: 10px; color: #dc2626; letter-spacing: .15em; font-weight: 700; text-transform: uppercase; }
-        .btn-ghost { font-family: 'Space Mono', monospace; font-size: 10px; color: #6b7280; background: none; border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; cursor: pointer; text-transform: uppercase; letter-spacing: .1em; text-decoration: none; transition: all .2s; }
-        .btn-ghost:hover { color: #ef4444; border-color: rgba(239,68,68,.3); }
+        .btn-ghost { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text-muted); background: none; border: 1px solid var(--border-color); padding: 6px 10px; cursor: pointer; text-transform: uppercase; letter-spacing: .1em; text-decoration: none; transition: all .2s; border-radius: 4px; display: inline-flex; align-items: center; }
+        .btn-ghost:hover { color: #ef4444; border-color: rgba(239,68,68,.3); background: var(--btn-ghost-hover-bg); }
 
         /* Layout */
-        .layout { display: grid; grid-template-columns: 340px 1fr; height: calc(100vh - 64px); overflow: hidden; }
-        @media(max-width:900px){ .layout{ grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; } }
+        .layout { display: flex; flex: 1; overflow: hidden; }
+        @media(max-width:900px){ .layout{ flex-direction: column; } }
 
         /* ── Left Panel ── */
-        .left-panel { border-right: 1px solid rgba(255,255,255,0.07); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; background: rgba(255,255,255,0.01); }
-        .booking-card { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.2); padding: 16px; }
-        .booking-type-icon { width: 40px; height: 40px; background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.3); display: flex; align-items: center; justify-content: center; color: #dc2626; font-size: 16px; margin-bottom: 12px; }
-        .booking-title { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
-        .booking-meta { font-size: 12px; color: #6b7280; line-height: 1.8; }
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 4px 10px; border: 1px solid; margin-top: 10px; }
+        .left-panel { width: 340px; border-right: 1px solid var(--border-color); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; background: var(--panel-bg); flex-shrink: 0; transition: background-color 0.3s, border-color 0.3s; }
+        @media(max-width:900px){ .left-panel{ width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); max-height: 40vh; } }
+        .booking-card { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.2); padding: 16px; border-radius: 8px; }
+        .booking-type-icon { width: 40px; height: 40px; background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.3); display: flex; align-items: center; justify-content: center; color: #dc2626; font-size: 16px; margin-bottom: 12px; border-radius: 8px; }
+        .booking-title { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: var(--text-title); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+        .booking-meta { font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+        .booking-meta strong { color: var(--text-muted) !important; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 4px 10px; border: 1px solid; margin-top: 10px; border-radius: 4px; }
 
         /* ── Progress Timeline ── */
-        .section-title { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: #4b5563; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 12px; }
+        .section-title { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 12px; }
         .timeline { display: flex; flex-direction: column; gap: 0; }
         .timeline-item { display: flex; gap: 12px; padding-bottom: 16px; position: relative; }
         .timeline-item:last-child { padding-bottom: 0; }
         .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #dc2626; flex-shrink: 0; margin-top: 4px; position: relative; z-index: 1; }
-        .timeline-line { position: absolute; left: 4px; top: 14px; bottom: 0; width: 1px; background: rgba(255,255,255,0.08); }
+        .timeline-line { position: absolute; left: 4px; top: 14px; bottom: 0; width: 1px; background: var(--border-color); }
         .timeline-item:last-child .timeline-line { display: none; }
         .timeline-content { flex: 1; }
-        .timeline-label { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: white; margin-bottom: 2px; }
-        .timeline-note { font-size: 12px; color: #6b7280; line-height: 1.5; }
-        .timeline-time { font-size: 10px; color: #374151; font-family: 'Space Mono', monospace; margin-top: 3px; }
-        .timeline-photo { margin-top: 8px; max-width: 100%; border: 1px solid rgba(255,255,255,0.1); }
+        .timeline-label { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-title); margin-bottom: 2px; }
+        .timeline-note { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+        .timeline-time { font-size: 10px; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-top: 3px; }
+        .timeline-photo { margin-top: 8px; max-width: 100%; border: 1px solid var(--border-color); border-radius: 6px; }
 
         /* Job Steps */
         .job-steps { display: flex; flex-direction: column; gap: 6px; }
-        .job-step { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.05); font-size: 12px; }
+        .job-step { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border-color); font-size: 12px; border-radius: 6px; }
         .job-step.done { background: rgba(34,197,94,.06); border-color: rgba(34,197,94,.2); }
         .job-step.active { background: rgba(220,38,38,.06); border-color: rgba(220,38,38,.25); }
         .job-step .step-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
         .job-step.done .step-icon { color: #22c55e; }
         .job-step.active .step-icon { color: #dc2626; }
-        .job-step.pending .step-icon { color: #374151; }
+        .job-step.pending .step-icon { color: var(--text-muted); }
         .job-step-label { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
         .job-step.done .job-step-label { color: #22c55e; }
-        .job-step.active .job-step-label { color: #fca5a5; }
-        .job-step.pending .job-step-label { color: #374151; }
+        .job-step.active .job-step-label { color: #dc2626; }
+        .job-step.pending .job-step-label { color: var(--text-muted); }
 
         /* ── Right Panel: Chat ── */
-        .chat-panel { display: flex; flex-direction: column; }
-        .chat-header { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.01); flex-shrink: 0; }
-        .chat-header-title { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: .06em; }
-        .chat-header-sub { font-size: 11px; color: #6b7280; }
-        .chat-icon { width: 36px; height: 36px; background: rgba(220,38,38,.1); border: 1px solid rgba(220,38,38,.3); display: flex; align-items: center; justify-content: center; color: #dc2626; font-size: 14px; flex-shrink: 0; }
+        .chat-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-main); transition: background-color 0.3s; }
+        .chat-header { padding: 14px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; background: var(--panel-bg); flex-shrink: 0; transition: background-color 0.3s, border-color 0.3s; }
+        .chat-header-title { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text-title); text-transform: uppercase; letter-spacing: .06em; }
+        .chat-header-sub { font-size: 11px; color: var(--text-muted); }
+        .chat-icon { width: 36px; height: 36px; background: rgba(220,38,38,.1); border: 1px solid rgba(220,38,38,.3); display: flex; align-items: center; justify-content: center; color: #dc2626; font-size: 14px; flex-shrink: 0; border-radius: 8px; }
         .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-        .msg-row { display: flex; flex-direction: column; max-width: 75%; }
+        .msg-row { display: flex; flex-direction: column; max-width: 85%; }
+        @media(min-width: 600px){ .msg-row { max-width: 75%; } }
         .msg-row.mine { align-self: flex-end; align-items: flex-end; }
         .msg-row.theirs { align-self: flex-start; align-items: flex-start; }
-        .msg-sender { font-family: 'Space Mono', monospace; font-size: 9px; color: #4b5563; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
-        .msg-bubble { padding: 10px 14px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-        .msg-row.mine .msg-bubble { background: rgba(220,38,38,.15); border: 1px solid rgba(220,38,38,.25); color: #fecaca; }
-        .msg-row.theirs .msg-bubble { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e5e7eb; }
-        .msg-time { font-size: 10px; color: #374151; font-family: 'Space Mono', monospace; margin-top: 4px; }
+        .msg-sender { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+        .msg-bubble { padding: 10px 14px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; border-radius: 8px; }
+        .msg-row.mine .msg-bubble { background: rgba(220,38,38,.15); border: 1px solid rgba(220,38,38,.25); color: #dc2626; }
+        html.dark .msg-row.mine .msg-bubble { color: #fecaca; }
+        .msg-row.theirs .msg-bubble { background: var(--msg-theirs-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+        .msg-time { font-size: 10px; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-top: 4px; }
         .msg-attachment { margin-top: 8px; }
-        .msg-attachment img { max-width: 200px; border: 1px solid rgba(255,255,255,0.1); }
-        .msg-attachment a { font-size: 12px; color: #60a5fa; text-decoration: none; }
+        .msg-attachment img { max-width: 200px; border: 1px solid var(--border-color); border-radius: 6px; }
+        .msg-attachment a { font-size: 12px; color: #ef4444; text-decoration: none; font-weight: 500; }
 
         /* Chat Input */
-        .chat-input-area { border-top: 1px solid rgba(255,255,255,0.07); padding: 16px 20px; background: rgba(255,255,255,0.01); flex-shrink: 0; }
+        .chat-input-area { border-top: 1px solid var(--border-color); padding: 16px 20px; background: var(--panel-bg); flex-shrink: 0; transition: background-color 0.3s, border-color 0.3s; }
+        @media(max-width: 600px) { .chat-input-area { padding: 12px 16px; padding-bottom: max(12px, env(safe-area-inset-bottom)); } }
         .chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
-        .chat-textarea { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #e5e7eb; padding: 10px 14px; font-size: 13px; font-family: 'Inter', sans-serif; resize: none; min-height: 44px; max-height: 120px; outline: none; transition: border-color .2s; }
+        .chat-textarea { flex: 1; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; font-size: 13px; font-family: 'Inter', sans-serif; resize: none; min-height: 44px; max-height: 120px; outline: none; transition: border-color .2s; border-radius: 8px; }
         .chat-textarea:focus { border-color: rgba(220,38,38,.5); }
-        .btn-send { width: 44px; height: 44px; background: #dc2626; border: none; color: white; font-size: 15px; cursor: pointer; flex-shrink: 0; transition: background .2s; display: flex; align-items: center; justify-content: center; }
+        .btn-send { width: 44px; height: 44px; background: #dc2626; border: none; color: white; font-size: 15px; cursor: pointer; flex-shrink: 0; transition: background .2s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
         .btn-send:hover { background: #b91c1c; }
-        .btn-attach { width: 44px; height: 44px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; font-size: 14px; cursor: pointer; flex-shrink: 0; transition: all .2s; display: flex; align-items: center; justify-content: center; }
-        .btn-attach:hover { color: white; background: rgba(255,255,255,0.1); }
-        .attach-name { font-size: 11px; color: #6b7280; font-family: 'Space Mono', monospace; margin-top: 6px; }
-        .alert-success { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3); color: #86efac; padding: 10px 14px; font-size: 12px; margin-bottom: 14px; }
+        .btn-attach { width: 44px; height: 44px; background: var(--msg-theirs-bg); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 14px; cursor: pointer; flex-shrink: 0; transition: all .2s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .btn-attach:hover { color: var(--text-main); background: var(--border-color); }
+        .attach-name { font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-top: 6px; margin-bottom: 6px; }
+        .alert-success { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3); color: #16a34a; padding: 10px 14px; font-size: 12px; margin-bottom: 14px; border-radius: 6px; }
+        html.dark .alert-success { color: #86efac; }
     </style>
+    <script>
+        // Set initial theme before body renders to prevent flickering
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
 <body>
     <nav class="portal-nav">
@@ -103,6 +144,9 @@
             <span class="nav-badge">Service Detail</span>
         </a>
         <div style="display:flex; align-items:center; gap:10px;">
+            <button id="themeToggle" class="btn-ghost" title="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
             <a href="{{ route('service.index') }}" class="btn-ghost"><i class="fa-solid fa-arrow-left mr-1"></i> My Bookings</a>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
@@ -253,6 +297,30 @@
         const CSRF = document.querySelector('meta[name="csrf-token"]').content;
         let lastId = {{ $booking->messages->last()?->id ?? 0 }};
         let pollInterval;
+
+        // Theme Toggle Logic
+        const themeBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        function updateThemeIcon() {
+            if (root.classList.contains('dark')) {
+                themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+        }
+        updateThemeIcon();
+
+        themeBtn.addEventListener('click', () => {
+            if (root.classList.contains('dark')) {
+                root.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                root.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+            updateThemeIcon();
+        });
 
         function scrollBottom() {
             const c = document.getElementById('chatMessages');
