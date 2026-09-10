@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('service_messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('booking_id')->constrained('service_bookings')->cascadeOnDelete();
+            $table->enum('sender_type', ['customer', 'mechanic']);
+            $table->string('sender_name');
+            $table->text('message')->nullable();
+            $table->string('attachment')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

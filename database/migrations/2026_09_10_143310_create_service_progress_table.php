@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('service_progress', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('booking_id')->constrained('service_bookings')->cascadeOnDelete();
+            $table->string('phase_label');
+            $table->text('note')->nullable();
+            $table->string('photo_url')->nullable();
             $table->timestamps();
         });
     }
