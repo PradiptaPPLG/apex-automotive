@@ -388,15 +388,23 @@
                                         <i class="fa-solid fa-truck-fast w-4 text-center text-cyan-400"></i>
                                         <span>Delivery Driver Console</span>
                                     </a>
+                                @elseif(auth()->user()->isMechanic())
+                                    <a href="{{ route('mechanic.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors" style="background: rgba(249,115,22,0.15);">
+                                        <i class="fa-solid fa-wrench w-4 text-center text-orange-500"></i>
+                                        <span>Mechanic Dashboard</span>
+                                    </a>
                                 @endif
-                                <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
-                                    <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
-                                    <span>Portal VIP &amp; Konsultasi</span>
-                                </a>
-                                <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
-                                    <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
-                                    <span>Profil &amp; Alamat VIP</span>
-                                </a>
+
+                                @if(!auth()->user()->isMechanic() && !auth()->user()->isDelivery() && !auth()->user()->isRm() && !auth()->user()->isManager())
+                                    <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
+                                        <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
+                                        <span>Portal VIP &amp; Konsultasi</span>
+                                    </a>
+                                    <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
+                                        <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
+                                        <span>Profil &amp; Alamat VIP</span>
+                                    </a>
+                                @endif
                                 <a href="{{ route('faq') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                     <i class="fa-solid fa-circle-question text-red-500 w-4 text-center"></i>
                                     <span>Bantuan &amp; FAQ</span>
@@ -1349,8 +1357,8 @@
                                 Custom titanium exhaust systems, carbon aerodynamic upgrades, and track telemetry optimization straight from European racing engineers.
                             </p>
                             <div class="pt-2">
-                                <a href="#dealer-location" class="inline-flex items-center text-xs font-mono text-neutral-900 dark:text-neutral-300 hover:text-red-600 font-semibold tracking-wider">
-                                    <i class="fa-solid fa-chevron-right text-red-600 mr-2 text-[10px]"></i> INQUIRE ACCESSORIES
+                                <a href="{{ route('service.create') }}" class="inline-flex items-center text-xs font-mono text-neutral-900 dark:text-neutral-300 hover:text-red-600 font-semibold tracking-wider">
+                                    <i class="fa-solid fa-chevron-right text-red-600 mr-2 text-[10px]"></i> INQUIRE ACCESSORIES / SERVICE
                                 </a>
                             </div>
                         </div>
@@ -1411,9 +1419,9 @@
                         </div>
 
                         <div class="pt-4 flex flex-wrap gap-4">
-                            <button onclick="toggleModal('inquireModal')" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center">
+                            <a href="{{ route('service.create') }}" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center">
                                 <i class="fa-solid fa-calendar-check mr-2"></i> BOOK PRIVATE APPOINTMENT
-                            </button>
+                            </a>
                             <a href="https://maps.google.com" target="_blank" class="px-6 py-3 border border-white/20 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 inline-flex items-center">
                                 <i class="fa-solid fa-map-location-dot mr-2"></i> GET DIRECTIONS
                             </a>
