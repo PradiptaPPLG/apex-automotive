@@ -117,11 +117,35 @@ class User extends Authenticatable
     }
 
     /**
+     * Determine whether the user is a Mechanic / Service Advisor.
+     */
+    public function isMechanic(): bool
+    {
+        return $this->role === 'mechanic';
+    }
+
+    /**
      * Get all inquiries belonging to this user.
      */
     public function inquiries(): HasMany
     {
         return $this->hasMany(Inquiry::class);
+    }
+
+    /**
+     * Get all vehicles registered to this user's garage.
+     */
+    public function customerVehicles(): HasMany
+    {
+        return $this->hasMany(CustomerVehicle::class);
+    }
+
+    /**
+     * Get all service bookings belonging to this user.
+     */
+    public function serviceBookings(): HasMany
+    {
+        return $this->hasMany(ServiceBooking::class);
     }
 
     /**
