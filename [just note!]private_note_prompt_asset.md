@@ -51,7 +51,7 @@ sekarang coba terapkan velg ini, aturannya masih sama, pastikan velgnya 101% ses
 
 ingat, jangan sampe berubah
 
-1. !important, paling penting : POSISI POV MOBIL, pov derajat nya, arahnya
+1. !important, paling penting : POSISI POV MOBIL, pov derajat nya, arahnya jangan sampe berubah 
 2. desain background, lightning, lantai, dinding, picture belakang jangan sampe ada yang berubah
 3. hanya merubah velg aja, jangan sampe merubah apapun lagi
 4. rasio aspek jangan dirubah, begitu juga dengan resolusi pixel graphic nya
