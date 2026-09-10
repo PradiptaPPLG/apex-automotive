@@ -216,6 +216,10 @@ class AuthController extends Controller
                 return redirect()->route('delivery.portal');
             }
 
+            if ($user->isMechanic()) {
+                return redirect()->route('mechanic.dashboard');
+            }
+
             if (! $user->hasCompletedProfile()) {
                 return redirect()->route('profile.complete')->with('welcome', true);
             }
@@ -268,6 +272,8 @@ class AuthController extends Controller
             $redirect = route('admin.inquiries.index');
         } elseif ($user->isDelivery()) {
             $redirect = route('delivery.portal');
+        } elseif ($user->isMechanic()) {
+            $redirect = route('mechanic.dashboard');
         } elseif (! $user->hasCompletedProfile()) {
             $redirect = route('profile.complete');
         } else {
