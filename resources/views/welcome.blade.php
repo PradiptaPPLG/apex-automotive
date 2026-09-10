@@ -1337,7 +1337,7 @@
                     <!-- SERVICE CARD 3 -->
                     <div class="glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80" alt="Performance Tuning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img src="{{ asset('images/service.webp') }}" alt="Performance Tuning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                         </div>
                         <div class="p-6 space-y-3 bg-white dark:bg-transparent">
