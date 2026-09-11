@@ -133,6 +133,7 @@ class CarSeeder extends Seeder
                 'description' => 'Zenvo TSR-S dengan active centripetal wing.',
                 'status' => 'available',
             ],
+            
         ];
 
         foreach ($cars as $car) {

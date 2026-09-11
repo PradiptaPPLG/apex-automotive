@@ -1238,7 +1238,7 @@
                     
                     <!-- SPOTLIGHT ITEM 1 -->
                     <div class="group relative overflow-hidden bg-neutral-900 h-64 border border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
-                        <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80" alt="Ferrari Roma Spider" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="{{ asset('images/limited-edition.webp') }}" alt="Ferrari Roma Spider" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">LIMITED EDITION</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari Roma Spider</h3>
@@ -1248,7 +1248,7 @@
 
                     <!-- SPOTLIGHT ITEM 2 -->
                     <div class="group relative overflow-hidden bg-neutral-900 h-64 border border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
-                        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" alt="Ferrari 296 GTS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="{{ asset('images/hybrid-innovation.webp') }}" alt="Ferrari 296 GTS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">HYBRID INNOVATION</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari 296 GTS</h3>
@@ -1258,7 +1258,7 @@
 
                     <!-- SPOTLIGHT ITEM 3 -->
                     <div class="group relative overflow-hidden bg-neutral-900 h-64 border border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
-                        <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="Ferrari Portofino M" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="{{ asset('images/exclusivity.webp') }}" alt="Ferrari Portofino M" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">EXCLUSIVITY</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari Portofino M</h3>
