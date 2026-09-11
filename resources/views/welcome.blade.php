@@ -1430,7 +1430,7 @@
 
                     <!-- RIGHT COLUMN: INTERACTIVE MAP PREVIEW CARD -->
                     <div class="relative h-[380px] rounded-none overflow-hidden border border-white/10 group reveal-on-scroll">
-                        <img src="https://images.unsplash.com/photo-1562519819-016930ada31b?auto=format&fit=crop&w=1000&q=80" alt="Showroom Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="{{ asset('images/experience-showroom.webp') }}" alt="Showroom Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8 flex flex-col justify-between">
                             <div class="flex justify-between items-start">
                                 <span class="bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg">
