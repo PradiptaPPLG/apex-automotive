@@ -110,6 +110,13 @@
         /* Light mode scrollbar */
         html.light ::-webkit-scrollbar-track { background: var(--bg-main); }
         html.light * { scrollbar-color: #dc2626 var(--bg-main); }
+        /* ── Root layout fix ── */
+        .layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
         .sidebar {
             width: 340px;
             flex-shrink: 0;
@@ -164,6 +171,16 @@
         .message-bubble .msg-text { white-space: pre-wrap; }
         .message-group.rm .message-bubble { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.3); color: #fecaca; }
         .message-group.buyer .message-bubble { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
+        /* delivery / system messages */
+        .message-group.delivery .message-bubble,
+        .message-group.system .message-bubble {
+            background: rgba(34,211,238,0.06);
+            border-color: rgba(34,211,238,0.25);
+            color: #a5f3fc;
+        }
+        .message-group.delivery { align-self: center; align-items: center; max-width: 80%; }
+        .message-group.system  { align-self: center; align-items: center; max-width: 80%; }
+        .msg-text strong { font-weight: 700; }
         .message-time { font-size: 10px; color: #374151; padding: 0 4px; }
 
         .chat-input-area { border-top: 1px solid rgba(255,255,255,0.06); padding: 12px 24px; background: rgba(6,6,9,0.95); display: flex; flex-direction: column; gap: 8px; }
@@ -377,7 +394,7 @@
                                         </a>
                                     </div>
                                 @else
-                                    <span class="msg-text">{{ $msg->message }}</span>
+                                    <span class="msg-text">{!! nl2br(e(preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $msg->message ?? ''))) !!}</span>
                                     @if($msg->attachment)
                                         @php $attachPath = str_replace('\\', '/', $msg->attachment); $ext = strtolower(pathinfo($attachPath, PATHINFO_EXTENSION)); @endphp
                                         @if(in_array($ext, ['jpg','jpeg','png','webp','gif']))
@@ -487,7 +504,7 @@
                         ? `<a href="${fileUrl}" target="_blank"><img src="${fileUrl}" style="max-width:240px;max-height:180px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);display:block;"></a>`
                         : `<a href="${fileUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:6px 12px;color:#60a5fa;text-decoration:underline;font-size:11px;font-family:monospace;"><i class="fa-solid fa-file-pdf"></i> Lihat File Lampiran</a>`;
                 }
-                const msgText = msg.message ? `<span class="msg-text">${msg.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</span>` : '';
+                const msgText = msg.message ? `<span class="msg-text">${msg.message.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</span>` : '';
                 contentHtml = msgText + attachHtml;
             }
             group.innerHTML = `
