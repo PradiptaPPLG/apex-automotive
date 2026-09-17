@@ -10,6 +10,7 @@ use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\Manager\CarController;
 use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Manager\TeamController;
+use App\Http\Controllers\Manager\SettingController;
 use App\Http\Controllers\Mechanic\ServiceController as MechanicServiceController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ServiceController;
@@ -140,6 +141,10 @@ Route::middleware(['auth', 'rm'])->prefix('admin')->name('admin.')->group(functi
 Route::middleware(['auth', 'manager'])->prefix('manager')->name('manager.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/preview', [DashboardController::class, 'preview'])->name('preview');
+
+    // Settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 
     // Cars Management
     Route::patch('/cars/{car}/status', [CarController::class, 'toggleStatus'])->name('cars.status');

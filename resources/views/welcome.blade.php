@@ -216,7 +216,7 @@
     <!-- ==========================================
          0. CINEMATIC BLACK INTRO SCREEN WITH LOGO FLICKER
          ========================================== -->
-    <div id="intro-screen" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center transition-all duration-1000">
+    <div id="intro-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center transition-all duration-1000" style="z-index: 2147483647;">
         <div class="relative flex flex-col items-center">
             <!-- Pulsing/Flickering Custom Logo -->
             <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="w-36 sm:w-48 h-auto object-contain logo-flicker mb-6">
@@ -562,6 +562,34 @@
                 </div>
             </div>
 
+            <!-- SLIDE 6: PORSCHE 911 GT3 RS -->
+            <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="5">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
+                <img src="{{ asset('images/carousell/carousell6.webp') }}" alt="Porsche 911 GT3 RS" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
+                    <div class="space-y-4 max-w-3xl">
+                        <div class="flex items-center space-x-3">
+                            <span class="red-divider-line"></span>
+                            <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">TRACK FOCUSED EXCELLENCE</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-white uppercase leading-none drop-shadow-2xl">
+                            PORSCHE 911 GT3 RS
+                        </h1>
+                        <p class="text-base sm:text-lg text-neutral-300 font-light max-w-xl">
+                            Aerodynamic perfection and naturally aspirated power. The ultimate expression of Porsche motorsport DNA.
+                        </p>
+                        <div class="pt-4 flex flex-wrap gap-4 items-center">
+                            <button onclick="openCarDetails('Porsche 911 GT3 RS')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
+                                EXPLORE MODEL <i class="fa-solid fa-arrow-right ml-3"></i>
+                            </button>
+                            <button onclick="window.location.href='/inquire'" class="px-8 py-3.5 border border-white/30 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 backdrop-blur-sm">
+                                REQUEST QUOTE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- CONTROLS & PAGINATION -->
             <div class="absolute bottom-6 left-0 right-0 z-30 max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
                 <!-- INDICATOR DOTS & PROGRESS BAR -->
@@ -572,8 +600,9 @@
                         <button onclick="setSlide(2)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 3"></button>
                         <button onclick="setSlide(3)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 4"></button>
                         <button onclick="setSlide(4)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 5"></button>
+                        <button onclick="setSlide(5)" class="w-4 h-1 bg-white/30 hover:bg-white transition-all rounded-full dot-indicator" aria-label="Slide 6"></button>
                     </div>
-                    <span class="text-xs font-mono text-neutral-400 pl-2" id="slide-counter">01 / 05</span>
+                    <span class="text-xs font-mono text-neutral-400 pl-2" id="slide-counter">01 / 06</span>
                 </div>
 
                 <!-- PREV / NEXT BUTTONS -->
@@ -1048,13 +1077,13 @@
                         <span class="font-serif tracking-widest text-lg font-black text-white uppercase">APEX AUTOMOTIVE</span>
                     </div>
                     <p class="text-xs text-neutral-400 font-light max-w-sm leading-relaxed">
-                        Official Cijeungjing luxury supercar showroom. Authorized partner for high-performance exotics, certified pre-owned supercars, and factory-trained racing maintenance.
+                        {{ \App\Models\Setting::where('key', 'footer_desc')->value('value') ?? 'Official Cijeungjing luxury supercar showroom. Authorized partner for high-performance exotics, certified pre-owned supercars, and factory-trained racing maintenance.' }}
                     </p>
                     <div class="flex space-x-4 pt-2 text-base text-neutral-400">
-                        <a href="#" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="{{ \App\Models\Setting::where('key', 'social_instagram')->value('value') ?? '#' }}" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="{{ \App\Models\Setting::where('key', 'social_youtube')->value('value') ?? '#' }}" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="{{ \App\Models\Setting::where('key', 'social_facebook')->value('value') ?? '#' }}" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="{{ \App\Models\Setting::where('key', 'social_linkedin')->value('value') ?? '#' }}" class="hover:text-red-500 transition-colors"><i class="fa-brands fa-linkedin"></i></a>
                     </div>
                 </div>
 

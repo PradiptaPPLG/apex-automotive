@@ -1,9 +1,7 @@
-@extends('manager.layout')
+<?php $__env->startSection('title', 'Dashboard & Analytics Manager'); ?>
+<?php $__env->startSection('page_header', 'Metabase Dashboard'); ?>
 
-@section('title', 'Dashboard & Analytics Manager')
-@section('page_header', 'Metabase Dashboard')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     /* METABASE UI CLONE STYLES */
     .metabase-dashboard {
@@ -148,7 +146,7 @@
                 <div class="mb-card-title">Total Unit Mobil</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number dark">{{ $totalCars }}</div>
+            <div class="mb-number dark"><?php echo e($totalCars); ?></div>
             <div class="mb-sub-metric">Total Asset Showroom</div>
         </div>
 
@@ -157,7 +155,7 @@
                 <div class="mb-card-title">Unit Available (Ready)</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number green">{{ $carStats['available'] }}</div>
+            <div class="mb-number green"><?php echo e($carStats['available']); ?></div>
             <div class="mb-sub-metric">Siap dijual</div>
         </div>
 
@@ -166,7 +164,7 @@
                 <div class="mb-card-title">Unit Reserved</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number orange">{{ $carStats['reserved'] }}</div>
+            <div class="mb-number orange"><?php echo e($carStats['reserved']); ?></div>
             <div class="mb-sub-metric">Proses SPK</div>
         </div>
 
@@ -175,7 +173,7 @@
                 <div class="mb-card-title">Unit Sold Out</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number red">{{ $carStats['sold'] }}</div>
+            <div class="mb-number red"><?php echo e($carStats['sold']); ?></div>
             <div class="mb-sub-metric">Selesai</div>
         </div>
 
@@ -184,7 +182,7 @@
                 <div class="mb-card-title">Inquiries</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number">{{ $totalInquiries }}</div>
+            <div class="mb-number"><?php echo e($totalInquiries); ?></div>
             <div class="mb-sub-metric">Leads Masuk</div>
         </div>
     </div>
@@ -214,7 +212,7 @@
                 <div class="mb-card-title">Sales Selesai</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number green">{{ $inquiryStats['completed'] }}</div>
+            <div class="mb-number green"><?php echo e($inquiryStats['completed']); ?></div>
             <div class="mb-sub-metric">Terkirim</div>
         </div>
 
@@ -223,7 +221,7 @@
                 <div class="mb-card-title">Sales RM</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number dark">{{ $totalRm }}</div>
+            <div class="mb-number dark"><?php echo e($totalRm); ?></div>
             <div class="mb-sub-metric">Aktif</div>
         </div>
 
@@ -232,7 +230,7 @@
                 <div class="mb-card-title">Drivers</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number dark">{{ $totalDelivery }}</div>
+            <div class="mb-number dark"><?php echo e($totalDelivery); ?></div>
             <div class="mb-sub-metric">Escort</div>
         </div>
     </div>
@@ -278,25 +276,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($recentInquiries as $inquiry)
+                        <?php $__empty_1 = true; $__currentLoopData = $recentInquiries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $inquiry): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
                                 <td>
-                                    <div style="font-weight: 600;">{{ $inquiry->name }}</div>
-                                    <div style="font-size: 11px; color: #8492a6;">#APX-{{ str_pad($inquiry->id, 5, '0', STR_PAD_LEFT) }}</div>
+                                    <div style="font-weight: 600;"><?php echo e($inquiry->name); ?></div>
+                                    <div style="font-size: 11px; color: #8492a6;">#APX-<?php echo e(str_pad($inquiry->id, 5, '0', STR_PAD_LEFT)); ?></div>
                                 </td>
-                                <td>{{ $inquiry->car_model }}</td>
-                                <td>{{ $inquiry->assigned_rm_name ?? 'Unassigned' }}</td>
+                                <td><?php echo e($inquiry->car_model); ?></td>
+                                <td><?php echo e($inquiry->assigned_rm_name ?? 'Unassigned'); ?></td>
                                 <td>
                                     <span style="font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: #edf2f7; color: #4a5568;">
-                                        {{ $inquiry->statusLabel() }}
+                                        <?php echo e($inquiry->statusLabel()); ?>
+
                                     </span>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="4" style="text-align: center; color: #8492a6;">No data available</td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -347,14 +346,15 @@
                 datasets: [{
                     label: 'Count',
                     data: [
-                        {{ $inquiryStats['received'] }},
-                        {{ $inquiryStats['consultation'] }},
-                        {{ $inquiryStats['spk'] }},
-                        {{ $inquiryStats['kyc'] }},
-                        {{ $inquiryStats['contract'] }},
-                        {{ $inquiryStats['payment'] }},
-                        {{ $inquiryStats['delivery'] }},
-                        {{ $inquiryStats['completed'] }}
+                        <?php echo e($inquiryStats['received']); ?>,
+                        <?php echo e($inquiryStats['consultation']); ?>,
+                        <?php echo e($inquiryStats['spk']); ?>,
+                        <?php echo e($inquiryStats['kyc']); ?>,
+                        <?php echo e($inquiryStats['contract']); ?>,
+                        <?php echo e($inquiryStats['payment']); ?>,
+                        <?php echo e($inquiryStats['delivery']); ?>,
+                        <?php echo e($inquiryStats['completed']); ?>
+
                     ],
                     backgroundColor: '#509ee3',
                     borderRadius: 2
@@ -388,9 +388,10 @@
                 labels: ['Available', 'Reserved', 'Sold Out'],
                 datasets: [{
                     data: [
-                        {{ $carStats['available'] }},
-                        {{ $carStats['reserved'] }},
-                        {{ $carStats['sold'] }}
+                        <?php echo e($carStats['available']); ?>,
+                        <?php echo e($carStats['reserved']); ?>,
+                        <?php echo e($carStats['sold']); ?>
+
                     ],
                     backgroundColor: ['#84bb3c', '#f2a83b', '#ed5c5c'],
                     borderWidth: 2,
@@ -411,4 +412,6 @@
         });
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('manager.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\apex-automotive\resources\views/manager/dashboard.blade.php ENDPATH**/ ?>

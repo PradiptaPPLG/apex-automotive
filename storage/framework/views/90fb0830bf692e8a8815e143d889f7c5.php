@@ -12,7 +12,7 @@
         position: fixed;
         bottom: 30px;
         right: 30px;
-        z-index: 2147483647;
+        z-index: 2147483640;
     }
 
     @media (max-width: 768px) {
@@ -748,7 +748,8 @@
             "// ADA JADWAL TEST DRIVE?",
             "// PANDUAN NAVIGASI AKTIF.",
             "// MENUNGGU PERINTAH...",
-            "// SINKRONISASI DATA DEALER..."
+            "// SINKRONISASI DATA DEALER...",
+            "// 24/7! SIAP..."
         ];
         const vBbl = document.getElementById('aiAssistBbl');
         const vBTxt = document.getElementById('aiAssistBblTxt');

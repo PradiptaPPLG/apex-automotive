@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Manager Dashboard') — Apex Automotive</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title><?php echo $__env->yieldContent('title', 'Manager Dashboard'); ?> — Apex Automotive</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @include('partials.theme-head')
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+    <?php echo $__env->make('partials.theme-head', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <style>
         /* Manager-specific overrides using CSS variables from theme-head */
         :root {
@@ -264,33 +264,33 @@
 
         <div class="nav-menu">
             <span class="nav-label">Menu utama</span>
-            <a href="{{ route('manager.dashboard') }}" class="nav-item {{ request()->routeIs('manager.dashboard') ? 'active' : '' }}">
+            <a href="<?php echo e(route('manager.dashboard')); ?>" class="nav-item <?php echo e(request()->routeIs('manager.dashboard') ? 'active' : ''); ?>">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Dashboard &amp; Analytics</span>
             </a>
 
-            <a href="{{ route('manager.cars.index') }}" class="nav-item {{ request()->routeIs('manager.cars.*') ? 'active' : '' }}">
+            <a href="<?php echo e(route('manager.cars.index')); ?>" class="nav-item <?php echo e(request()->routeIs('manager.cars.*') ? 'active' : ''); ?>">
                 <i class="fa-solid fa-car"></i>
                 <span>Kelola Showroom Mobil</span>
             </a>
 
-            <a href="{{ route('manager.team.index') }}" class="nav-item {{ request()->routeIs('manager.team.*') ? 'active' : '' }}">
+            <a href="<?php echo e(route('manager.team.index')); ?>" class="nav-item <?php echo e(request()->routeIs('manager.team.*') ? 'active' : ''); ?>">
                 <i class="fa-solid fa-users"></i>
                 <span>Kelola Tim Sales &amp; Delivery</span>
             </a>
 
             <span class="nav-label" style="margin-top: 14px;">Preview &amp; Sistem</span>
-            <a href="{{ route('manager.preview') }}" class="nav-item {{ request()->routeIs('manager.preview') ? 'active' : '' }}">
+            <a href="<?php echo e(route('manager.preview')); ?>" class="nav-item <?php echo e(request()->routeIs('manager.preview') ? 'active' : ''); ?>">
                 <i class="fa-solid fa-eye"></i>
                 <span>Preview Website</span>
             </a>
 
-            <a href="{{ route('manager.settings.index') }}" class="nav-item {{ request()->routeIs('manager.settings.*') ? 'active' : '' }}">
+            <a href="<?php echo e(route('manager.settings.index')); ?>" class="nav-item <?php echo e(request()->routeIs('manager.settings.*') ? 'active' : ''); ?>">
                 <i class="fa-solid fa-gear"></i>
                 <span>Pengaturan Website</span>
             </a>
 
-            <a href="{{ route('home') }}" target="_blank" class="nav-item">
+            <a href="<?php echo e(route('home')); ?>" target="_blank" class="nav-item">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 <span>Buka Landing Page</span>
             </a>
@@ -298,11 +298,11 @@
 
         <div class="user-footer">
             <div class="user-info">
-                <span class="user-name">{{ auth()->user()->name }}</span>
+                <span class="user-name"><?php echo e(auth()->user()->name); ?></span>
                 <span class="user-role">MANAGER EXEC</span>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
+            <form method="POST" action="<?php echo e(route('logout')); ?>">
+                <?php echo csrf_field(); ?>
                 <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:14px;" title="Keluar">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
@@ -312,42 +312,44 @@
 
     <div class="main-wrapper">
         <header class="topbar">
-            <h1 class="topbar-title">@yield('page_header', 'Manager Portal')</h1>
+            <h1 class="topbar-title"><?php echo $__env->yieldContent('page_header', 'Manager Portal'); ?></h1>
             <div class="flex items-center gap-4">
                 <span style="font-size: 12px; font-family: 'Space Mono', monospace; color: var(--text-muted);">
-                    <i class="fa-regular fa-clock text-red-500 mr-1"></i> {{ date('d M Y') }}
+                    <i class="fa-regular fa-clock text-red-500 mr-1"></i> <?php echo e(date('d M Y')); ?>
+
                 </span>
                 <button onclick="toggleGlobalTheme()" class="apex-theme-btn" id="managerThemeBtn">
                     <i class="fa-solid fa-moon" style="color:#818cf8;"></i> DARK MODE
                 </button>
                 <span style="padding: 6px 12px; background: rgba(220, 38, 38, 0.12); border: 1px solid rgba(220, 38, 38, 0.3); color: #fca5a5; font-family: 'Space Mono', monospace; font-size: 11px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
                     <i class="fa-solid fa-user-shield text-red-500"></i>
-                    <span>{{ auth()->user()->email }}</span>
+                    <span><?php echo e(auth()->user()->email); ?></span>
                 </span>
             </div>
         </header>
 
         <main class="content-body">
-            @if(session('success'))
+            <?php if(session('success')): ?>
                 <div class="alert-success-panel">
                     <i class="fa-solid fa-circle-check"></i>
-                    <span>{{ session('success') }}</span>
+                    <span><?php echo e(session('success')); ?></span>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @if(session('error'))
+            <?php if(session('error')): ?>
                 <div class="alert-error-panel">
                     <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>{{ session('error') }}</span>
+                    <span><?php echo e(session('error')); ?></span>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </main>
     </div>
-@include('partials.chatbot')
+<?php echo $__env->make('partials.chatbot', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 </html>
 
 
 
+<?php /**PATH C:\xampp\htdocs\apex-automotive\resources\views/manager/layout.blade.php ENDPATH**/ ?>
