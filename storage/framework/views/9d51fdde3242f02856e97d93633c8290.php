@@ -1,8 +1,7 @@
-@extends('layouts.app')
-@section('title', 'APEX AUTOMOTIVE | Official Luxury Showroom & Hypercar Dealer')
-@section('meta_description', 'Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Cijeungjing. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, Koenigsegg, Bugatti, Chevrolet Corvette, Pagani, Zenvo, and Jeep.')
+<?php $__env->startSection('title', 'APEX AUTOMOTIVE | Official Luxury Showroom & Hypercar Dealer'); ?>
+<?php $__env->startSection('meta_description', 'Apex Automotive - Official Luxury Supercar & Hypercar Dealer in Cijeungjing. Exclusive inventory of BMW Motorsport, Lamborghini, McLaren, Ferrari, Porsche, Audi, Koenigsegg, Bugatti, Chevrolet Corvette, Pagani, Zenvo, and Jeep.'); ?>
 
-@section('styles')
+<?php $__env->startSection('styles'); ?>
 <style>
             .reveal-on-scroll {
                 opacity: 0;
@@ -180,9 +179,9 @@
                 transform: translateY(-3px);
             }
         </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div id="pixel-transition-overlay" class="fixed inset-0 z-[9998] pointer-events-none hidden grid grid-cols-12 grid-rows-8 w-full h-full"></div>
 
     <!-- FERRARI-STYLE FLOATING SCROLL SECTION NAVIGATOR -->
@@ -219,7 +218,7 @@
     <div id="intro-screen" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center transition-all duration-1000">
         <div class="relative flex flex-col items-center">
             <!-- Pulsing/Flickering Custom Logo -->
-            <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="w-36 sm:w-48 h-auto object-contain logo-flicker mb-6">
+            <img src="<?php echo e(asset('images/logo/logo.png')); ?>" alt="Apex Automotive Logo" class="w-36 sm:w-48 h-auto object-contain logo-flicker mb-6">
             
             <div class="flex items-center space-x-3 mt-4">
                 <span class="red-divider-line w-8"></span>
@@ -235,7 +234,7 @@
     <script>
         (function() {
             try {
-                const isFreshAuth = {{ (session('welcome') || session('logged_out') || session('email_sent')) ? 'true' : 'false' }};
+                const isFreshAuth = <?php echo e((session('welcome') || session('logged_out') || session('email_sent')) ? 'true' : 'false'); ?>;
                 const hasSeen = sessionStorage.getItem('apex_intro_seen');
                 if (hasSeen && !isFreshAuth) {
                     const el = document.getElementById('intro-screen');
@@ -311,7 +310,7 @@
             
             <!-- BRAND LOGO (Using logo.png) -->
             <a href="/" class="flex items-center space-x-3 group">
-                <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform">
+                <img src="<?php echo e(asset('images/logo/logo.png')); ?>" alt="Apex Automotive Logo" class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform">
                 <div class="flex flex-col">
                     <span class="font-serif tracking-widest text-xl font-black text-neutral-900 dark:text-white group-hover:text-red-600 transition-colors uppercase">APEX</span>
                     <span class="text-[9px] font-mono tracking-[0.3em] text-neutral-500 dark:text-neutral-400 -mt-1 uppercase">Automotive</span>
@@ -339,65 +338,66 @@
                     </div>
                 </button>
 
-                @auth
-                    {{-- AUTHENTICATED: Show user profile badge & dropdown --}}
+                <?php if(auth()->guard()->check()): ?>
+                    
                     <div class="relative inline-block text-left" id="userDropdownWrapper">
                         <button type="button" id="userDropdownToggle" onclick="toggleUserDropdown()" class="flex items-center space-x-2 px-3 py-2 border border-red-600/40 bg-[#0c0c14] hover:bg-red-600/10 transition-all duration-200 text-xs font-mono font-semibold text-white cursor-pointer rounded-sm shadow-md">
                             <span class="inline-flex w-6 h-6 items-center justify-center rounded-full bg-red-600 text-white text-[11px] font-extrabold uppercase shrink-0">
-                                {{ strtoupper(substr(auth()->user()->name ?? 'V', 0, 1)) }}
+                                <?php echo e(strtoupper(substr(auth()->user()->name ?? 'V', 0, 1))); ?>
+
                             </span>
-                            <span class="uppercase tracking-wider max-w-[120px] sm:max-w-[160px] truncate text-[11px] font-bold">{{ auth()->user()->name ?? 'VIP Buyer' }}</span>
+                            <span class="uppercase tracking-wider max-w-[120px] sm:max-w-[160px] truncate text-[11px] font-bold"><?php echo e(auth()->user()->name ?? 'VIP Buyer'); ?></span>
                             <i id="userDropdownChevron" class="fa-solid fa-chevron-down text-[9px] text-red-500 ml-1 transition-transform duration-200"></i>
                         </button>
-                        {{-- Dropdown Menu — solid background, click trigger --}}
+                        
                         <div id="userDropdownMenu" class="absolute right-0 top-full mt-2 w-64 z-[100] hidden rounded-sm overflow-hidden" style="background: #0c0c14; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px rgba(0,0,0,0.85);">
                             <div class="p-3.5 border-b" style="background: #111118; border-color: rgba(255,255,255,0.08);">
                                 <p class="text-[9px] font-mono text-red-500 uppercase tracking-widest font-bold">AKUN VIP TERVERIFIKASI</p>
-                                <p class="text-xs font-semibold text-white truncate mt-1">{{ auth()->user()->email }}</p>
-                                @if (! auth()->user()->hasCompletedProfile())
-                                    <a href="{{ route('profile.complete') }}" class="inline-flex items-center mt-2 text-[10px] font-mono text-amber-400 hover:text-amber-300 font-bold tracking-wider">
+                                <p class="text-xs font-semibold text-white truncate mt-1"><?php echo e(auth()->user()->email); ?></p>
+                                <?php if(! auth()->user()->hasCompletedProfile()): ?>
+                                    <a href="<?php echo e(route('profile.complete')); ?>" class="inline-flex items-center mt-2 text-[10px] font-mono text-amber-400 hover:text-amber-300 font-bold tracking-wider">
                                         <i class="fa-solid fa-triangle-exclamation mr-1"></i> LENGKAPI PROFIL
                                     </a>
-                                @endif
+                                <?php endif; ?>
                             </div>
                             <div class="py-1" style="background: #0c0c14;">
-                                @if(auth()->user()->isManager())
-                                    <a href="{{ route('manager.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors" style="background: rgba(220,38,38,0.15);">
+                                <?php if(auth()->user()->isManager()): ?>
+                                    <a href="<?php echo e(route('manager.dashboard')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors" style="background: rgba(220,38,38,0.15);">
                                         <i class="fa-solid fa-chart-line w-4 text-center text-red-500"></i>
                                         <span>Dashboard Manager Executive</span>
                                     </a>
-                                @elseif(auth()->user()->isRm())
-                                    <a href="{{ route('admin.inquiries.index') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors" style="background: rgba(234,179,8,0.15);">
+                                <?php elseif(auth()->user()->isRm()): ?>
+                                    <a href="<?php echo e(route('admin.inquiries.index')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors" style="background: rgba(234,179,8,0.15);">
                                         <i class="fa-solid fa-shield-halved w-4 text-center text-amber-400"></i>
                                         <span>Sales RM Panel Admin</span>
                                     </a>
-                                @elseif(auth()->user()->isDelivery())
-                                    <a href="{{ route('delivery.portal') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors" style="background: rgba(34,211,238,0.15);">
+                                <?php elseif(auth()->user()->isDelivery()): ?>
+                                    <a href="<?php echo e(route('delivery.portal')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors" style="background: rgba(34,211,238,0.15);">
                                         <i class="fa-solid fa-truck-fast w-4 text-center text-cyan-400"></i>
                                         <span>Delivery Driver Console</span>
                                     </a>
-                                @elseif(auth()->user()->isMechanic())
-                                    <a href="{{ route('mechanic.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors" style="background: rgba(249,115,22,0.15);">
+                                <?php elseif(auth()->user()->isMechanic()): ?>
+                                    <a href="<?php echo e(route('mechanic.dashboard')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors" style="background: rgba(249,115,22,0.15);">
                                         <i class="fa-solid fa-wrench w-4 text-center text-orange-500"></i>
                                         <span>Mechanic Dashboard</span>
                                     </a>
-                                @endif
+                                <?php endif; ?>
 
-                                    <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
+                                    <a href="<?php echo e(route('portal.dashboard')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
                                         <span>Portal VIP &amp; Konsultasi (Chat)</span>
                                     </a>
-                                    <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
+                                    <a href="<?php echo e(route('profile.complete')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
                                         <span>Profil &amp; Alamat VIP</span>
                                     </a>
-                                <a href="{{ route('faq') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
+                                <a href="<?php echo e(route('faq')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                     <i class="fa-solid fa-circle-question text-red-500 w-4 text-center"></i>
                                     <span>Bantuan &amp; FAQ</span>
                                 </a>
                                 <div class="border-t my-1" style="border-color: rgba(255,255,255,0.08);"></div>
-                                <form method="POST" action="{{ route('logout') }}" class="m-0">
-                                    @csrf
+                                <form method="POST" action="<?php echo e(route('logout')); ?>" class="m-0">
+                                    <?php echo csrf_field(); ?>
                                     <button type="submit" class="flex w-full items-center space-x-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:text-red-300 transition-colors cursor-pointer text-left" style="background: transparent;" onmouseover="this.style.background='rgba(220,38,38,0.08)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i>
                                         <span>KELUAR / LOGOUT</span>
@@ -406,12 +406,12 @@
                             </div>
                         </div>
                     </div>
-                @else
-                    {{-- GUEST: Show login button --}}
-                    <a href="{{ route('login') }}" id="navLoginBtn" class="inline-flex items-center justify-center px-4 py-2 text-xs tracking-widest font-bold uppercase border border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300">
+                <?php else: ?>
+                    
+                    <a href="<?php echo e(route('login')); ?>" id="navLoginBtn" class="inline-flex items-center justify-center px-4 py-2 text-xs tracking-widest font-bold uppercase border border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition-all duration-300">
                         <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> LOGIN / REGISTER
                     </a>
-                @endauth
+                <?php endif; ?>
             </div>
         </div>
     </header>
@@ -425,7 +425,7 @@
             <!-- SLIDE 1: BMW MOTORSPORT -->
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-10" data-index="0">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
-                <img src="{{ asset('images/carousell/carousell1.png') }}" alt="BMW Motorsport" class="w-full h-full object-cover object-center transform scale-105 transition-transform duration-[8000ms] ease-out hero-img">
+                <img src="<?php echo e(asset('images/carousell/carousell1.png')); ?>" alt="BMW Motorsport" class="w-full h-full object-cover object-center transform scale-105 transition-transform duration-[8000ms] ease-out hero-img">
                 <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
                     <div class="space-y-4 max-w-3xl reveal-on-scroll is-visible">
                         <div class="flex items-center space-x-3">
@@ -453,7 +453,7 @@
             <!-- SLIDE 2: LAMBORGHINI AVENTADOR SVJ -->
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="1">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
-                <img src="{{ asset('images/carousell/carousell2.png') }}" alt="Lamborghini Aventador SVJ" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <img src="<?php echo e(asset('images/carousell/carousell2.png')); ?>" alt="Lamborghini Aventador SVJ" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
                 <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
                     <div class="space-y-4 max-w-3xl">
                         <div class="flex items-center space-x-3">
@@ -481,7 +481,7 @@
             <!-- SLIDE 3: MCLAREN SENNA -->
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="2">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
-                <img src="{{ asset('images/carousell/carousell3.png') }}" alt="McLaren Senna" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <img src="<?php echo e(asset('images/carousell/carousell3.png')); ?>" alt="McLaren Senna" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
                 <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
                     <div class="space-y-4 max-w-3xl">
                         <div class="flex items-center space-x-3">
@@ -509,7 +509,7 @@
             <!-- SLIDE 4: FERRARI SF90 XX STRADALE (F90XX) -->
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="3">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
-                <img src="{{ asset('images/carousell/carousell4.png') }}" alt="Ferrari SF90 XX Stradale" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <img src="<?php echo e(asset('images/carousell/carousell4.png')); ?>" alt="Ferrari SF90 XX Stradale" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
                 <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
                     <div class="space-y-4 max-w-3xl">
                         <div class="flex items-center space-x-3">
@@ -537,7 +537,7 @@
             <!-- SLIDE 5: JEEP GLADIATOR RUBICON -->
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="4">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
-                <img src="{{ asset('images/carousell/carousell5.png') }}" alt="Jeep Gladiator Rubicon" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <img src="<?php echo e(asset('images/carousell/carousell5.png')); ?>" alt="Jeep Gladiator Rubicon" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
                 <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
                     <div class="space-y-4 max-w-3xl">
                         <div class="flex items-center space-x-3">
@@ -742,15 +742,16 @@
 
                 <!-- CAR CATALOG GRID (CLEAN LUXURY GRID - CLICK ANY CAR TO INSPECT & TOGGLE COLORS/BODYKITS) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="carCatalog">
-                    @foreach($cars as $car)
-                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="{{ $car->brand }}" data-price="{{ $car->price }}" data-condition="{{ $car->category }}" onclick="openCarInspector('{{ $car->id }}')">
+                    <?php $__currentLoopData = $cars; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $car): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="<?php echo e($car->brand); ?>" data-price="<?php echo e($car->price); ?>" data-condition="<?php echo e($car->category); ?>" onclick="openCarInspector('<?php echo e($car->id); ?>')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
-                            <img src="{{ $car->image_url ? asset(ltrim($car->image_url, '/')) : asset('images/no-image.png') }}" alt="{{ $car->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img src="<?php echo e($car->image_url ? asset(ltrim($car->image_url, '/')) : asset('images/no-image.png')); ?>" alt="<?php echo e($car->name); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md flex items-center space-x-1">
-                                <span>{{ $car->status ?? 'AVAILABLE' }}</span>
+                                <span><?php echo e($car->status ?? 'AVAILABLE'); ?></span>
                             </div>
                             <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
-                                {{ $car->year }}
+                                <?php echo e($car->year); ?>
+
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                                 <span class="text-white text-xs font-mono font-bold tracking-widest flex items-center">
@@ -762,9 +763,10 @@
                         <div class="p-6 space-y-4 bg-white dark:bg-transparent">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold">{{ $car->year }} • {{ $car->brand }}</span>
+                                    <span class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 uppercase font-semibold"><?php echo e($car->year); ?> • <?php echo e($car->brand); ?></span>
                                     <h4 class="text-lg font-bold font-serif text-neutral-900 dark:text-white tracking-wide group-hover:text-red-600 transition-colors">
-                                        {{ $car->name }}
+                                        <?php echo e($car->name); ?>
+
                                     </h4>
                                 </div>
                             </div>
@@ -772,33 +774,34 @@
                             <div class="border-t border-b border-neutral-200 dark:border-white/10 py-2.5 my-2 bg-neutral-50 dark:bg-neutral-950/60 px-3">
                                 <div class="text-[10px] font-mono text-neutral-600 dark:text-neutral-400">ESTIMATED PRICE</div>
                                 <div class="text-lg font-bold font-mono text-red-600 dark:text-red-500">
-                                    IDR {{ number_format($car->price, 0, ',', '.') }}
+                                    IDR <?php echo e(number_format($car->price, 0, ',', '.')); ?>
+
                                 </div>
                             </div>
 
-                            @if(is_array($car->specs) && count($car->specs) > 0)
+                            <?php if(is_array($car->specs) && count($car->specs) > 0): ?>
                             <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-neutral-700 dark:text-neutral-400">
-                                @php
+                                <?php
                                     $specKeys = array_keys($car->specs);
                                     $showSpecs = array_slice($specKeys, 0, 2);
-                                @endphp
-                                @foreach($showSpecs as $key)
-                                    @php
+                                ?>
+                                <?php $__currentLoopData = $showSpecs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php
                                         $specVal = is_array($car->specs[$key]) ? ($car->specs[$key]['val'] ?? '') : $car->specs[$key];
-                                    @endphp
-                                    <div><i class="fa-solid fa-check mr-1 text-red-600"></i> {{ \Illuminate\Support\Str::limit($specVal, 15) }}</div>
-                                @endforeach
+                                    ?>
+                                    <div><i class="fa-solid fa-check mr-1 text-red-600"></i> <?php echo e(\Illuminate\Support\Str::limit($specVal, 15)); ?></div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
-                            @endif
+                            <?php endif; ?>
 
                             <div class="grid grid-cols-2 gap-2 pt-2">
-                                <button onclick="event.stopPropagation(); openCarInspector('{{ $car->id }}');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                <button onclick="event.stopPropagation(); openCarInspector('<?php echo e($car->id); ?>');" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest font-bold uppercase transition-colors">
                                     EXPLORE & INSPECT
                                 </button>
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </div>
             </div>
@@ -816,7 +819,7 @@
                     
                     <!-- SPOTLIGHT ITEM 1 -->
                     <div class="group relative overflow-hidden bg-neutral-900 h-64 border border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
-                        <img src="{{ asset('images/limited-edition.webp') }}" alt="Ferrari Roma Spider" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="<?php echo e(asset('images/limited-edition.webp')); ?>" alt="Ferrari Roma Spider" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">LIMITED EDITION</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari Roma Spider</h3>
@@ -826,7 +829,7 @@
 
                     <!-- SPOTLIGHT ITEM 2 -->
                     <div class="group relative overflow-hidden bg-neutral-900 h-64 border border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
-                        <img src="{{ asset('images/hybrid-innovation.webp') }}" alt="Ferrari 296 GTS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="<?php echo e(asset('images/hybrid-innovation.webp')); ?>" alt="Ferrari 296 GTS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">HYBRID INNOVATION</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari 296 GTS</h3>
@@ -836,7 +839,7 @@
 
                     <!-- SPOTLIGHT ITEM 3 -->
                     <div class="group relative overflow-hidden bg-neutral-900 h-64 border border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
-                        <img src="{{ asset('images/exclusivity.webp') }}" alt="Ferrari Portofino M" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="<?php echo e(asset('images/exclusivity.webp')); ?>" alt="Ferrari Portofino M" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-[10px] font-mono text-red-500 tracking-widest uppercase font-bold">EXCLUSIVITY</span>
                             <h3 class="text-xl font-bold font-serif text-white">Ferrari Portofino M</h3>
@@ -879,7 +882,7 @@
                     <!-- SERVICE CARD 1 -->
                     <div class="glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="{{ asset('images/book_a_service.webp') }}" alt="Book a Service" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img src="<?php echo e(asset('images/book_a_service.webp')); ?>" alt="Book a Service" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                         </div>
                         <div class="p-6 space-y-3 bg-white dark:bg-transparent">
@@ -901,7 +904,7 @@
                     <!-- SERVICE CARD 2 -->
                     <div class="glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="{{ asset('images/a-long-term-plan.webp') }}" alt="Long Term Plan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img src="<?php echo e(asset('images/a-long-term-plan.webp')); ?>" alt="Long Term Plan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                         </div>
                         <div class="p-6 space-y-3 bg-white dark:bg-transparent">
@@ -923,7 +926,7 @@
                     <!-- SERVICE CARD 3 -->
                     <div class="glass-card group overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="{{ asset('images/service.webp') }}" alt="Performance Tuning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img src="<?php echo e(asset('images/service.webp')); ?>" alt="Performance Tuning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                         </div>
                         <div class="p-6 space-y-3 bg-white dark:bg-transparent">
@@ -935,7 +938,7 @@
                                 Custom titanium exhaust systems, carbon aerodynamic upgrades, and track telemetry optimization straight from European racing engineers.
                             </p>
                             <div class="pt-2">
-                                <a href="{{ route('service.create') }}" class="inline-flex items-center text-xs font-mono text-neutral-900 dark:text-neutral-300 hover:text-red-600 font-semibold tracking-wider">
+                                <a href="<?php echo e(route('service.create')); ?>" class="inline-flex items-center text-xs font-mono text-neutral-900 dark:text-neutral-300 hover:text-red-600 font-semibold tracking-wider">
                                     <i class="fa-solid fa-chevron-right text-red-600 mr-2 text-[10px]"></i> INQUIRE ACCESSORIES / SERVICE
                                 </a>
                             </div>
@@ -997,7 +1000,7 @@
                         </div>
 
                         <div class="pt-4 flex flex-wrap gap-4">
-                            <a href="{{ route('service.create') }}" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center">
+                            <a href="<?php echo e(route('service.create')); ?>" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center">
                                 <i class="fa-solid fa-calendar-check mr-2"></i> BOOK PRIVATE APPOINTMENT
                             </a>
                             <a href="https://maps.google.com" target="_blank" class="px-6 py-3 border border-white/20 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 inline-flex items-center">
@@ -1008,7 +1011,7 @@
 
                     <!-- RIGHT COLUMN: INTERACTIVE MAP PREVIEW CARD -->
                     <div class="relative h-[380px] rounded-none overflow-hidden border border-white/10 group reveal-on-scroll">
-                        <img src="{{ asset('images/experience-showroom.webp') }}" alt="Showroom Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="<?php echo e(asset('images/experience-showroom.webp')); ?>" alt="Showroom Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8 flex flex-col justify-between">
                             <div class="flex justify-between items-start">
                                 <span class="bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg">
@@ -1044,7 +1047,7 @@
                 <!-- BRAND BRANDING -->
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive Logo" class="h-10 w-auto object-contain">
+                        <img src="<?php echo e(asset('images/logo/logo.png')); ?>" alt="Apex Automotive Logo" class="h-10 w-auto object-contain">
                         <span class="font-serif tracking-widest text-lg font-black text-white uppercase">APEX AUTOMOTIVE</span>
                     </div>
                     <p class="text-xs text-neutral-400 font-light max-w-sm leading-relaxed">
@@ -1245,11 +1248,11 @@
                             <i class="fa-solid fa-arrow-right ml-1"></i>
                         </button>
 
-                        @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()))
+                        <?php if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery())): ?>
                             <button type="button" disabled class="w-full py-3.5 bg-neutral-900/90 text-neutral-400 font-bold text-xs tracking-widest uppercase cursor-not-allowed flex items-center justify-center border border-red-900/50 shadow-lg">
                                 <i class="fa-solid fa-lock mr-2 text-red-500"></i> BOOKING DINONAKTIFKAN (AKUN STAFF)
                             </button>
-                        @else
+                        <?php else: ?>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <button onclick="bookCarWithSelectedConfig()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center">
                                     <i class="fa-solid fa-calendar-check mr-2"></i> BOOK THIS SPEC
@@ -1258,7 +1261,7 @@
                                     REQUEST QUOTE
                                 </button>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
 
@@ -1290,10 +1293,10 @@
                     const formData = new FormData(form);
 
                     try {
-                        const response = await fetch('{{ route('inquire.store') }}', {
+                        const response = await fetch('<?php echo e(route('inquire.store')); ?>', {
                             method: 'POST',
                             headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
                                 'Accept': 'application/json'
                             },
                             body: formData
@@ -1306,14 +1309,14 @@
                             btn.classList.add('hidden');
                             setTimeout(() => {
                                 toggleModal('inquireModal');
-                                @auth
-                                    window.location.href = "{{ route('portal.dashboard') }}";
-                                @else
+                                <?php if(auth()->guard()->check()): ?>
+                                    window.location.href = "<?php echo e(route('portal.dashboard')); ?>";
+                                <?php else: ?>
                                     successDiv.classList.add('hidden');
                                     btn.classList.remove('hidden');
                                     btn.disabled = false;
                                     btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>SUBMIT REQUEST</span>';
-                                @endauth
+                                <?php endif; ?>
                             }, 1500);
                         } else {
                             alert(result.message || 'Gagal mengirim permintaan.');
@@ -1331,43 +1334,44 @@
 
         // 0. COMPREHENSIVE CAR DATABASE (STRICT SEPARATION: ONLY FILES WITH bodykit_ ARE BODYKITS)
         const CAR_DATABASE = {
-            @foreach($cars as $car)
-            '{{ $car->id }}': {
-                brand: '{{ addslashes($car->brand) }}',
-                model: '{{ addslashes($car->name) }}',
-                year: '{{ $car->year }}',
-                originalPriceNum: {{ $car->price + ($car->price * 0.10) }},
-                finalPriceNum: {{ $car->price }},
+            <?php $__currentLoopData = $cars; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $car): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            '<?php echo e($car->id); ?>': {
+                brand: '<?php echo e(addslashes($car->brand)); ?>',
+                model: '<?php echo e(addslashes($car->name)); ?>',
+                year: '<?php echo e($car->year); ?>',
+                originalPriceNum: <?php echo e($car->price + ($car->price * 0.10)); ?>,
+                finalPriceNum: <?php echo e($car->price); ?>,
                 discountPct: '10%',
-                condition: '{{ $car->category ?? "NEW" }}',
-                interior: "{{ asset('images/interior/interior_bmw.webp') }}",
-                engine: "{{ asset('images/mesin/mesin_bmw.webp') }}",
+                condition: '<?php echo e($car->category ?? "NEW"); ?>',
+                interior: "<?php echo e(asset('images/interior/interior_bmw.webp')); ?>",
+                engine: "<?php echo e(asset('images/mesin/mesin_bmw.webp')); ?>",
                 specs: [
-                    @if(is_array($car->specs) && count($car->specs) > 0)
-                        @foreach($car->specs as $label => $v)
-                            @php
+                    <?php if(is_array($car->specs) && count($car->specs) > 0): ?>
+                        <?php $__currentLoopData = $car->specs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
                                 $specVal = is_array($v) ? ($v['val'] ?? '') : $v;
                                 $specIcon = is_array($v) ? ($v['icon'] ?? 'fa-circle-info') : 'fa-circle-info';
-                            @endphp
-                            { label: '{{ addslashes(strtoupper($label)) }}', val: '{{ addslashes($specVal) }}', icon: '{{ addslashes($specIcon) }}' },
-                        @endforeach
-                    @else
+                            ?>
+                            { label: '<?php echo e(addslashes(strtoupper($label))); ?>', val: '<?php echo e(addslashes($specVal)); ?>', icon: '<?php echo e(addslashes($specIcon)); ?>' },
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
                         { label: 'ENGINE', val: 'Standard', icon: 'fa-gears' }
-                    @endif
+                    <?php endif; ?>
                 ],
                 colors: [
-                    @foreach($car->variants->whereIn('type', ['color', 'primer']) as $v)
-                        { name: '{{ addslashes($v->name ?? "Color") }}', hex: '{{ $v->hex }}', img: "{{ $v->image_url ? asset(ltrim($v->image_url, '/')) : asset('images/no-image.png') }}" },
-                    @endforeach
+                    <?php $__currentLoopData = $car->variants->whereIn('type', ['color', 'primer']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        { name: '<?php echo e(addslashes($v->name ?? "Color")); ?>', hex: '<?php echo e($v->hex); ?>', img: "<?php echo e($v->image_url ? asset(ltrim($v->image_url, '/')) : asset('images/no-image.png')); ?>" },
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 ],
                 bodykits: [
-                    @php $kCount = 1; @endphp
-                    @foreach($car->variants->where('type', 'bodykit') as $index => $v)
-                        { num: 'KIT 0{{ $kCount++ }}', name: '{{ addslashes($v->name ?? "Bodykit") }}', img: "{{ $v->image_url ? asset(ltrim($v->image_url, '/')) : asset('images/no-image.png') }}" },
-                    @endforeach
+                    <?php $kCount = 1; ?>
+                    <?php $__currentLoopData = $car->variants->where('type', 'bodykit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        { num: 'KIT 0<?php echo e($kCount++); ?>', name: '<?php echo e(addslashes($v->name ?? "Bodykit")); ?>', img: "<?php echo e($v->image_url ? asset(ltrim($v->image_url, '/')) : asset('images/no-image.png')); ?>" },
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 ]
-            }{{ !$loop->last ? ',' : '' }}
-            @endforeach
+            }<?php echo e(!$loop->last ? ',' : ''); ?>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         };
 
         let currentInspectedCarKey = null;
@@ -1379,7 +1383,7 @@
             const intro = document.getElementById('intro-screen');
             if (intro) {
                 const hasSeenIntro = sessionStorage.getItem('apex_intro_seen');
-                const isFreshAuthAction = {{ (session('welcome') || session('logged_out') || session('profile_success') || session('info')) ? 'true' : 'false' }};
+                const isFreshAuthAction = <?php echo e((session('welcome') || session('logged_out') || session('profile_success') || session('info')) ? 'true' : 'false'); ?>;
 
                 if (hasSeenIntro && !isFreshAuthAction) {
                     intro.style.display = 'none';
@@ -1712,15 +1716,15 @@
             // Trigger Peak Wave transition animation then redirect to garage studio
             triggerPixelWaveTransition();
             setTimeout(() => {
-                window.location.href = "{{ route('garage') }}";
+                window.location.href = "<?php echo e(route('garage')); ?>";
             }, 500);
         }
 
                 function bookCarWithSelectedConfig() {
-            @if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery()))
+            <?php if(auth()->check() && (auth()->user()->isRm() || auth()->user()->isManager() || auth()->user()->isDelivery())): ?>
                 alert('Akun Staff (Sales RM / Delivery Driver) tidak dapat melakukan booking unit kendaraan.');
                 return;
-            @endif
+            <?php endif; ?>
 
             const car = CAR_DATABASE[currentInspectedCarKey];
             if (!car) return;
@@ -2405,9 +2409,11 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
 
 
 
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\apex-automotive\resources\views/welcome.blade.php ENDPATH**/ ?>

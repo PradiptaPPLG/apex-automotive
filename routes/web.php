@@ -13,6 +13,7 @@ use App\Http\Controllers\Manager\TeamController;
 use App\Http\Controllers\Mechanic\ServiceController as MechanicServiceController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Route;
 
 // ──────────────────────────────────────────────
@@ -29,6 +30,14 @@ Route::get('/debug-php', function() {
         'post_max_size' => ini_get('post_max_size'),
         'upload_max_filesize' => ini_get('upload_max_filesize'),
     ];
+});
+
+Route::get('/reset-opcache', function() {
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    return 'OPcache reset successful';
 });
 
 Route::get('/faq', function () {
@@ -96,6 +105,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/service/{booking}/poll', [ServiceController::class, 'poll'])->name('service.poll');
 });
 
+// AI Chatbot Route
+Route::post('/api/chat', [ChatbotController::class, 'handleChat'])->name('api.chat');
+
 // ──────────────────────────────────────────────
 // DELIVERY DRIVER ROUTES (pradipta.endra4@smp.belajar.id)
 // ──────────────────────────────────────────────
@@ -152,3 +164,5 @@ Route::middleware(['auth', 'mechanic'])->prefix('mechanic')->name('mechanic.')->
     Route::post('/{booking}/progress', [MechanicServiceController::class, 'addProgress'])->name('progress');
     Route::post('/{booking}/quote', [MechanicServiceController::class, 'setQuote'])->name('quote');
 });
+
+Route::get('/test', function() { return view('test-chatbot'); });

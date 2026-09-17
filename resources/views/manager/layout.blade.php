@@ -340,5 +340,9 @@
             @yield('content')
         </main>
     </div>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+

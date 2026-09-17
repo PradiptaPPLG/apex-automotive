@@ -413,5 +413,9 @@
         }
         pollInterval = setInterval(doPoll, 4000);
     </script>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+

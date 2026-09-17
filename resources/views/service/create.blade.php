@@ -332,5 +332,9 @@
             form.submit();
         }
     </script>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+

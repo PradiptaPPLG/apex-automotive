@@ -451,5 +451,8 @@
             switchTab('service');
         }
     </script>
+    @include('partials.chatbot')
 </body>
 </html>
+
+

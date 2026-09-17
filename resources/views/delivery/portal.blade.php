@@ -86,5 +86,9 @@
             @endforeach
         @endif
     </div>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+

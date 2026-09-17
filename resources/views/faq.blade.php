@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pertanyaan Umum (FAQ) — PT Apex Automotive Indonesia</title>
-    <meta name="description" content="Informasi lengkap mengenai alur konsultasi VIP, pembuatan SPK, verifikasi dokumen legalitas KYC, skema pembayaran escrow, hingga pengiriman serah terima supercar.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
+@extends('layouts.app')
+@section('title', 'Pertanyaan Umum (FAQ) — PT Apex Automotive Indonesia')
+@section('meta_description', 'Informasi lengkap mengenai alur konsultasi VIP, pembuatan SPK, verifikasi dokumen legalitas KYC, skema pembayaran escrow, hingga pengiriman serah terima supercar.')
+@section('body_class', 'faq-body')
+
+@section('styles')
+<style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
@@ -147,8 +141,10 @@
             background: rgba(220,38,38,0.1);
         }
     </style>
-</head>
-<body>
+@endsection
+
+@section('content')
+
     <nav class="faq-nav">
         <a href="{{ route('home') }}" class="faq-nav-logo">
             <img src="{{ asset('images/logo/logo.png') }}" alt="Apex Automotive">
@@ -252,11 +248,17 @@
 
     </main>
 
-    <script>
+    @endsection
+
+@section('scripts')
+<script>
         function toggleFaq(element) {
             const item = element.parentElement;
             item.classList.toggle('active');
         }
     </script>
-</body>
-</html>
+@endsection
+
+
+
+

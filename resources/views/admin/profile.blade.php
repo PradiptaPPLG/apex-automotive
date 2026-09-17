@@ -611,5 +611,9 @@
                 });
         }
     </script>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+

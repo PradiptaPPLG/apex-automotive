@@ -299,5 +299,9 @@
             {{ $inquiries->links() }}
         </div>
     </main>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+

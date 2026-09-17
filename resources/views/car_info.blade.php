@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="id" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Comprehensive Technical Specifications & Documentation — Apex Automotive</title>
-    <meta name="description" content="All Info & Detailed Specifications Document for Luxury Supercars & Hypercars.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    @include('partials.theme-head')
+@extends('layouts.app')
+@section('title', 'Vehicle Comprehensive Technical Specifications & Documentation — Apex Automotive')
+@section('meta_description', 'All Info & Detailed Specifications Document for Luxury Supercars & Hypercars.')
+@section('body_class', 'car-info-body')
+
+@section('styles')
+@include('partials.theme-head')
     <style>
         body {
             background-color: var(--bg-main, #080810);
@@ -76,8 +71,10 @@
             background: var(--bg-hover);
         }
     </style>
-</head>
-<body>
+@endsection
+
+@section('content')
+
 
     <div class="doc-container">
         <!-- BACK NAV -->
@@ -159,5 +156,8 @@
         </div>
     </div>
 
-</body>
-</html>
+@endsection
+
+
+
+

@@ -162,5 +162,9 @@
             </div>
         @endif
     </main>
+@include('partials.chatbot')
 </body>
 </html>
+
+
+
