@@ -88,91 +88,44 @@
         </div>
 
         @php
-            $carDocs = [
-                'audi_r8' => [
-                    'brand' => 'AUDI MOTORSPORT',
-                    'title' => 'AUDI R8 V10 PERFORMANCE GT4 SPEC',
-                    'subtitle' => 'Comprehensive Technical Blueprint & Official Manufacturer Specification Documentation',
-                    'intro' => 'Audi R8 V10 Performance adalah puncak rekayasa supercar bermesin Naturally Aspirated V12/V10 buatan Neckarsulm, Jerman. Menggabungkan arsitektur bodi Audi Space Frame (ASF) berbahan aluminium dan Carbon Fiber Reinforced Polymer (CFRP), kendaraan ini menghadirkan rasio kekakuan torsi tertinggi di kelasnya.',
-                    'history' => 'Dikembangkan secara langsung di sasar balap GT4 oleh divisi Audi Sport GmbH, sistem penggerak All-Wheel Drive Quattro permanen memberikan traksi ekstrem dan diferensial belakang mekanis terlunci secara terukur. Dapur pacu 5.2 Litre V10 mampu meraung hingga 8.700 RPM tanpa bantuan turbocharger.',
-                    'engine_specs' => [
-                        'Mesin & Konfigurasi' => '5.2L (5,204 cc) 90° V10 FSI Direct Injection',
-                        'Tenaga Maksimum' => '620 HP @ 8,000 RPM',
-                        'Torsi Maksimum' => '580 Nm @ 6,600 RPM',
-                        'Transmisi' => '7-Speed S-Tronic Dual-Clutch Transmission',
-                        'Penggerak' => 'Quattro Permanent All-Wheel Drive',
-                        'Akselerasi 0-100 km/j' => '3.1 Detik',
-                        'Kecepatan Maksimum' => '331 KM/H (205 MPH)',
-                        'Bobot Kosong' => '1,595 KG (Rasio 2.57 kg/HP)'
-                    ]
-                ],
-                'bmw_m4' => [
-                    'brand' => 'BMW MOTORSPORT',
-                    'title' => 'BMW M4 COMPETITION COUPE M XDRIVE',
-                    'subtitle' => 'Official M Performance Technical Dossier',
-                    'intro' => 'BMW M4 Competition Coupe merepresentasikan tradisi divisi M Motorsport dalam memadukan performa lintasan balap sirkuit dengan kenyamanan berkendara harian tingkat tinggi.',
-                    'history' => 'Didukung oleh mesin S58 3.0-liter Twin-Turbo Inline-6 bertekanan injeksi 350 bar, mobil ini dilengkapi manifold cetak 3D untuk efisiensi pendinginan termal optimal.',
-                    'engine_specs' => [
-                        'Mesin' => '3.0L M TwinPower Turbo Inline-6 (S58)',
-                        'Tenaga' => '510 HP @ 6,250 RPM',
-                        'Torsi' => '650 Nm @ 2,750 - 5,500 RPM',
-                        'Transmisi' => '8-Speed M Steptronic dengan Drivelogic',
-                        'Drivetrain' => 'M xDrive AWD dengan Mode 2WD Drift Pure Rear',
-                        '0-100 km/j' => '3.5 Detik',
-                        'Kecepatan Maksimum' => '290 KM/H (M Driver\'s Package)'
-                    ]
-                ],
-                'lamborghini_revuelto' => [
-                    'brand' => 'AUTOMOBILI LAMBORGHINI',
-                    'title' => 'LAMBORGHINI REVUELTO V12 HPEV HYBRID',
-                    'subtitle' => 'High Performance Electrified Vehicle Technical Manual',
-                    'intro' => 'Revuelto adalah supercar High Performance Electrified Vehicle (HPEV) pertama buatan Sant\'Agata Bolognese, menetapkan tolok ukur baru dalam hal performa, teknologi, dan kenikmatan berkendara.',
-                    'history' => 'Jantung mekanisnya merupakan mesin V12 6.5 liter yang dipadukan secara harmonis dengan 3 motor listrik bertenaga baterai lithium-ion berdensitas daya tinggi.',
-                    'engine_specs' => [
-                        'Mesin Utama' => '6.5L Mid-Mounted Naturally Aspirated V12 (L545)',
-                        'Sistem Elektrik' => '3x Axial Flux Electric Motors (150 HP each)',
-                        'Output Kombinasi' => '1,015 HP Total Power Output',
-                        'Transmisi' => '8-Speed Transverse Dual Clutch Automatic',
-                        '0-100 km/j' => '2.5 Detik',
-                        'Kecepatan Maksimum' => '> 350 KM/H'
-                    ]
-                ],
-                'mclaren_senna' => [
-                    'brand' => 'MCLAREN AUTOMOTIVE',
-                    'title' => 'MCLAREN SENNA GTR TRACK SPECIFICATION',
-                    'subtitle' => 'Ultimate Series Aerodynamic & Engineering Document',
-                    'intro' => 'Dinamai dari pembalap legenda Formula 1 Ayrton Senna, McLaren Senna GTR adalah mahakarya lintasan balap paling ekstrem yang pernah dirancang tanpa batasan regulasi jalan raya.',
-                    'history' => 'Menggunakan monokok serat karbon Monocage III, Senna GTR menghasilkan beban downforce aktif sebesar 800 kg pada kecepatan 250 km/j.',
-                    'engine_specs' => [
-                        'Mesin' => '4.0L M840TR Twin-Turbocharged V8',
-                        'Tenaga' => '825 PS (814 HP) @ 7,250 RPM',
-                        'Downforce' => '800 KG Active Aero Load',
-                        'Bobot Kering' => '1,188 KG (Power-to-weight 694 PS/tonne)',
-                        '0-100 km/j' => '2.8 Detik'
-                    ]
-                ]
+            $descData = [
+                'title' => strtoupper($car->name),
+                'subtitle' => 'OFFICIAL MANUFACTURER SPECIFICATION',
+                'intro' => 'No description available.',
+                'history' => 'No history available.'
             ];
-
-            $doc = $carDocs[$carKey] ?? $carDocs['audi_r8'];
+            if ($car->description) {
+                $parsed = json_decode($car->description, true);
+                if(json_last_error() === JSON_ERROR_NONE) {
+                    $descData = array_merge($descData, $parsed);
+                } else {
+                    $descData['intro'] = $car->description;
+                }
+            }
+            $engineSpecs = is_array($car->specs) ? $car->specs : [];
         @endphp
 
         <div class="doc-card">
             <div class="doc-header">
                 <div class="doc-section-title"><i class="fa-solid fa-file-lines mr-1.5"></i> OFFICIAL TECHNICAL DOSSIER</div>
-                <h1 class="doc-car-title">{{ $doc['title'] }}</h1>
-                <p class="text-xs font-mono text-neutral-400 mt-2 uppercase tracking-wider font-bold">{{ $doc['subtitle'] }}</p>
+                <h1 class="doc-car-title">{{ $descData['title'] ?: strtoupper($car->name) }}</h1>
+                <p class="text-xs font-mono text-neutral-400 mt-2 uppercase tracking-wider font-bold">{{ $descData['subtitle'] }}</p>
             </div>
 
             <div class="space-y-6">
+                @if(!empty($descData['intro']))
                 <div>
                     <h3 class="font-mono text-xs font-bold text-red-500 uppercase tracking-widest mb-2"><i class="fa-solid fa-circle-info mr-1"></i> OVERVIEW & RINGKASAN DESAIN</h3>
-                    <p class="doc-text-block">{{ $doc['intro'] }}</p>
+                    <p class="doc-text-block">{{ $descData['intro'] }}</p>
                 </div>
+                @endif
 
+                @if(!empty($descData['history']))
                 <div>
                     <h3 class="font-mono text-xs font-bold text-red-500 uppercase tracking-widest mb-2"><i class="fa-solid fa-layer-group mr-1"></i> ARSITEKTUR BALAP & WARISAN TEKNOLOGI</h3>
-                    <p class="doc-text-block">{{ $doc['history'] }}</p>
+                    <p class="doc-text-block">{{ $descData['history'] }}</p>
                 </div>
+                @endif
 
                 <div>
                     <h3 class="font-mono text-xs font-bold text-red-500 uppercase tracking-widest mb-3"><i class="fa-solid fa-sliders mr-1"></i> SPESIFIKASI TEKNIS & PERFORMA LENGKAP</h3>
@@ -184,10 +137,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($doc['engine_specs'] as $param => $val)
+                            @foreach($engineSpecs as $param => $val)
+                                @php
+                                    $specVal = is_array($val) ? ($val['val'] ?? '') : $val;
+                                    $specIcon = is_array($val) ? ($val['icon'] ?? 'fa-circle-info') : 'fa-circle-info';
+                                @endphp
                                 <tr>
-                                    <td class="font-mono font-bold text-neutral-300">{{ $param }}</td>
-                                    <td class="font-mono text-red-400 font-semibold">{{ $val }}</td>
+                                    <td class="font-mono font-bold text-neutral-300"><i class="fa-solid {{ $specIcon }} text-red-500 mr-2 text-[10px]"></i>{{ $param }}</td>
+                                    <td class="font-mono text-red-400 font-semibold">{{ $specVal }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

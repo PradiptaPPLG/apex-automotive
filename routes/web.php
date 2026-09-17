@@ -19,8 +19,17 @@ use Illuminate\Support\Facades\Route;
 // PUBLIC ROUTES (no login required)
 // ──────────────────────────────────────────────
 Route::get('/', function () {
-    return view('welcome');
+    $cars = \App\Models\Car::with('variants')->where('status', '!=', 'sold')->latest()->get();
+    return view('welcome', compact('cars'));
 })->name('home');
+
+Route::get('/debug-php', function() {
+    return [
+        'max_input_vars' => ini_get('max_input_vars'),
+        'post_max_size' => ini_get('post_max_size'),
+        'upload_max_filesize' => ini_get('upload_max_filesize'),
+    ];
+});
 
 Route::get('/faq', function () {
     return view('faq');
@@ -30,11 +39,13 @@ Route::get('/garage', function () {
     return view('garage');
 })->name('garage');
 
-Route::get('/car-info/{car?}', function ($car = 'bmw_m4') {
-    return view('car_info', ['carKey' => $car]);
+Route::get('/car-info/{id}', function ($id) {
+    $car = \App\Models\Car::findOrFail($id);
+    return view('car_info', compact('car'));
 })->name('car.info');
 
 // Inquiry — VIP Viewing Request (works for guests & authenticated users)
+Route::get('/inquire', function() { return view('inquire'); })->name('inquire.create');
 Route::post('/inquire', [InquiryController::class, 'store'])->name('inquire.store');
 
 // Auth — Login flow

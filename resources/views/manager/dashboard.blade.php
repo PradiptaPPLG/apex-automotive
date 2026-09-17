@@ -161,7 +161,7 @@
                                         </span>
                                     </div>
                                 @elseif(!empty($car->specs['Warna']))
-                                    <span style="font-size: 11px; color: var(--text-base); font-family: 'Space Mono', monospace;">🎨 {{ $car->specs['Warna'] }}</span>
+                                    <span style="font-size: 11px; color: var(--text-base); font-family: 'Space Mono', monospace;">🎨 {{ is_array($car->specs['Warna']) ? ($car->specs['Warna']['val'] ?? '') : $car->specs['Warna'] }}</span>
                                 @else
                                     <span style="font-size: 11px; color: var(--text-dim);">Standard Spec</span>
                                 @endif

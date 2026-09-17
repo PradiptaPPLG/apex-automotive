@@ -4,15 +4,20 @@
 @section('page_header', $car->exists ? 'Edit Mobil: '.$car->name : 'Tambah Mobil Showroom Baru')
 
 @section('content')
-<div style="max-width: 850px;">
-    <div class="card-panel">
-        <form method="POST" action="{{ $car->exists ? route('manager.cars.update', $car) : route('manager.cars.store') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 20px;">
-            @csrf
-            @if($car->exists)
-                @method('PUT')
-            @endif
+<div style="max-width: 1400px; margin: 0 auto;">
+    <form id="carForm" method="POST" action="{{ $car->exists ? route('manager.cars.update', $car) : route('manager.cars.store') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 40px;">
+        @csrf
+        @if($car->exists)
+            @method('PUT')
+        @endif
+        
+        <!-- KOLOM KIRI (GENERAL INFO) -->
+        <div class="card-panel" style="display: flex; flex-direction: column; gap: 20px;">
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                @php
+                    $primaryVariant = $car->variants ? $car->variants->where('type', 'primer')->first() : null;
+                @endphp
                 <div style="position: relative;">
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Nama Unit / Model <span style="color:#ef4444;">*</span></label>
                     <input type="text" name="name" id="carNameInput" value="{{ old('name', $car->name) }}" required placeholder="Contoh: McLaren Senna GTR" class="mgr-input" autocomplete="off">
@@ -78,24 +83,26 @@
                 </label>
                 
                 <div style="display: grid; grid-template-columns: 1fr 140px; gap: 16px; align-items: start;">
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
                         <div>
-                            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Option 1: Upload File Berkas Gambar</span>
+                            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Pilih File Berkas Gambar</span>
                             <input type="file" name="image_file" accept="image/*" class="mgr-input" onchange="previewImageFile(this)" style="padding: 8px;">
+                            <input type="hidden" name="image_url" value="{{ old('image_url', $car->image_url) }}">
                             @error('image_file')
                                 <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</span>
                             @enderror
+                            
+                            <div style="display: grid; grid-template-columns: 50px 1fr 100px; gap: 10px; margin-top: 12px; align-items: center; border: 1px dashed rgba(255,255,255,0.1); padding: 10px; border-radius: 4px;">
+                                <input type="color" name="primary_color_hex" value="{{ old('primary_color_hex', $primaryVariant->hex ?? '#ffffff') }}" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
+                                <input type="text" name="primary_color_name" value="{{ old('primary_color_name', $primaryVariant->name ?? '') }}" oninput="updatePalettePreview()" placeholder="Nama Warna Utama (Misal: Alpine White)" class="mgr-input">
+                                <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-hover); height: 38px; overflow: hidden;">
+                                    <span style="font-size: 10px; font-family: monospace; color: var(--text-muted); padding: 0 6px;">STOCK</span>
+                                    <input type="number" name="primary_stock" value="{{ old('primary_stock', $primaryVariant->stock ?? 0) }}" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
+                                </div>
+                            </div>
                         </div>
-
-                        <div>
-                            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Option 2: Atau Tautkan URL Gambar Direct (Opsional)</span>
-                            <input type="url" name="image_url" id="imageUrlInput" value="{{ old('image_url', $car->image_url) }}" placeholder="https://..." class="mgr-input" oninput="previewImageUrl(this.value)">
-                        </div>
-                    </div>
 
                     <div>
-                        <span style="font-size: 10px; font-family: 'Space Mono', monospace; color: var(--text-muted); display: block; margin-bottom: 4px;">PREVIEW FOTO:</span>
-                        <div id="imagePreviewContainer" style="width: 140px; height: 95px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative;">
+                        <div id="imagePreviewContainer" onclick="if(document.getElementById('imagePreviewImg').src) openImageModal(document.getElementById('imagePreviewImg').src)" style="width: 140px; height: 95px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
                             @if($car->image_url)
                                 <img id="imagePreviewImg" src="{{ $car->image_url }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
                             @else
@@ -113,48 +120,71 @@
             <!-- Varian Warna & Palet Warna Section -->
             <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px; border-radius: 6px; margin-top: 4px;">
                 <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <label style="font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-heading); text-transform: uppercase; font-weight: 700;">
-                            <i class="fa-solid fa-palette" style="color: #ef4444; margin-right: 6px;"></i> Palet Warna & Varian Warna Kendaraan
-                        </label>
-                        <button type="button" onclick="addColorRow('', '#dc2626')" style="padding: 6px 14px; background: #dc2626; color: #fff; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: 700;">
-                            <i class="fa-solid fa-plus"></i> Tambah Warna
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed var(--border);">
+                        <h4 style="margin: 0; font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-palette" style="color: #dc2626;"></i> Kelola Varian (Warna / Bodykit / Primer)
+                        </h4>
+                        <button type="button" onclick="addVariantRow()" style="padding: 6px 14px; background: #dc2626; color: #fff; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: 700;">
+                            <i class="fa-solid fa-plus"></i> Tambah Varian
                         </button>
                     </div>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Kelola pilihan varian warna mobil. Palet warna ini akan otomatis muncul sebagai tombol lingkaran warna interaktif pada popup inspector buyer.</p>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Kelola varian mobil beserta foto dan stoknya masing-masing. Tipe varian dapat berupa Warna, Bodykit, atau Primer.</p>
 
                     <!-- Quick Preset Buttons -->
                     <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
                         <span style="font-size: 10px; font-family: 'Space Mono', monospace; color: var(--text-muted); align-self: center; margin-right: 4px;">PRESET WARNA:</span>
-                        <button type="button" onclick="addColorRow('Rosso Corsa Red', '#dc2626')" style="padding: 3px 8px; background: rgba(220,38,38,0.2); border: 1px solid #dc2626; color: #f87171; border-radius: 3px; font-size: 10px; cursor: pointer;">🔴 Rosso Corsa</button>
-                        <button type="button" onclick="addColorRow('Obsidian Black', '#111827')" style="padding: 3px 8px; background: rgba(17,24,39,0.5); border: 1px solid #4b5563; color: #d1d5db; border-radius: 3px; font-size: 10px; cursor: pointer;">⚫ Obsidian Black</button>
-                        <button type="button" onclick="addColorRow('Pearl White', '#f9fafb')" style="padding: 3px 8px; background: rgba(249,250,251,0.1); border: 1px solid #e5e7eb; color: #ffffff; border-radius: 3px; font-size: 10px; cursor: pointer;">⚪ Pearl White</button>
-                        <button type="button" onclick="addColorRow('Giallo Auge Yellow', '#f59e0b')" style="padding: 3px 8px; background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; border-radius: 3px; font-size: 10px; cursor: pointer;">🟡 Giallo Yellow</button>
-                        <button type="button" onclick="addColorRow('Blu Nethuns', '#2563eb')" style="padding: 3px 8px; background: rgba(37,99,235,0.2); border: 1px solid #2563eb; color: #60a5fa; border-radius: 3px; font-size: 10px; cursor: pointer;">🔵 Blu Nethuns</button>
-                        <button type="button" onclick="addColorRow('Verde Mantis Green', '#16a34a')" style="padding: 3px 8px; background: rgba(22,163,74,0.2); border: 1px solid #16a34a; color: #4ade80; border-radius: 3px; font-size: 10px; cursor: pointer;">🟢 Verde Green</button>
-                    </div>
+                        <button type="button" onclick="addVariantRow('Rosso Corsa Red', '#dc2626')" style="padding: 3px 8px; background: rgba(220,38,38,0.2); border: 1px solid #dc2626; color: #f87171; border-radius: 3px; font-size: 10px; cursor: pointer;">🔴 Rosso Corsa</button>
+                        <button type="button" onclick="addVariantRow('Obsidian Black', '#111827')" style="padding: 3px 8px; background: rgba(17,24,39,0.5); border: 1px solid #4b5563; color: #d1d5db; border-radius: 3px; font-size: 10px; cursor: pointer;">⚫ Obsidian Black</button>
+                        <button type="button" onclick="addVariantRow('Pearl White', '#f9fafb')" style="padding: 3px 8px; background: rgba(249,250,251,0.1); border: 1px solid #e5e7eb; color: #ffffff; border-radius: 3px; font-size: 10px; cursor: pointer;">⚪ Pearl White</button>
+                        <button type="button" onclick="addVariantRow('Giallo Auge Yellow', '#f59e0b')" style="padding: 3px 8px; background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; border-radius: 3px; font-size: 10px; cursor: pointer;">🟡 Giallo Yellow</button>
+                    </div>          </div>
                 </div>
 
-                <div id="colorsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+                <div id="variantsContainer" style="display: flex; flex-direction: column; gap: 10px;">
                     @php
-                        $existingColors = old('color_names')
-                            ? array_map(function($n, $h) { return ['name' => $n, 'hex' => $h]; }, old('color_names'), old('color_hexes'))
-                            : ($car->specs['colors'] ?? []);
+                        if (old('variant_names')) {
+                            $existingVariants = array_map(function($t, $n, $h, $s, $i) { 
+                                return ['type' => $t, 'name' => $n, 'hex' => $h, 'stock' => $s, 'image_url' => $i]; 
+                            }, old('variant_types'), old('variant_names'), old('variant_hexes'), old('variant_stocks'), old('variant_images_existing'));
+                        } else {
+                            $existingVariants = $car->exists 
+                                ? $car->variants()->where('type', '!=', 'primer')->get()->toArray() 
+                                : [];
+                        }
 
-                        // Default sample color if none exist
-                        if (empty($existingColors)) {
-                            $existingColors = [
-                                ['name' => 'Rosso Corsa Red', 'hex' => '#dc2626'],
-                                ['name' => 'Obsidian Black', 'hex' => '#111827'],
+                        if (empty($existingVariants)) {
+                            $existingVariants = [
+                                ['type' => 'color', 'name' => 'Rosso Corsa Red', 'hex' => '#dc2626', 'stock' => 0, 'image_url' => null],
                             ];
                         }
                     @endphp
 
-                    @foreach($existingColors as $c)
-                        <div class="color-row" style="display: grid; grid-template-columns: 50px 1fr 40px; gap: 10px; align-items: center;">
-                            <input type="color" name="color_hexes[]" value="{{ $c['hex'] ?? '#dc2626' }}" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
-                            <input type="text" name="color_names[]" value="{{ $c['name'] ?? '' }}" oninput="updatePalettePreview()" placeholder="Nama Warna (misal: Rosso Corsa Red)" class="mgr-input">
-                            <button type="button" onclick="removeColorRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    @foreach($existingVariants as $index => $v)
+                        <div class="variant-row" style="display: grid; grid-template-columns: 100px 50px 1fr 100px 220px 40px; gap: 10px; align-items: center; border: 1px dashed var(--border); padding: 10px; border-radius: 4px;">
+                            <select name="variant_types[{{ $index }}]" class="mgr-input" style="height: 38px;" onchange="handleVariantTypeChange(this)">
+                                <option value="color" {{ (isset($v['type']) && $v['type'] == 'color') ? 'selected' : '' }}>Warna Tambahan</option>
+                                <option value="bodykit" {{ (isset($v['type']) && $v['type'] == 'bodykit') ? 'selected' : '' }}>Bodykit</option>
+                            </select>
+                            <div style="width: 100%; height: 38px; position: relative;">
+                                <input type="color" name="variant_hexes[{{ $index }}]" value="{{ $v['hex'] ?? '#dc2626' }}" onchange="updatePalettePreview()" style="width: 100%; height: 100%; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer; {{ (isset($v['type']) && $v['type'] == 'bodykit') ? 'display: none;' : '' }}">
+                                <div class="bodykit-badge" style="width: 100%; height: 100%; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 4px; display: {{ (isset($v['type']) && $v['type'] == 'bodykit') ? 'flex' : 'none' }}; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; font-weight: bold; color: var(--text-muted);">KIT</div>
+                            </div>
+                            <input type="text" name="variant_names[{{ $index }}]" value="{{ $v['name'] ?? '' }}" oninput="updatePalettePreview()" placeholder="Nama (misal: Rosso Corsa)" class="mgr-input">
+                            <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-hover); height: 38px; overflow: hidden;">
+                                <span style="font-size: 10px; font-family: monospace; color: var(--text-muted); padding: 0 6px;">STOCK</span>
+                                <input type="number" name="variant_stocks[{{ $index }}]" value="{{ $v['stock'] ?? 0 }}" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)" style="width: 38px; height: 38px; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; background: var(--bg-card); flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                    <img src="{{ $v['image_url'] ?? '' }}" alt="" style="width: 100%; height: 100%; object-fit: cover; {{ empty($v['image_url']) ? 'display: none;' : '' }}" class="variant-img-preview">
+                                    <div class="variant-img-placeholder" style="color: var(--text-dim); {{ !empty($v['image_url']) ? 'display: none;' : '' }}"><i class="fa-solid fa-image"></i></div>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                                    <input type="file" name="variant_images_upload[{{ $index }}]" accept="image/*" class="mgr-input" style="padding: 5px; font-size: 11px;" onchange="previewVariantImage(this)">
+                                    <input type="hidden" name="variant_images_existing[{{ $index }}]" value="{{ $v['image_url'] ?? '' }}">
+                                </div>
+                            </div>
+                            <button type="button" onclick="removeVariantRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
@@ -170,22 +200,146 @@
                 </div>
             </div>
 
-            <div>
-                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Deskripsi Unit</label>
-                <textarea name="description" rows="4" placeholder="Keterangan spesifikasi & keunggulan mobil..." class="mgr-input" style="resize: vertical;">{{ old('description', $car->description) }}</textarea>
+        </div> <!-- End of Left Column -->
+
+        <!-- BAGIAN BAWAH (DOSSIER & SPECS) -->
+        <div class="card-panel" style="display: flex; flex-direction: column; gap: 20px; border-top: 3px solid #ef4444;">
+            <div style="border-bottom: 1px dashed var(--border); padding-bottom: 12px;">
+                <h4 style="margin: 0; font-family: 'Space Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #ef4444; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-file-lines"></i> OFFICIAL TECHNICAL DOSSIER
+                </h4>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Deskripsi unit dan spesifikasi teknis untuk halaman informasi detail.</p>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 16px;">
+            @php
+                $descData = [];
+                if ($car->description) {
+                    $parsed = json_decode($car->description, true);
+                    if(json_last_error() === JSON_ERROR_NONE) {
+                        $descData = $parsed;
+                    } else {
+                        // Fallback for old simple text
+                        $descData['intro'] = $car->description;
+                    }
+                }
+            @endphp
+
+            <div>
+                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Judul Dokumen (Title)</label>
+                <input type="text" name="desc_title" value="{{ old('desc_title', $descData['title'] ?? '') }}" placeholder="Contoh: AUDI R8 V10 PERFORMANCE GT4 SPEC" class="mgr-input">
+            </div>
+
+            <div>
+                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Subjudul (Subtitle)</label>
+                <input type="text" name="desc_subtitle" value="{{ old('desc_subtitle', $descData['subtitle'] ?? '') }}" placeholder="Contoh: Comprehensive Technical Blueprint & Official Manufacturer Specification Documentation" class="mgr-input">
+            </div>
+
+            <div>
+                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Overview & Ringkasan Desain (Intro)</label>
+                <textarea name="desc_intro" rows="3" placeholder="Deskripsi umum tentang mobil..." class="mgr-input" style="resize: vertical;">{{ old('desc_intro', $descData['intro'] ?? '') }}</textarea>
+            </div>
+
+            <div>
+                <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Arsitektur Balap & Warisan Teknologi (History)</label>
+                <textarea name="desc_history" rows="3" placeholder="Deskripsi teknis tentang sejarah atau pengembangan mesin..." class="mgr-input" style="resize: vertical;">{{ old('desc_history', $descData['history'] ?? '') }}</textarea>
+            </div>
+
+            <!-- TABEL SPESIFIKASI DINAMIS -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px; border-radius: 6px; margin-top: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed var(--border);">
+                    <h4 style="margin: 0; font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-sliders"></i> Tabel Spesifikasi Teknis
+                    </h4>
+                    <button type="button" onclick="addSpecRow()" style="padding: 6px 14px; background: #dc2626; color: #fff; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: 700;">
+                        <i class="fa-solid fa-plus"></i> Tambah Baris
+                    </button>
+                </div>
+                <input type="hidden" name="specs_json" id="specs_json">
+
+                <div id="specsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+                    @php
+                        $existingSpecs = [];
+                        if (old('spec_keys')) {
+                            $existingSpecs = array_map(function($k, $v, $i) { 
+                                return ['key' => $k, 'val' => $v, 'icon' => $i]; 
+                            }, old('spec_keys'), old('spec_vals'), old('spec_icons') ?? array_fill(0, count(old('spec_keys')), 'fa-circle-info'));
+                        } else {
+                            if ($car->exists && is_array($car->specs)) {
+                                foreach($car->specs as $k => $v) {
+                                    $specVal = is_array($v) ? ($v['val'] ?? '') : $v;
+                                    $specIcon = is_array($v) ? ($v['icon'] ?? 'fa-circle-info') : 'fa-circle-info';
+                                    $existingSpecs[] = ['key' => $k, 'val' => $specVal, 'icon' => $specIcon];
+                                }
+                            }
+                        }
+
+                        if (empty($existingSpecs)) {
+                            $existingSpecs = [
+                                ['key' => 'Mesin & Konfigurasi', 'val' => '', 'icon' => 'fa-engine'],
+                                ['key' => 'Tenaga Maksimum', 'val' => '', 'icon' => 'fa-bolt'],
+                            ];
+                        }
+                    @endphp
+
+                    @foreach($existingSpecs as $index => $s)
+                        <div class="spec-row" style="display: grid; grid-template-columns: 1fr 1fr 140px 40px; gap: 10px; align-items: center;">
+                            <input type="text" name="spec_keys[]" value="{{ $s['key'] }}" placeholder="Komponen (Misal: Mesin)" class="mgr-input">
+                            <input type="text" name="spec_vals[]" value="{{ $s['val'] }}" placeholder="Spesifikasi (Misal: 5.2L V10)" class="mgr-input">
+                            <select name="spec_icons[]" class="mgr-input" style="padding-left: 8px;">
+                                @php $curr = $s['icon'] ?? 'fa-circle-info'; @endphp
+                                <option value="fa-circle-info" {{ $curr == 'fa-circle-info' ? 'selected' : '' }}>Info</option>
+                                <option value="fa-bolt" {{ $curr == 'fa-bolt' ? 'selected' : '' }}>Listrik / Power</option>
+                                <option value="fa-gauge-high" {{ $curr == 'fa-gauge-high' ? 'selected' : '' }}>Kecepatan</option>
+                                <option value="fa-gears" {{ $curr == 'fa-gears' ? 'selected' : '' }}>Mesin / Gigi</option>
+                                <option value="fa-truck-monster" {{ $curr == 'fa-truck-monster' ? 'selected' : '' }}>Drivetrain</option>
+                                <option value="fa-weight-hanging" {{ $curr == 'fa-weight-hanging' ? 'selected' : '' }}>Berat</option>
+                                <option value="fa-wind" {{ $curr == 'fa-wind' ? 'selected' : '' }}>Aerodinamika</option>
+                                <option value="fa-tachometer-alt" {{ $curr == 'fa-tachometer-alt' ? 'selected' : '' }}>Torsi / RPM</option>
+                                <option value="fa-gas-pump" {{ $curr == 'fa-gas-pump' ? 'selected' : '' }}>Bahan Bakar</option>
+                                <option value="fa-battery-full" {{ $curr == 'fa-battery-full' ? 'selected' : '' }}>Baterai</option>
+                            </select>
+                            <button type="button" onclick="this.closest('.spec-row').remove()" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px;">
                 <a href="{{ route('manager.cars.index') }}" style="padding: 10px 18px; background: var(--bg-hover); color: var(--text-muted); text-decoration: none; border-radius: 4px; font-size: 13px; border: 1px solid var(--border);">Batal</a>
                 <button type="submit" style="padding: 10px 24px; background: #dc2626; color: #fff; border: none; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer;">
                     {{ $car->exists ? 'Simpan Perubahan' : 'Tambah Mobil' }}
                 </button>
             </div>
-        </form>
+        </div>
+    </form>
+</div>
+
+<!-- Full Image Preview Modal -->
+<div id="fullImageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+    <div style="position: relative; max-width: 90%; max-height: 90%; background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        <button type="button" onclick="closeImageModal()" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.2); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="fullImageModalImg" src="" alt="Full Preview" style="max-width: 100%; max-height: 85vh; display: block; object-fit: contain;">
     </div>
 </div>
 
 <script>
+    function openImageModal(src) {
+        if (!src || src.trim() === '' || src.endsWith('null') || src.includes('undefined')) return;
+        const modal = document.getElementById('fullImageModal');
+        const img = document.getElementById('fullImageModalImg');
+        img.src = src;
+        modal.style.display = 'flex';
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('fullImageModal');
+        modal.style.display = 'none';
+    }
+
     function previewImageFile(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
@@ -210,52 +364,163 @@
         }
     }
 
-    function addColorRow(colorName = '', hexCode = '#dc2626') {
-        const container = document.getElementById('colorsContainer');
+    function previewVariantImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const container = input.closest('.variant-row');
+                const img = container.querySelector('.variant-img-preview');
+                const placeholder = container.querySelector('.variant-img-placeholder');
+                if(img) {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                }
+                if (placeholder) placeholder.style.display = 'none';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    let variantIndex = {{ count($existingVariants ?? []) }};
+
+    function addVariantRow(colorName = '', hexCode = '#dc2626') {
+        const container = document.getElementById('variantsContainer');
         const row = document.createElement('div');
-        row.className = 'color-row';
-        row.style.cssText = 'display: grid; grid-template-columns: 50px 1fr 40px; gap: 10px; align-items: center;';
+        row.className = 'variant-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 100px 50px 1fr 100px 220px 40px; gap: 10px; align-items: center; border: 1px dashed var(--border); padding: 10px; border-radius: 4px;';
         row.innerHTML = `
-            <input type="color" name="color_hexes[]" value="${hexCode}" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
-            <input type="text" name="color_names[]" value="${colorName}" oninput="updatePalettePreview()" placeholder="Nama Warna (misal: Rosso Corsa)" class="mgr-input">
-            <button type="button" onclick="removeColorRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <select name="variant_types[${variantIndex}]" class="mgr-input" style="height: 38px;" onchange="handleVariantTypeChange(this)">
+                <option value="color">Warna Tambahan</option>
+                <option value="bodykit">Bodykit</option>
+            </select>
+            <div style="width: 100%; height: 38px; position: relative;">
+                <input type="color" name="variant_hexes[${variantIndex}]" value="${hexCode}" onchange="updatePalettePreview()" style="width: 100%; height: 100%; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
+                <div class="bodykit-badge" style="width: 100%; height: 100%; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 4px; display: none; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; font-weight: bold; color: var(--text-muted);">KIT</div>
+            </div>
+            <input type="text" name="variant_names[${variantIndex}]" value="${colorName}" oninput="updatePalettePreview()" placeholder="Nama (misal: Rosso Corsa)" class="mgr-input">
+            <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-hover); height: 38px; overflow: hidden;">
+                <span style="font-size: 10px; font-family: monospace; color: var(--text-muted); padding: 0 6px;">STOCK</span>
+                <input type="number" name="variant_stocks[${variantIndex}]" value="0" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)" style="width: 38px; height: 38px; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; background: var(--bg-card); flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="" alt="" style="width: 100%; height: 100%; object-fit: cover; display: none;" class="variant-img-preview">
+                    <div class="variant-img-placeholder" style="color: var(--text-dim);"><i class="fa-solid fa-image"></i></div>
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                    <input type="file" name="variant_images_upload[${variantIndex}]" accept="image/*" class="mgr-input" style="padding: 5px; font-size: 11px;" onchange="previewVariantImage(this)">
+                    <input type="hidden" name="variant_images_existing[${variantIndex}]" value="">
+                </div>
+            </div>
+            <button type="button" onclick="removeVariantRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         `;
         container.appendChild(row);
+        variantIndex++;
+        updateVariantRowsUI();
         updatePalettePreview();
     }
 
-    function removeColorRow(button) {
-        const rows = document.querySelectorAll('.color-row');
+    function removeVariantRow(button) {
+        const rows = document.querySelectorAll('.variant-row');
         if (rows.length > 1) {
-            button.closest('.color-row').remove();
+            button.closest('.variant-row').remove();
         } else {
-            const inputs = button.closest('.color-row').querySelectorAll('input');
-            inputs[0].value = '#dc2626';
-            inputs[1].value = '';
+            const inputs = button.closest('.variant-row').querySelectorAll('input');
+            const selects = button.closest('.variant-row').querySelectorAll('select');
+            if (inputs[0] && inputs[0].type === 'color') inputs[0].value = '#dc2626';
+            if (inputs[1] && inputs[1].type === 'text') inputs[1].value = '';
+            if (inputs[2] && inputs[2].type === 'number') inputs[2].value = '0';
+            if (selects[0]) selects[0].value = 'color';
         }
+        updateVariantRowsUI();
         updatePalettePreview();
+    }
+
+    function addSpecRow() {
+        const container = document.getElementById('specsContainer');
+        const row = document.createElement('div');
+        row.className = 'spec-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr 140px 40px; gap: 10px; align-items: center;';
+        row.innerHTML = `
+            <input type="text" name="spec_keys[]" value="" placeholder="Komponen (Misal: Mesin)" class="mgr-input">
+            <input type="text" name="spec_vals[]" value="" placeholder="Spesifikasi (Misal: 5.2L V10)" class="mgr-input">
+            <select name="spec_icons[]" class="mgr-input" style="padding-left: 8px;">
+                <option value="fa-circle-info">Info</option>
+                <option value="fa-bolt">Listrik / Power</option>
+                <option value="fa-gauge-high">Kecepatan</option>
+                <option value="fa-gears">Mesin / Gigi</option>
+                <option value="fa-truck-monster">Drivetrain</option>
+                <option value="fa-weight-hanging">Berat</option>
+                <option value="fa-wind">Aerodinamika</option>
+                <option value="fa-tachometer-alt">Torsi / RPM</option>
+                <option value="fa-gas-pump">Bahan Bakar</option>
+                <option value="fa-battery-full">Baterai</option>
+            </select>
+            <button type="button" onclick="this.closest('.spec-row').remove()" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        `;
+        container.appendChild(row);
+    }
+
+    function handleVariantTypeChange(select) {
+        updateVariantRowsUI();
+        updatePalettePreview();
+    }
+
+    function updateVariantRowsUI() {
+        const rows = document.querySelectorAll('.variant-row');
+        let kitCount = 1;
+        rows.forEach(row => {
+            const select = row.querySelector('select[name^="variant_types"]');
+            const colorInput = row.querySelector('input[type="color"]');
+            const badge = row.querySelector('.bodykit-badge');
+            
+            if (select && select.value === 'bodykit') {
+                if (colorInput) colorInput.style.display = 'none';
+                if (badge) {
+                    badge.style.display = 'flex';
+                    badge.textContent = 'KIT ' + kitCount;
+                }
+                kitCount++;
+            } else {
+                if (colorInput) colorInput.style.display = 'block';
+                if (badge) badge.style.display = 'none';
+            }
+        });
     }
 
     function updatePalettePreview() {
         const previewContainer = document.getElementById('livePalettePreview');
         if (!previewContainer) return;
 
-        const hexInputs = document.querySelectorAll('input[name="color_hexes[]"]');
-        const nameInputs = document.querySelectorAll('input[name="color_names[]"]');
-        
         let html = '';
+        
+        const primaryColorHex = document.querySelector('input[name="primary_color_hex"]');
+        const primaryColorName = document.querySelector('input[name="primary_color_name"]');
+        if (primaryColorHex && primaryColorHex.value) {
+            const nameVal = (primaryColorName && primaryColorName.value) ? primaryColorName.value : 'Warna Utama';
+            html += `<div title="${nameVal} (Warna Utama)" style="width: 24px; height: 24px; border-radius: 50%; background-color: ${primaryColorHex.value}; border: 2px solid #ef4444; box-shadow: 0 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 10;"></div>`;
+        }
+
+        const hexInputs = document.querySelectorAll('input[name^="variant_hexes"]');
+        const nameInputs = document.querySelectorAll('input[name^="variant_names"]');
+        const typeInputs = document.querySelectorAll('select[name^="variant_types"]');
+        
         hexInputs.forEach((hexIn, idx) => {
+            if (typeInputs[idx] && typeInputs[idx].value !== 'color' && typeInputs[idx].value !== 'primer') return;
             const nameVal = nameInputs[idx] ? nameInputs[idx].value : 'Warna';
             const hexVal = hexIn.value;
-            html += `<div title="${nameVal}" style="width: 22px; height: 22px; border-radius: 50%; background-color: ${hexVal}; border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`;
+            html += `<div title="${nameVal}" style="width: 22px; height: 22px; border-radius: 50%; background-color: ${hexVal}; border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-left: -6px;"></div>`;
         });
         
         previewContainer.innerHTML = html;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        updateVariantRowsUI();
         updatePalettePreview();
         
         // Autocomplete & Auto-fill Brand Logic
@@ -362,18 +627,18 @@
             { model: "Mercedes-SL 63 AMG", brand: "Mercedes-Benz" },
 
             // BMW
-            { model: "BMW M4 Competition Coupe", brand: "BMW" },
-            { model: "BMW M2 Coupe (G87)", brand: "BMW" },
-            { model: "BMW M3 Sedan (G80)", brand: "BMW" },
-            { model: "BMW M4 Coupe", brand: "BMW" },
+            { model: "BMW M4 Competition Coupe", brand: "BMW", category: "Supercar", year: 2026, transmission: "8-Speed M Steptronic", fuel_type: "TwinPower Turbo Inline-6", description: "BMW M4 Competition Coupe merepresentasikan tradisi divisi M Motorsport dalam memadukan performa lintasan balap sirkuit dengan kenyamanan berkendara harian tingkat tinggi." },
+            { model: "BMW M2 Coupe (G87)", brand: "BMW", category: "Supercar", year: 2024, transmission: "8-Speed M Steptronic", fuel_type: "TwinPower Turbo Inline-6" },
+            { model: "BMW M3 Sedan (G80)", brand: "BMW", category: "Supercar", year: 2024, transmission: "8-Speed M Steptronic", fuel_type: "TwinPower Turbo Inline-6" },
+            { model: "BMW M4 Coupe", brand: "BMW", category: "Supercar" },
             { model: "BMW M2 Competition", brand: "BMW" },
-            { model: "BMW M5 Competition", brand: "BMW" },
+            { model: "BMW M5 Competition", brand: "BMW", category: "Supercar", year: 2024, transmission: "8-Speed M Steptronic", fuel_type: "TwinPower Turbo V8" },
             { model: "BMW M5 CS", brand: "BMW" },
             { model: "BMW M4 CSL", brand: "BMW" },
             { model: "BMW M3 Competition xDrive", brand: "BMW" },
-            { model: "BMW XM Label Red", brand: "BMW" },
+            { model: "BMW XM Label Red", brand: "BMW", category: "Luxury SUV", year: 2025, transmission: "8-Speed M Steptronic", fuel_type: "Plug-in Hybrid V8" },
             { model: "BMW M8 Competition Coupe", brand: "BMW" },
-            { model: "BMW i8 Roadster", brand: "BMW" },
+            { model: "BMW i8 Roadster", brand: "BMW", category: "Supercar", year: 2020, transmission: "6-Speed Automatic", fuel_type: "Plug-in Hybrid 3-cylinder" },
 
             // Lamborghini
             { model: "Lamborghini Revuelto V12 Hybrid", brand: "Lamborghini" },
@@ -384,12 +649,12 @@
             { model: "Lamborghini Countach LPI 800-4", brand: "Lamborghini" },
 
             // McLaren
-            { model: "McLaren Senna GTR Edition", brand: "McLaren Automotive" },
-            { model: "McLaren 720S", brand: "McLaren Automotive" },
-            { model: "McLaren 765LT", brand: "McLaren Automotive" },
-            { model: "McLaren P1", brand: "McLaren Automotive" },
-            { model: "McLaren Artura", brand: "McLaren Automotive" },
-            { model: "McLaren Speedtail", brand: "McLaren Automotive" },
+            { model: "McLaren Senna GTR Edition", brand: "McLaren Automotive", category: "Hypercar", year: 2021, transmission: "7-Speed SSG", fuel_type: "Twin-Turbo V8" },
+            { model: "McLaren 720S", brand: "McLaren Automotive", category: "Supercar", year: 2023, transmission: "7-Speed SSG", fuel_type: "Twin-Turbo V8" },
+            { model: "McLaren 765LT", brand: "McLaren Automotive", category: "Supercar", year: 2023, transmission: "7-Speed SSG", fuel_type: "Twin-Turbo V8" },
+            { model: "McLaren P1", brand: "McLaren Automotive", category: "Hypercar", year: 2015, transmission: "7-Speed SSG", fuel_type: "Hybrid Twin-Turbo V8" },
+            { model: "McLaren Artura", brand: "McLaren Automotive", category: "Supercar", year: 2024, transmission: "8-Speed SSG", fuel_type: "Plug-in Hybrid Twin-Turbo V6" },
+            { model: "McLaren Speedtail", brand: "McLaren Automotive", category: "Hypercar", year: 2021, transmission: "7-Speed Dual-Clutch", fuel_type: "Hybrid Twin-Turbo V8" },
 
             // Porsche
             { model: "Porsche 911 GT3 RS (992)", brand: "Porsche" },
@@ -492,6 +757,28 @@
                         e.stopPropagation();
                         nameInput.value = car.model;
                         brandInput.value = car.brand;
+
+                        if (car.category) {
+                            const catSelect = document.querySelector('select[name="category"]');
+                            if (catSelect) catSelect.value = car.category;
+                        }
+                        if (car.year) {
+                            const yearInput = document.querySelector('input[name="year"]');
+                            if (yearInput) yearInput.value = car.year;
+                        }
+                        if (car.transmission) {
+                            const transInput = document.querySelector('input[name="transmission"]');
+                            if (transInput) transInput.value = car.transmission;
+                        }
+                        if (car.fuel_type) {
+                            const fuelInput = document.querySelector('input[name="fuel_type"]');
+                            if (fuelInput) fuelInput.value = car.fuel_type;
+                        }
+                        if (car.description) {
+                            const descInput = document.querySelector('textarea[name="description"]');
+                            if (descInput) descInput.value = car.description;
+                        }
+
                         suggestionsBox.style.display = 'none';
                         selectedFromList = true;
                     });
@@ -517,6 +804,70 @@
         nameInput.addEventListener('click', function() {
             this.dispatchEvent(new Event('input'));
         });
+
+        // --- Auto-Save & Prevent Data Loss ---
+        const carForm = document.getElementById('carForm');
+        let isDirty = false;
+
+        carForm.addEventListener('input', function() {
+            isDirty = true;
+            saveDraft();
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (isDirty) {
+                e.preventDefault();
+                e.returnValue = 'Anda masih dalam pengisian, apakah yakin ingin meninggalkan halaman?';
+            }
+        });
+
+        carForm.addEventListener('submit', function() {
+            isDirty = false;
+            localStorage.removeItem('apex_car_draft');
+            
+            // Bypass array POST limits/bugs by sending as JSON
+            const keys = Array.from(document.querySelectorAll('input[name="spec_keys[]"]')).map(el => el.value);
+            const vals = Array.from(document.querySelectorAll('input[name="spec_vals[]"]')).map(el => el.value);
+            const icons = Array.from(document.querySelectorAll('select[name="spec_icons[]"]')).map(el => el.value);
+            const specsData = keys.map((key, i) => ({ key: key, val: vals[i] || '', icon: icons[i] || 'fa-circle-info' }));
+            document.getElementById('specs_json').value = JSON.stringify(specsData);
+        });
+
+        function saveDraft() {
+            const draft = {
+                name: document.querySelector('input[name="name"]').value,
+                brand: document.querySelector('input[name="brand"]').value,
+                category: document.querySelector('select[name="category"]').value,
+                price: document.querySelector('input[name="price"]').value,
+                year: document.querySelector('input[name="year"]').value,
+                transmission: document.querySelector('input[name="transmission"]').value,
+                fuel_type: document.querySelector('input[name="fuel_type"]').value,
+                description: document.querySelector('textarea[name="description"]').value,
+                status: document.querySelector('select[name="status"]').value,
+            };
+            localStorage.setItem('apex_car_draft', JSON.stringify(draft));
+        }
+
+        @if(!$car->exists)
+        const savedDraft = localStorage.getItem('apex_car_draft');
+        if (savedDraft) {
+            try {
+                const draft = JSON.parse(savedDraft);
+                if (draft.name) document.querySelector('input[name="name"]').value = draft.name;
+                if (draft.brand) document.querySelector('input[name="brand"]').value = draft.brand;
+                if (draft.category) document.querySelector('select[name="category"]').value = draft.category;
+                if (draft.price) document.querySelector('input[name="price"]').value = draft.price;
+                if (draft.year) document.querySelector('input[name="year"]').value = draft.year;
+                if (draft.transmission) document.querySelector('input[name="transmission"]').value = draft.transmission;
+                if (draft.fuel_type) document.querySelector('input[name="fuel_type"]').value = draft.fuel_type;
+                if (draft.desc_title) document.querySelector('input[name="desc_title"]').value = draft.desc_title;
+                if (draft.desc_subtitle) document.querySelector('input[name="desc_subtitle"]').value = draft.desc_subtitle;
+                if (draft.desc_intro) document.querySelector('textarea[name="desc_intro"]').value = draft.desc_intro;
+                if (draft.desc_history) document.querySelector('textarea[name="desc_history"]').value = draft.desc_history;
+                if (draft.status) document.querySelector('select[name="status"]').value = draft.status;
+            } catch (e) {}
+        }
+        @endif
     });
 </script>
 @endsection

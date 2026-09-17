@@ -17,7 +17,7 @@
     </div>
 
     <div class="card-panel">
-        <div style="overflow-x: auto;">
+        <div style="overflow: visible;">
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
                 <thead>
                     <tr class="mgr-table-header-row">
@@ -44,8 +44,8 @@
                                 </div>
                             </td>
                             <td style="padding: 12px 10px;">
-                                <div class="mgr-cell-heading">{{ $car->name }}</div>
-                                <div class="mgr-cell-muted" style="margin-bottom: 4px;">{{ $car->brand ?? '—' }} ({{ $car->year ?? '—' }})</div>
+                                <div style="font-weight: 600; color: var(--text-heading);">{{ $car->name }}</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">{{ $car->brand }}</div>
                                 @if(!empty($car->specs['colors']) && is_array($car->specs['colors']))
                                     <div style="display: flex; align-items: center; gap: 6px; margin-top: 5px;">
                                         <div style="display: flex; gap: 4px; align-items: center;">
@@ -59,7 +59,7 @@
                                     </div>
                                 @elseif(!empty($car->specs['Warna']))
                                     <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px; font-family: 'Space Mono', monospace;">
-                                        🎨 {{ $car->specs['Warna'] }}
+                                        🎨 {{ is_array($car->specs['Warna']) ? ($car->specs['Warna']['val'] ?? '') : $car->specs['Warna'] }}
                                     </div>
                                 @endif
                             </td>
@@ -73,54 +73,52 @@
                             </td>
                             <td style="padding: 12px 10px;">
                                 @if($car->status === 'available')
-                                    <span style="color: #4ade80; background: rgba(74, 222, 128, 0.15); border: 1px solid rgba(74, 222, 128, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">AVAILABLE</span>
-                                @elseif($car->status === 'reserved')
-                                    <span style="color: #fbbf24; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">RESERVED</span>
+                                    <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 8px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 2px; color: #4ade80; font-weight: 700;">AVAILABLE</span>
+                                @elseif($car->status === 'sold')
+                                    <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 8px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 2px; color: #f87171; font-weight: 700;">SOLD OUT</span>
                                 @else
-                                    <span style="color: #f87171; background: rgba(248, 113, 113, 0.15); border: 1px solid rgba(248, 113, 113, 0.3); font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 2px;">SOLD</span>
+                                    <span style="font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 8px; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.2); border-radius: 2px; color: #facc15; font-weight: 700;">COMING SOON</span>
                                 @endif
                             </td>
                             <td style="padding: 12px 10px; text-align: right; position: relative;">
-                                <div style="position: relative; display: inline-block;">
-                                    <button onclick="toggleActionDropdown({{ $car->id }})" style="padding: 6px 10px; background: var(--bg-hover); border: 1px solid var(--border); color: var(--text-base); border-radius: 4px; font-size: 13px; cursor: pointer;">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
+                                <button type="button" onclick="toggleActionDropdown('{{ $car->id }}')" style="padding: 6px 10px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); cursor: pointer; transition: all 0.2s;">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                
+                                <div id="dropdown-menu-{{ $car->id }}" class="action-dropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; width: 160px; z-index: 50; padding: 6px 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: left;">
+                                    <a href="{{ route('manager.cars.edit', $car->id) }}" class="mgr-dropdown-link" style="color: #60a5fa;">
+                                        <i class="fa-solid fa-pen-to-square w-4"></i> Edit Detail
+                                    </a>
+                                    
+                                    @if($car->status !== 'sold')
+                                    <form action="{{ route('manager.cars.status', $car->id) }}" method="POST" style="margin:0;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="sold">
+                                        <button type="submit" class="mgr-dropdown-link" style="width: 100%; background: none; border: none; text-align: left; color: #f87171; font-family: inherit; cursor: pointer;">
+                                            <i class="fa-solid fa-ban w-4"></i> Set SOLD OUT
+                                        </button>
+                                    </form>
+                                    @else
+                                    <form action="{{ route('manager.cars.status', $car->id) }}" method="POST" style="margin:0;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="available">
+                                        <button type="submit" class="mgr-dropdown-link" style="width: 100%; background: none; border: none; text-align: left; color: #4ade80; font-family: inherit; cursor: pointer;">
+                                            <i class="fa-solid fa-circle-check w-4"></i> Set Available
+                                        </button>
+                                    </form>
+                                    @endif
 
-                                    <div id="dropdown-menu-{{ $car->id }}" class="action-dropdown mgr-dropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; width: 170px; z-index: 50; padding: 4px 0; text-align: left;">
-                                        <a href="{{ route('manager.cars.edit', $car) }}" class="mgr-dropdown-link">
-                                            <i class="fa-solid fa-pen-to-square w-4"></i> Edit Detail
-                                        </a>
-
-                                        @if($car->status !== 'sold')
-                                            <form method="POST" action="{{ route('manager.cars.status', $car) }}" style="margin: 0;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="hidden" name="status" value="sold">
-                                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #f87171; background: none; border: none; font-size: 12px; cursor: pointer; text-align: left;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">
-                                                    <i class="fa-solid fa-ban w-4"></i> Set SOLD OUT
-                                                </button>
-                                            </form>
-                                        @else
-                                            <form method="POST" action="{{ route('manager.cars.status', $car) }}" style="margin: 0;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="hidden" name="status" value="available">
-                                                <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #4ade80; background: none; border: none; font-size: 12px; cursor: pointer; text-align: left;" onmouseover="this.style.background='rgba(74,222,128,0.1)'" onmouseout="this.style.background='transparent'">
-                                                    <i class="fa-solid fa-circle-check w-4"></i> Set Available
-                                                </button>
-                                            </form>
-                                        @endif
-
-                                        <div style="border-top: 1px solid var(--border-soft); margin: 4px 0;"></div>
-
-                                        <form method="POST" action="{{ route('manager.cars.destroy', $car) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus mobil ini?')" style="margin: 0;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" style="width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #ef4444; background: none; border: none; font-size: 12px; cursor: pointer; text-align: left;" onmouseover="this.style.background='rgba(239,68,68,0.15)'" onmouseout="this.style.background='transparent'">
-                                                <i class="fa-solid fa-trash w-4"></i> Hapus Mobil
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <div style="margin: 4px 0; border-top: 1px solid var(--border);"></div>
+                                    
+                                    <form action="{{ route('manager.cars.destroy', $car->id) }}" method="POST" style="margin:0;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus mobil ini? Data yang dihapus tidak dapat dikembalikan.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="mgr-dropdown-link" style="width: 100%; background: none; border: none; text-align: left; color: #ef4444; font-family: inherit; cursor: pointer;">
+                                            <i class="fa-solid fa-trash w-4"></i> Hapus Mobil
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -135,9 +133,30 @@
             </table>
         </div>
 
-        <div style="margin-top: 18px;">
-            {{ $cars->links() }}
-        </div>
+        <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; justify-content: flex-end;">
+            <style>
+                .custom-pagination { display: flex; list-style: none; padding: 0; margin: 0; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 600; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); background: var(--bg-card); }
+                .custom-pagination li { border-right: 1px solid var(--border); }
+                .custom-pagination li:last-child { border-right: none; }
+                .custom-pagination li a, .custom-pagination li span { display: block; padding: 8px 14px; color: var(--text-base); text-decoration: none; }
+                .custom-pagination li a:hover { background: var(--bg-hover); color: var(--text-heading); }
+                .custom-pagination li.active span { background: #dc2626; color: #fff; }
+                .custom-pagination li.disabled span { opacity: 0.4; background: var(--bg-surface); cursor: not-allowed; }
+            </style>
+            {{ $cars->links('pagination::bootstrap-4') }}
+            <script>
+                // Add custom class to pagination ul
+                document.querySelectorAll('.pagination').forEach(el => {
+                    el.classList.remove('pagination');
+                    el.classList.add('custom-pagination');
+                });
+                document.querySelectorAll('.page-link').forEach(el => {
+                    el.classList.remove('page-link');
+                });
+                document.querySelectorAll('.page-item').forEach(el => {
+                    el.classList.remove('page-item');
+                });
+            </script>
     </div>
 </div>
 

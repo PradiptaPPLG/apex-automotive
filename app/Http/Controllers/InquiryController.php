@@ -15,10 +15,10 @@ class InquiryController extends Controller
     public function store(Request $request): JsonResponse
     {
         if (auth()->check() && (auth()->user()->isRm() || auth()->user()->isDelivery())) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Akun Staff (Sales RM / Delivery Driver) tidak dapat membuat inquiry/booking kendaraan untuk diri sendiri.',
-            ], 403);
+            if ($request->wantsJson()) {
+            return response()->json(['success' => false, 'message' => 'Akun Staff (Sales RM / Delivery Driver) tidak dapat membuat inquiry/booking kendaraan untuk diri sendiri.'], 403);
+        }
+        return redirect()->back()->withErrors(['error' => 'Akun Staff (Sales RM / Delivery Driver) tidak dapat membuat inquiry/booking kendaraan untuk diri sendiri.']);
         }
 
         $validated = $request->validate([
@@ -36,10 +36,10 @@ class InquiryController extends Controller
         if ($carModel) {
             $car = Car::where('name', 'LIKE', "%{$carModel}%")->first();
             if ($car && $car->status === 'sold') {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Maaf, unit {$car->name} sudah SOLD OUT (Terjual) dan tidak dapat dipesan lagi.",
-                ], 422);
+                if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => "Maaf, unit {$car->name} sudah SOLD OUT (Terjual) dan tidak dapat dipesan lagi."], 422);
+            }
+            return redirect()->back()->withErrors(['error' => "Maaf, unit {$car->name} sudah SOLD OUT (Terjual) dan tidak dapat dipesan lagi."])->withInput();
             }
         }
 

@@ -25,4 +25,9 @@ class Car extends Model
         'year' => 'integer',
         'specs' => 'array',
     ];
+
+    public function variants()
+    {
+        return $this->hasMany(CarVariant::class);
+    }
 }
