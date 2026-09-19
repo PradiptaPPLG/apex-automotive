@@ -1,9 +1,7 @@
-@extends('manager.layout')
+<?php $__env->startSection('page_header', 'Pengaturan Website'); ?>
+<?php $__env->startSection('title', 'Pengaturan Website'); ?>
 
-@section('page_header', 'Pengaturan Website')
-@section('title', 'Pengaturan Website')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <!-- Leaflet Map CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <!-- We inject styles here because layout doesn't yield styles -->
@@ -202,12 +200,12 @@
     .cyber-btn:disabled { border-color: #333 !important; color: #555 !important; cursor: not-allowed; background: #111 !important; box-shadow: none !important; }
 </style>
 
-@if(session('success'))
+<?php if(session('success')): ?>
     <div class="m-alert">
         <i class="fa-solid fa-check-circle text-xl"></i>
-        <span>{{ session('success') }}</span>
+        <span><?php echo e(session('success')); ?></span>
     </div>
-@endif
+<?php endif; ?>
 
 <div class="settings-wrapper">
     <!-- LEFT COLUMN: AI MODEL INFO -->
@@ -218,7 +216,7 @@
             </h2>
             
             <div class="ai-avatar-container">
-                <img src="{{ asset('images/logo/staff/neura_ai_pose_1.webp') }}" alt="Neura AI" id="aiSettingsAvatar" class="ai-avatar ai-avatar-glitch">
+                <img src="<?php echo e(asset('images/logo/staff/neura_ai_pose_1.webp')); ?>" alt="Neura AI" id="aiSettingsAvatar" class="ai-avatar ai-avatar-glitch">
             </div>
 
             <div class="ai-spec-row">
@@ -342,12 +340,12 @@
                 <i class="fa-solid fa-pen-nib text-red-600"></i> Konfigurasi Tampilan
             </h2>
             
-            <form action="{{ route('manager.settings.update') }}" method="POST">
-                @csrf
+            <form action="<?php echo e(route('manager.settings.update')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 
                 <div class="m-form-group">
                     <label class="m-form-label">Deskripsi Profil Showroom (Footer)</label>
-                    <textarea name="footer_desc" class="m-input" rows="4" placeholder="Tuliskan deskripsi pameran di sini...">{{ old('footer_desc', $settings['footer_desc']) }}</textarea>
+                    <textarea name="footer_desc" class="m-input" rows="4" placeholder="Tuliskan deskripsi pameran di sini..."><?php echo e(old('footer_desc', $settings['footer_desc'])); ?></textarea>
                 </div>
 
                 <div style="margin: 30px 0 20px;">
@@ -360,22 +358,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="m-form-group">
                         <label class="m-form-label"><i class="fa-brands fa-instagram text-pink-500"></i> Instagram URL</label>
-                        <input type="text" name="social_instagram" class="m-input" value="{{ old('social_instagram', $settings['social_instagram']) }}">
+                        <input type="text" name="social_instagram" class="m-input" value="<?php echo e(old('social_instagram', $settings['social_instagram'])); ?>">
                     </div>
 
                     <div class="m-form-group">
                         <label class="m-form-label"><i class="fa-brands fa-youtube text-red-500"></i> YouTube URL</label>
-                        <input type="text" name="social_youtube" class="m-input" value="{{ old('social_youtube', $settings['social_youtube']) }}">
+                        <input type="text" name="social_youtube" class="m-input" value="<?php echo e(old('social_youtube', $settings['social_youtube'])); ?>">
                     </div>
 
                     <div class="m-form-group">
                         <label class="m-form-label"><i class="fa-brands fa-facebook text-blue-500"></i> Facebook URL</label>
-                        <input type="text" name="social_facebook" class="m-input" value="{{ old('social_facebook', $settings['social_facebook']) }}">
+                        <input type="text" name="social_facebook" class="m-input" value="<?php echo e(old('social_facebook', $settings['social_facebook'])); ?>">
                     </div>
 
                     <div class="m-form-group">
                         <label class="m-form-label"><i class="fa-brands fa-linkedin text-blue-700"></i> LinkedIn URL</label>
-                        <input type="text" name="social_linkedin" class="m-input" value="{{ old('social_linkedin', $settings['social_linkedin']) }}">
+                        <input type="text" name="social_linkedin" class="m-input" value="<?php echo e(old('social_linkedin', $settings['social_linkedin'])); ?>">
                     </div>
                 </div>
 
@@ -389,12 +387,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div class="m-form-group">
                         <label class="m-form-label">Latitude</label>
-                        <input type="text" name="dealer_latitude" id="dealer_latitude" class="m-input" style="font-family: 'Space Mono', monospace;" value="{{ old('dealer_latitude', $settings['dealer_latitude'] ?? '-7.32733900') }}">
+                        <input type="text" name="dealer_latitude" id="dealer_latitude" class="m-input" style="font-family: 'Space Mono', monospace;" value="<?php echo e(old('dealer_latitude', $settings['dealer_latitude'] ?? '-7.32733900')); ?>">
                     </div>
 
                     <div class="m-form-group">
                         <label class="m-form-label">Longitude</label>
-                        <input type="text" name="dealer_longitude" id="dealer_longitude" class="m-input" style="font-family: 'Space Mono', monospace;" value="{{ old('dealer_longitude', $settings['dealer_longitude'] ?? '108.35416200') }}">
+                        <input type="text" name="dealer_longitude" id="dealer_longitude" class="m-input" style="font-family: 'Space Mono', monospace;" value="<?php echo e(old('dealer_longitude', $settings['dealer_longitude'] ?? '108.35416200')); ?>">
                     </div>
                 </div>
 
@@ -430,11 +428,11 @@
     // AI Pose Animation Logic
     document.addEventListener('DOMContentLoaded', () => {
         const poses = [
-            "{{ asset('images/logo/staff/neura_ai_pose_1.webp') }}",
-            "{{ asset('images/logo/staff/neura_ai_pose_2.webp') }}",
-            "{{ asset('images/logo/staff/neura_ai_pose_3.webp') }}",
-            "{{ asset('images/logo/staff/neura_ai_pose_4.webp') }}",
-            "{{ asset('images/logo/staff/neura_ai_pose_5.webp') }}"
+            "<?php echo e(asset('images/logo/staff/neura_ai_pose_1.webp')); ?>",
+            "<?php echo e(asset('images/logo/staff/neura_ai_pose_2.webp')); ?>",
+            "<?php echo e(asset('images/logo/staff/neura_ai_pose_3.webp')); ?>",
+            "<?php echo e(asset('images/logo/staff/neura_ai_pose_4.webp')); ?>",
+            "<?php echo e(asset('images/logo/staff/neura_ai_pose_5.webp')); ?>"
         ];
         
         const avatar = document.getElementById('aiSettingsAvatar');
@@ -457,7 +455,7 @@
 
     // Unsaved Changes Tracker
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form[action="{{ route('manager.settings.update') }}"]');
+        const form = document.querySelector('form[action="<?php echo e(route('manager.settings.update')); ?>"]');
         const actionsContainer = document.getElementById('formActionsContainer');
         
         if (form && actionsContainer) {
@@ -899,4 +897,6 @@
 </script>
 <!-- Leaflet Map JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('manager.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\apex-automotive\resources\views/manager/settings.blade.php ENDPATH**/ ?>

@@ -17,6 +17,8 @@ class SettingController extends Controller
             'social_youtube' => Setting::where('key', 'social_youtube')->value('value') ?? '#',
             'social_facebook' => Setting::where('key', 'social_facebook')->value('value') ?? '#',
             'social_linkedin' => Setting::where('key', 'social_linkedin')->value('value') ?? '#',
+            'dealer_latitude' => Setting::where('key', 'dealer_latitude')->value('value') ?? '-7.32740000',
+            'dealer_longitude' => Setting::where('key', 'dealer_longitude')->value('value') ?? '108.32250000',
         ];
 
         return view('manager.settings', compact('settings'));
@@ -30,6 +32,8 @@ class SettingController extends Controller
             'social_youtube' => 'nullable|string',
             'social_facebook' => 'nullable|string',
             'social_linkedin' => 'nullable|string',
+            'dealer_latitude' => 'nullable|string',
+            'dealer_longitude' => 'nullable|string',
         ]);
 
         foreach ($data as $key => $value) {

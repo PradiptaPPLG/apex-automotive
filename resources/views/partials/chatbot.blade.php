@@ -635,6 +635,28 @@
             isProc = true;
             vLd.classList.add('active');
             vBdy.scrollTop = vBdy.scrollHeight;
+            
+            // Periksa apakah ada kabel dataset yang tercabut (hanya berlaku di halaman Settings)
+            let dataset1 = document.getElementById('dataset-1');
+            let dataset2 = document.getElementById('dataset-2');
+            
+            if (dataset1 && dataset2) {
+                let isD1Connected = dataset1.classList.contains('connected');
+                let isD2Connected = dataset2.classList.contains('connected');
+                
+                if (!isD1Connected || !isD2Connected) {
+                    setTimeout(() => {
+                        let errMsg = "Mohon maaf, sistem layanan pelanggan saat ini sedang mengalami kendala teknis.<br><br>Silakan coba kembali dalam beberapa menit.";
+                        addM(errMsg, 'v-sys');
+                        isProc = false;
+                        vLd.classList.remove('active');
+                        vInp.disabled = false;
+                        if(isOpen) vInp.focus();
+                    }, 1000); // Sedikit delay agar terkesan sedang mengecek server
+                    return;
+                }
+            }
+            
             vAPI(m);
         }
         

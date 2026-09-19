@@ -183,6 +183,13 @@
 @endsection
 
 @section('content')
+
+@php
+    // Fetch coordinates securely for frontend
+    $dealer_lat = \App\Models\Setting::where('key', 'dealer_latitude')->value('value') ?? '-7.32740000';
+    $dealer_lng = \App\Models\Setting::where('key', 'dealer_longitude')->value('value') ?? '108.32250000';
+@endphp
+
     <div id="pixel-transition-overlay" class="fixed inset-0 z-[9998] pointer-events-none hidden grid grid-cols-12 grid-rows-8 w-full h-full"></div>
 
     <!-- FERRARI-STYLE FLOATING SCROLL SECTION NAVIGATOR -->
@@ -383,10 +390,12 @@
                                     </a>
                                 @endif
 
+                                @if(!auth()->user()->isManager())
                                     <a href="{{ route('portal.dashboard') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
                                         <span>Portal VIP &amp; Konsultasi (Chat)</span>
                                     </a>
+                                @endif
                                     <a href="{{ route('profile.complete') }}" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
                                         <span>Profil &amp; Alamat VIP</span>
@@ -562,24 +571,24 @@
                 </div>
             </div>
 
-            <!-- SLIDE 6: PORSCHE 911 GT3 RS -->
+            <!-- SLIDE 6: CHEVROLET CAMARO -->
             <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-0" data-index="5">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-black/40 to-black/60 z-10"></div>
-                <img src="{{ asset('images/carousell/carousell6.webp') }}" alt="Porsche 911 GT3 RS" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
+                <img src="{{ asset('images/carousell/carousell6.webp') }}" alt="Chevrolet Camaro" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[8000ms] ease-out hero-img">
                 <div class="absolute inset-0 z-20 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24">
                     <div class="space-y-4 max-w-3xl">
                         <div class="flex items-center space-x-3">
                             <span class="red-divider-line"></span>
-                            <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">TRACK FOCUSED EXCELLENCE</span>
+                            <span class="text-xs font-mono tracking-[0.3em] uppercase text-red-500 font-bold">AMERICAN MUSCLE LEGACY</span>
                         </div>
                         <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black font-serif tracking-tight text-white uppercase leading-none drop-shadow-2xl">
-                            PORSCHE 911 GT3 RS
+                            CHEVROLET CAMARO
                         </h1>
                         <p class="text-base sm:text-lg text-neutral-300 font-light max-w-xl">
-                            Aerodynamic perfection and naturally aspirated power. The ultimate expression of Porsche motorsport DNA.
+                            Raw American muscle power with bold styling. An icon of performance and aggressive road presence.
                         </p>
                         <div class="pt-4 flex flex-wrap gap-4 items-center">
-                            <button onclick="openCarDetails('Porsche 911 GT3 RS')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
+                            <button onclick="openCarDetails('Chevrolet Camaro')" class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center shadow-lg shadow-red-600/30">
                                 EXPLORE MODEL <i class="fa-solid fa-arrow-right ml-3"></i>
                             </button>
                             <button onclick="window.location.href='/inquire'" class="px-8 py-3.5 border border-white/30 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 backdrop-blur-sm">
@@ -1001,44 +1010,59 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
                     <!-- LEFT COLUMN: ADDRESS & DETAILS -->
-                    <div class="space-y-8 glass-card p-8 border border-neutral-200 dark:border-white/10 reveal-on-scroll">
-                        <div class="space-y-4">
-                            <h3 class="text-xl font-bold font-serif text-neutral-900 dark:text-white tracking-wide flex items-center">
-                                <i class="fa-solid fa-location-dot text-red-600 dark:text-red-500 mr-3"></i> APEX AUTOMOTIVE CIJEUNGJING
-                            </h3>
-                            <p class="text-xs text-neutral-700 dark:text-neutral-300 font-mono leading-relaxed">
-                                Jl. Raya Banjar - Dsn. Kidul RT09 RW 04 Desa Cijeungjing Kecamatan Cijeungjing Kabupaten Ciamis<br>
-                                Jawa Barat, Indonesia
-                            </p>
-                        </div>
+                    <div class="relative h-[380px] rounded-none border border-white/10 overflow-hidden reveal-on-scroll">
+                        <!-- Dealer Leaflet Map (Full Background) -->
+                        <div id="dealerMap" class="absolute inset-0 z-0 bg-neutral-900 map-dark-filter"></div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-neutral-200 dark:border-white/10 text-xs font-mono">
-                            <div>
-                                <span class="text-neutral-600 dark:text-neutral-400 block mb-1 font-semibold">OPERATING HOURS:</span>
-                                <span class="text-neutral-900 dark:text-white font-bold block">Mon - Sat: 08:30 - 20:00 WIB</span>
-                                <span class="text-neutral-600 dark:text-neutral-400 block">Sunday: By Private Appointment</span>
-                            </div>
-                            <div>
-                                <span class="text-neutral-600 dark:text-neutral-400 block mb-1 font-semibold">HOTLINE & WHATSAPP:</span>
-                                <span class="text-red-600 dark:text-red-500 font-bold block">+62 21 555 9988</span>
-                                <span class="text-neutral-900 dark:text-white font-bold block">+62 811 8888 999</span>
-                            </div>
-                        </div>
+                        <!-- Permanent Dark Gradient Overlay for readability -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent z-10 pointer-events-none"></div>
 
-                        <div class="pt-4 flex flex-wrap gap-4">
-                            <a href="{{ route('service.create') }}" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 flex items-center">
-                                <i class="fa-solid fa-calendar-check mr-2"></i> BOOK PRIVATE APPOINTMENT
-                            </a>
-                            <a href="https://maps.google.com" target="_blank" class="px-6 py-3 border border-white/20 hover:border-white text-white text-xs tracking-widest font-bold uppercase transition-all duration-300 inline-flex items-center">
-                                <i class="fa-solid fa-map-location-dot mr-2"></i> GET DIRECTIONS
-                            </a>
+                        <!-- Content always visible -->
+                        <div class="absolute inset-0 z-20 flex flex-col justify-end p-6 bg-transparent pointer-events-none">
+                            
+                            <div class="space-y-2 pointer-events-auto">
+                                <h3 class="text-lg font-bold font-serif text-white tracking-wide flex items-center drop-shadow-md">
+                                    <i class="fa-solid fa-location-dot text-red-500 mr-2"></i> APEX AUTOMOTIVE
+                                </h3>
+                                <p class="text-[10px] text-neutral-300 font-mono leading-relaxed drop-shadow-md">
+                                    Jl. Raya Banjar - Dsn. Kidul RT09 RW04 Cijeungjing, Ciamis, Jawa Barat
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 pt-4 mt-4 border-t border-white/20 text-[10px] font-mono drop-shadow-md pointer-events-auto">
+                                <div>
+                                    <span class="text-neutral-400 block font-semibold mb-1">OPERATING HOURS:</span>
+                                    <span class="text-white block">Mon-Sat: 08:30-20:00</span>
+                                    <span class="text-neutral-400 block">Sun: By Appointment</span>
+                                </div>
+                                <div>
+                                    <span class="text-neutral-400 block font-semibold mb-1">HOTLINE:</span>
+                                    <span class="text-red-500 font-bold block">+62 21 555 9988</span>
+                                    <span class="text-white font-bold block">+62 811 8888 999</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 mt-2 flex gap-3 pointer-events-auto">
+                                <a href="{{ route('service.create') }}" class="flex-1 px-3 py-3 bg-red-600 hover:bg-red-700 text-white text-[9px] tracking-widest font-bold uppercase transition-all duration-300 flex items-center justify-center shadow-lg shadow-red-600/30">
+                                    <i class="fa-solid fa-calendar-check mr-2"></i> BOOK APPT
+                                </a>
+                                <a href="https://maps.google.com/?q={{ $dealer_lat ?? '-7.3274' }},{{ $dealer_lng ?? '108.3225' }}" target="_blank" class="flex-1 px-3 py-3 border border-white/30 hover:border-white text-white text-[9px] tracking-widest font-bold uppercase transition-all duration-300 flex items-center justify-center backdrop-blur-md bg-black/50">
+                                    <i class="fa-solid fa-map-location mr-2"></i> DIRECTIONS
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- RIGHT COLUMN: INTERACTIVE MAP PREVIEW CARD -->
-                    <div class="relative h-[380px] rounded-none overflow-hidden border border-white/10 group reveal-on-scroll">
-                        <img src="{{ asset('images/experience-showroom.webp') }}" alt="Showroom Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8 flex flex-col justify-between">
+                    <!-- RIGHT COLUMN: 360 VIRTUAL TOUR CARD -->
+                    <div id="showroom360Card" class="relative h-[380px] rounded-none overflow-hidden border border-white/10 group reveal-on-scroll" style="cursor:pointer;">
+                        <img src="{{ asset('images/experience-showroom.webp') }}"
+                             alt="Showroom Exterior"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                             draggable="false">
+                        <!-- Gradient overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                        <!-- Content layer -->
+                        <div class="absolute inset-0 p-8 flex flex-col justify-between">
                             <div class="flex justify-between items-start">
                                 <span class="bg-red-600 text-white text-[10px] font-mono font-bold px-3 py-1 uppercase tracking-widest shadow-lg">
                                     VIRTUAL TOUR READY
@@ -1050,11 +1074,16 @@
                             <div class="space-y-2">
                                 <h4 class="text-2xl font-serif font-extrabold text-white">Experience Our 360° Showroom</h4>
                                 <p class="text-xs font-mono text-neutral-300">Step inside Indonesia's premier luxury supercar lounge from anywhere.</p>
-                                <button onclick="window.location.href='/inquire'" class="mt-2 text-xs font-mono tracking-widest text-red-500 hover:text-white font-bold uppercase inline-flex items-center">
+                                <span class="mt-2 text-xs font-mono tracking-widest text-red-500 font-bold uppercase inline-flex items-center">
                                     LAUNCH VIRTUAL EXPERIENCE <i class="fa-solid fa-arrow-right ml-2"></i>
-                                </button>
+                                </span>
                             </div>
                         </div>
+                        {{-- Transparent clickable button — sits on top of all content, guaranteed to catch clicks --}}
+                        <button type="button"
+                                onclick="console.log('Card button clicked'); open360ShowroomModal();"
+                                aria-label="Launch 360 Virtual Showroom Tour"
+                                style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;cursor:pointer;z-index:20;"></button>
                     </div>
 
                 </div>
@@ -1096,7 +1125,7 @@
                         <li><a href="#" class="hover:text-white transition-colors">McLaren Senna Hypercar</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Ferrari SF90 XX Stradale</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Jeep Gladiator Rubicon</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Porsche 911 GT3 RS</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Chevrolet Camaro</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Audi R8 V10 Performance</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Koenigsegg Jesko Absolut</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Bugatti Chiron Pur Sport</a></li>
@@ -2430,13 +2459,336 @@
         height: 18px;
         fill: currentColor;
     }
+
+    /* Pannellum 360 Viewer Custom Overrides */
+    #pannellum360Viewer {
+        width: 100%;
+        height: 100%;
+    }
+    #pannellum360Viewer .pnlm-container {
+        background: #0a0a0c !important;
+    }
+    .pnlm-hot-spot-debug-indicator { display: none; }
+    .pnlm-info-hotspot .pnlm-tooltip span {
+        background: rgba(12,12,20,0.95);
+        border: 1px solid rgba(229,9,20,0.5);
+        color: #fff;
+        font-size: 11px;
+        font-family: 'Space Mono', monospace;
+        border-radius: 0;
+        padding: 6px 12px;
+    }
 </style>
 
+{{-- 360° VIRTUAL SHOWROOM TOUR MODAL --}}
+<div id="virtualTourModal"
+     style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2147483647;align-items:center;justify-content:center;background:rgba(0,0,0,0.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:1rem;"
+     onclick="if(event.target===this)close360ShowroomModal()">
+    <div style="position:relative;width:100%;max-width:1100px;height:85vh;background:#0c0c14;border:1px solid rgba(255,255,255,0.12);box-shadow:0 30px 80px rgba(0,0,0,0.9);display:flex;flex-direction:column;overflow:hidden;">
+        <!-- Modal Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:1px solid rgba(255,255,255,0.08);background:#0a0a0c;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="width:9px;height:9px;border-radius:50%;background:#e50914;display:inline-block;"></span>
+                <div>
+                    <p style="font-family:'Cinzel',serif;font-weight:700;font-size:13px;color:#fff;letter-spacing:.15em;text-transform:uppercase;margin:0;">APEX VIRTUAL SHOWROOM 360&deg;</p>
+                    <p style="font-family:'Space Mono',monospace;font-size:10px;color:#6b7280;margin:0;">Pondok Indah VIP &bull; Drag &amp; scroll to explore</p>
+                </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button id="autoRotateBtn" onclick="toggle360AutoRotate()"
+                    style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:#111118;border:1px solid rgba(255,255,255,0.12);color:#d1d5db;font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;">
+                    <i class="fa-solid fa-rotate" style="color:#e50914;"></i> AUTO ROTATE
+                </button>
+                <button onclick="close360ShowroomModal()"
+                    style="width:32px;height:32px;border-radius:50%;background:#111118;border:1px solid rgba(255,255,255,0.12);color:#9ca3af;cursor:pointer;display:flex;align-items:center;justify-content:center;"
+                    onmouseover="this.style.background='#e50914'" onmouseout="this.style.background='#111118'">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        <!-- ROOM NAVIGATION TABS -->
+        <div style="background:#0a0a0c;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;padding:10px 22px;gap:12px;overflow-x:auto;">
+            <button onclick="change360Room('showroom')" id="tab-showroom" class="room-tab-btn active" style="padding:6px 16px;background:rgba(229,9,20,0.15);border:1px solid #e50914;color:#fff;font-size:11px;font-family:'Space Mono',monospace;cursor:pointer;white-space:nowrap;transition:all 0.3s;">MAIN SHOWROOM</button>
+            <button onclick="change360Room('garage')" id="tab-garage" class="room-tab-btn" style="padding:6px 16px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#9ca3af;font-size:11px;font-family:'Space Mono',monospace;cursor:pointer;white-space:nowrap;transition:all 0.3s;">LUXURY GARAGE</button>
+            <button onclick="change360Room('lounge')" id="tab-lounge" class="room-tab-btn" style="padding:6px 16px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#9ca3af;font-size:11px;font-family:'Space Mono',monospace;cursor:pointer;white-space:nowrap;transition:all 0.3s;">VIP LOUNGE</button>
+            <button onclick="change360Room('front')" id="tab-front" class="room-tab-btn" style="padding:6px 16px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#9ca3af;font-size:11px;font-family:'Space Mono',monospace;cursor:pointer;white-space:nowrap;transition:all 0.3s;">EXTERIOR FRONT</button>
+        </div>
+        <!-- Viewer Area -->
+        <div style="flex:1;position:relative;overflow:hidden;background:#000;">
+            <div id="pannellum360Viewer" style="width:100%;height:100%;"></div>
+            <div id="tourHint"
+                 style="position:absolute;bottom:18px;left:18px;z-index:10;background:rgba(0,0,0,0.8);border:1px solid rgba(255,255,255,0.1);padding:8px 14px;display:flex;align-items:center;gap:10px;transition:opacity .6s;pointer-events:none;">
+                <i class="fa-solid fa-hand-pointer" style="color:#e50914;"></i>
+                <span style="font-family:'Space Mono',monospace;font-size:10px;color:#d1d5db;">Geser / Drag untuk rotasi 360&deg; &bull; Scroll = zoom</span>
+            </div>
+            <div id="tourLoading"
+                 style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0a0a0c;z-index:5;">
+                <div style="text-align:center;">
+                    <div style="width:48px;height:48px;border:3px solid rgba(229,9,20,0.3);border-top:3px solid #e50914;border-radius:50%;animation:spin360 1s linear infinite;margin:0 auto 12px;"></div>
+                    <p style="font-family:'Space Mono',monospace;font-size:11px;color:#9ca3af;">Loading 360&deg; view...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<style>
+    @keyframes spin360 {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<script>
+    // Global variables for 360 viewer
+    var _360viewer = null;
+    var _360rotating = false;
+    var _360loaded = false;
+
+    // Plain global function
+    function open360ShowroomModal() {
+        console.log('[360Tour] open360ShowroomModal called');
+        
+        var modal = document.getElementById('virtualTourModal');
+        if (!modal) {
+            console.error('[360Tour] Modal not found');
+            alert('Error: Modal element not found!');
+            return;
+        }
+        
+        // Break out of any hiding parent containers by moving modal directly to body
+        if (modal.parentNode !== document.body) {
+            document.body.appendChild(modal);
+        }
+        
+        // Show modal immediately with high priority
+        modal.style.setProperty('display', 'flex', 'important');
+
+        if (!_360loaded) {
+            _360loaded = true;
+            console.log('[360Tour] Dynamically loading Pannellum scripts');
+            
+            var css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css';
+            document.head.appendChild(css);
+
+            var js = document.createElement('script');
+            js.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
+            js.onload = function() {
+                console.log('[360Tour] Pannellum script loaded successfully');
+                _init360Viewer();
+            };
+            js.onerror = function() {
+                console.error('[360Tour] Failed to load Pannellum JS');
+                var el = document.getElementById('tourLoading');
+                if (el) el.innerHTML = '<p style="color:#e50914;font-family:monospace;font-size:12px;padding:20px;">Failed to load viewer.<br>Check your internet connection.</p>';
+            };
+            document.body.appendChild(js);
+        } else if (_360viewer) {
+            var el = document.getElementById('tourLoading');
+            if (el) el.style.display = 'none';
+        }
+    }
+
+    function _init360Viewer() {
+        if (_360viewer) return;
+        try {
+            console.log('[360Tour] Initializing viewer...');
+            _360viewer = pannellum.viewer('pannellum360Viewer', {
+                default: {
+                    firstScene: "showroom",
+                    autoLoad: true,
+                    autoRotate: -2,
+                    autoRotateInactivityDelay: 1000,
+                    compass: false,
+                    showControls: true
+                },
+                scenes: {
+                    showroom: {
+                        type: 'equirectangular',
+                        panorama: '{{ asset("images/showroom_360.png") }}',
+                        hotSpots: [
+                            { pitch: -2, yaw:  20, type: 'info', text: 'Ferrari & Hypercar Lounge Zone' },
+                            { pitch: -4, yaw: -75, type: 'info', text: 'Lamborghini Revuelto Display' },
+                            { pitch:  0, yaw: 125, type: 'info', text: 'VIP Concierge & Reception Desk' }
+                        ]
+                    },
+                    garage: {
+                        type: 'equirectangular',
+                        panorama: '{{ asset("images/garage_360.png") }}',
+                        hotSpots: [
+                            { pitch: 0, yaw: 0, type: 'info', text: 'Supercar Storage & Tuning' }
+                        ]
+                    },
+                    lounge: {
+                        type: 'equirectangular',
+                        panorama: '{{ asset("images/lounge_360.png") }}',
+                        hotSpots: [
+                            { pitch: -5, yaw: 45, type: 'info', text: 'VIP Negotiation Table' }
+                        ]
+                    },
+                    front: {
+                        type: 'equirectangular',
+                        panorama: '{{ asset("images/front_360.png") }}',
+                        hotSpots: [
+                            { pitch: 0, yaw: 0, type: 'info', text: 'Dealership Exterior' }
+                        ]
+                    }
+                }
+            });
+            _360rotating = true;
+
+            var checkLoaded = setInterval(function() {
+                try {
+                    if (_360viewer && _360viewer.isLoaded()) {
+                        clearInterval(checkLoaded);
+                        console.log('[360Tour] Viewer fully loaded and rendering');
+                        var el = document.getElementById('tourLoading');
+                        if (el) el.style.display = 'none';
+                        setTimeout(function() {
+                            var hint = document.getElementById('tourHint');
+                            if (hint) hint.style.opacity = '0';
+                        }, 5000);
+                    }
+                } catch(e) { clearInterval(checkLoaded); }
+            }, 300);
+
+        } catch(e) {
+            console.error('[360Tour] Init error:', e);
+            alert('Error initializing 360 viewer.');
+        }
+    }
+
+    function change360Room(roomId) {
+        if (!_360viewer) return;
+        
+        var loading = document.getElementById('tourLoading');
+        if (loading) loading.style.display = 'flex';
+        
+        try {
+            _360viewer.loadScene(roomId);
+        } catch(e) {
+            console.error('Error loading scene:', e);
+        }
+        
+        var tabs = document.querySelectorAll('.room-tab-btn');
+        tabs.forEach(function(t) {
+            t.style.background = 'transparent';
+            t.style.border = '1px solid rgba(255,255,255,0.2)';
+            t.style.color = '#9ca3af';
+        });
+        var active = document.getElementById('tab-' + roomId);
+        if (active) {
+            active.style.background = 'rgba(229,9,20,0.15)';
+            active.style.border = '1px solid #e50914';
+            active.style.color = '#fff';
+        }
+
+        setTimeout(function() {
+            var checkLoaded = setInterval(function() {
+                try {
+                    if (_360viewer && _360viewer.isLoaded()) {
+                        clearInterval(checkLoaded);
+                        if (loading) loading.style.display = 'none';
+                    }
+                } catch(e) { clearInterval(checkLoaded); }
+            }, 300);
+        }, 150);
+    }
+
+    function close360ShowroomModal() {
+        console.log('[360Tour] close360ShowroomModal called');
+        var modal = document.getElementById('virtualTourModal');
+        if (modal) modal.style.setProperty('display', 'none', 'important');
+    }
+
+    function toggle360AutoRotate() {
+        if (!_360viewer) return;
+        var btn = document.getElementById('autoRotateBtn');
+        if (_360rotating) {
+            _360viewer.stopAutoRotate();
+            _360rotating = false;
+            if (btn) { btn.style.opacity = '0.45'; btn.title = 'Auto Rotate: OFF'; }
+        } else {
+            _360viewer.startAutoRotate(-2);
+            _360rotating = true;
+            if (btn) { btn.style.opacity = '1'; btn.title = 'Auto Rotate: ON'; }
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') close360ShowroomModal();
+    });
+
+    // Explicitly expose functions to window just in case
+    window.open360ShowroomModal = open360ShowroomModal;
+    window.close360ShowroomModal = close360ShowroomModal;
+    window.toggle360AutoRotate = toggle360AutoRotate;
+    window.change360Room = change360Room;
+</script>
 
 @endsection
 
-
-
-
-
+@section('scripts')
+<!-- Leaflet Map JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var mapEl = document.getElementById('dealerMap');
+        if (mapEl) {
+            var lat = {{ $dealer_lat }};
+            var lng = {{ $dealer_lng }};
+            
+            // Initialize map
+            var map = L.map('dealerMap', {
+                center: [lat, lng],
+                zoom: 15,
+                scrollWheelZoom: false
+            });
+            
+            // Fix Leaflet rendering issue when container is initially off-screen or animating
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 500);
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 1500);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            // Custom red marker icon
+            var redIcon = L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            
+            // Add marker
+            var marker = L.marker([lat, lng], {icon: redIcon}).addTo(map);
+            marker.bindPopup("<b>APEX AUTOMOTIVE</b><br>Official Showroom").openPopup();
+            
+            // Fix map rendering issues inside hidden or resized containers
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 500);
+        }
+    });
+</script>
+<style>
+    /* CSS Trick to make OpenStreetMap dark mode without API keys */
+    .map-dark-filter .leaflet-layer,
+    .map-dark-filter .leaflet-control-zoom-in,
+    .map-dark-filter .leaflet-control-zoom-out,
+    .map-dark-filter .leaflet-control-attribution {
+        filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
+</style>
+@endsection

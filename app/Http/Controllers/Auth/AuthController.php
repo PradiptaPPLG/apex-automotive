@@ -121,6 +121,10 @@ class AuthController extends Controller
         }
 
         // Role-based redirects
+        if ($user->isManager()) {
+            return redirect()->route('manager.dashboard');
+        }
+
         if ($user->isRm()) {
             return redirect()->route('admin.inquiries.index');
         }
@@ -221,6 +225,10 @@ class AuthController extends Controller
 
             Auth::login($user, remember: true);
 
+            if ($user->isManager()) {
+                return redirect()->route('manager.dashboard');
+            }
+
             if ($user->isRm()) {
                 return redirect()->route('admin.inquiries.index');
             }
@@ -281,7 +289,9 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         $redirect = route('home');
-        if ($user->isRm()) {
+        if ($user->isManager()) {
+            $redirect = route('manager.dashboard');
+        } elseif ($user->isRm()) {
             $redirect = route('admin.inquiries.index');
         } elseif ($user->isDelivery()) {
             $redirect = route('delivery.portal');
