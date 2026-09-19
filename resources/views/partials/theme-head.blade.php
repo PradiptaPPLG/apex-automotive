@@ -85,18 +85,94 @@
     })();
 
     function toggleGlobalTheme() {
-        var isLight = document.documentElement.classList.contains('light');
-        var newTheme = isLight ? 'dark' : 'light';
         var h = document.documentElement;
-        if (newTheme === 'light') {
-            h.classList.add('light');
-            h.classList.remove('dark');
-        } else {
-            h.classList.add('dark');
-            h.classList.remove('light');
+        var isLight = h.classList.contains('light');
+        var newTheme = isLight ? 'dark' : 'light';
+        
+        var overlay = document.getElementById('pixel-transition-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'pixel-transition-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.zIndex = '999999';
+            overlay.style.pointerEvents = 'none';
+            overlay.style.display = 'grid';
+            overlay.style.gridTemplateColumns = 'repeat(12, 1fr)';
+            overlay.style.gridTemplateRows = 'repeat(8, 1fr)';
+            document.body.appendChild(overlay);
         }
-        localStorage.setItem('apex_theme', newTheme);
-        _syncThemeBtns(newTheme);
+        
+        overlay.style.display = 'grid';
+        if (overlay.classList) overlay.classList.remove('hidden');
+        overlay.innerHTML = '';
+        
+        var cols = 12;
+        var rows = 8;
+        var totalTiles = cols * rows;
+        var tileColor = newTheme === 'light' ? '#f5f5f5' : '#0a0a0a';
+        var tileBorder = newTheme === 'light' ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.15)';
+        
+        for (var i = 0; i < totalTiles; i++) {
+            var tile = document.createElement('div');
+            tile.style.backgroundColor = tileColor;
+            tile.style.border = '1px solid ' + tileBorder;
+            tile.style.opacity = '0';
+            tile.style.transform = 'scale(0.5)';
+            tile.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            
+            var col = i % cols;
+            tile.style.transitionDelay = (col * 0.05) + 's';
+            
+            overlay.appendChild(tile);
+        }
+        
+        // Trigger in animation
+        setTimeout(function() {
+            var tiles = overlay.children;
+            for (var i = 0; i < tiles.length; i++) {
+                tiles[i].style.opacity = '1';
+                tiles[i].style.transform = 'scale(1.05)';
+            }
+        }, 10);
+        
+        // Toggle theme when screen is mostly covered
+        setTimeout(function() {
+            if (newTheme === 'light') {
+                h.classList.add('light');
+                h.classList.remove('dark');
+            } else {
+                h.classList.add('dark');
+                h.classList.remove('light');
+            }
+            localStorage.setItem('apex_theme', newTheme);
+            _syncThemeBtns(newTheme);
+            
+            // Re-sync thumb in dashboard if it exists
+            var toggleThumb = document.getElementById('toggleThumb');
+            if (toggleThumb) {
+                toggleThumb.style.transform = newTheme === 'dark' ? 'translateX(32px)' : 'translateX(0)';
+            }
+        }, 600);
+        
+        // Trigger out animation
+        setTimeout(function() {
+            var tiles = overlay.children;
+            for (var i = 0; i < tiles.length; i++) {
+                tiles[i].style.opacity = '0';
+                tiles[i].style.transform = 'scale(0)';
+            }
+        }, 700);
+        
+        // Cleanup
+        setTimeout(function() {
+            overlay.style.display = 'none';
+            if (overlay.classList) overlay.classList.add('hidden');
+            overlay.innerHTML = '';
+        }, 1500);
     }
 
     function _syncThemeBtns(theme) {
