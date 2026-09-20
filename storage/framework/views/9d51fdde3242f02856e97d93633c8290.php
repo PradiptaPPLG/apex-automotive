@@ -780,13 +780,33 @@
 
                 <!-- CAR CATALOG GRID (CLEAN LUXURY GRID - CLICK ANY CAR TO INSPECT & TOGGLE COLORS/BODYKITS) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="carCatalog">
-                    <?php $__currentLoopData = $cars; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $car): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                        $sortedCars = $cars->sortBy(function($car) {
+                            if ($car->status === 'available') return 0;
+                            if ($car->status === 'sold') return 2;
+                            return 1; // reserved, coming_soon, etc
+                        });
+                    ?>
+                    <?php $__currentLoopData = $sortedCars; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $car): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="car-card glass-card group cursor-pointer overflow-hidden border border-neutral-200 dark:border-white/10 hover:border-red-600 transition-all duration-300 reveal-on-scroll" data-make="<?php echo e($car->brand); ?>" data-price="<?php echo e($car->price); ?>" data-condition="<?php echo e($car->category); ?>" onclick="openCarInspector('<?php echo e($car->id); ?>')">
                         <div class="relative h-64 overflow-hidden bg-neutral-900">
                             <img src="<?php echo e($car->image_url ? asset(ltrim($car->image_url, '/')) : asset('images/no-image.png')); ?>" alt="<?php echo e($car->name); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md flex items-center space-x-1">
-                                <span><?php echo e($car->status ?? 'AVAILABLE'); ?></span>
+                            
+                            <?php
+                                $statusColor = 'bg-red-600 text-white';
+                                $statusText = 'AVAILABLE';
+                                if ($car->status === 'sold') {
+                                    $statusColor = 'bg-neutral-900/80 text-neutral-400 border border-neutral-500/50 backdrop-blur-sm';
+                                    $statusText = 'SOLD OUT';
+                                } elseif ($car->status !== 'available') {
+                                    $statusColor = 'bg-amber-500/20 text-amber-400 border border-amber-500/50 backdrop-blur-sm';
+                                    $statusText = 'COMING SOON';
+                                }
+                            ?>
+                            <div class="absolute top-3 left-3 <?php echo e($statusColor); ?> text-[10px] font-mono font-bold px-2 py-0.5 uppercase tracking-widest shadow-md flex items-center space-x-1">
+                                <span><?php echo e($statusText); ?></span>
                             </div>
+
                             <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-neutral-200 text-[10px] font-mono px-2.5 py-0.5 border border-white/10">
                                 <?php echo e($car->year); ?>
 

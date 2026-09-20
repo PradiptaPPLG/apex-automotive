@@ -181,7 +181,7 @@
     <div class="mb-grid">
         <div class="mb-card span-3">
             <div class="mb-card-header">
-                <div class="mb-card-title">Total Unit Mobil</div>
+                <div class="mb-card-title">Total Jenis Mobil</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
             <div class="mb-number dark">{{ $totalCars }}</div>
@@ -227,7 +227,7 @@
 
     <!-- METRICS GRID ROW 2 -->
     <div class="mb-grid">
-        <div class="mb-card span-4">
+        <div class="mb-card span-2">
             <div class="mb-card-header">
                 <div class="mb-card-title">Total Visit Website</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
@@ -236,7 +236,16 @@
             <div class="mb-sub-metric">Pengunjung Landing Page</div>
         </div>
 
-        <div class="mb-card span-4">
+        <div class="mb-card span-2">
+            <div class="mb-card-header">
+                <div class="mb-card-title">Total Unit Mobil</div>
+                <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
+            </div>
+            <div class="mb-number" style="color: #60a5fa;">{{ $totalUnits }}</div>
+            <div class="mb-sub-metric">Total Fisik Unit (Stok Varian)</div>
+        </div>
+
+        <div class="mb-card span-2">
             <div class="mb-card-header">
                 <div class="mb-card-title">Total User Aktif</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
@@ -254,7 +263,7 @@
             <div class="mb-sub-metric">Terkirim</div>
         </div>
 
-        <div class="mb-card span-1">
+        <div class="mb-card span-2">
             <div class="mb-card-header">
                 <div class="mb-card-title">Sales RM</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
@@ -263,7 +272,7 @@
             <div class="mb-sub-metric">Aktif</div>
         </div>
 
-        <div class="mb-card span-1">
+        <div class="mb-card span-2">
             <div class="mb-card-header">
                 <div class="mb-card-title">Drivers</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>

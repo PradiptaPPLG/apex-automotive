@@ -38,6 +38,8 @@ class DashboardController extends Controller
             'sold' => Car::where('status', 'sold')->count(),
         ];
 
+        $totalUnits = \App\Models\CarVariant::sum('stock');
+
         // Recent inquiries
         $recentInquiries = Inquiry::with('user')
             ->latest()
@@ -50,6 +52,7 @@ class DashboardController extends Controller
         return view('manager.dashboard', compact(
             'totalVisits',
             'totalCars',
+            'totalUnits',
             'totalRm',
             'totalDelivery',
             'totalInquiries',

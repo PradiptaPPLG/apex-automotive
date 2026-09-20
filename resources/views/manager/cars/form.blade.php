@@ -731,8 +731,19 @@
 
             // Lexus & Toyota & Ford & Others
             { model: "Lexus LFA Nurburgring Package", brand: "Lexus" },
-            { model: "Toyota GR Supra 3.0", brand: "Toyota" },
+            { model: "Toyota GR Supra MK5 (A90) 3.0", brand: "Toyota", category: "Supercar", year: 2024, transmission: "8-Speed Automatic", fuel_type: "Turbocharged Inline-6 3.0L" },
+            { model: "Toyota GR Supra MK5 (A90) 3.0 MT", brand: "Toyota", category: "Supercar", year: 2024, transmission: "6-Speed Manual", fuel_type: "Turbocharged Inline-6 3.0L" },
+            { model: "Toyota Supra MK4 (A80) RZ", brand: "Toyota", category: "Supercar", year: 1998, transmission: "6-Speed Manual", fuel_type: "Twin-Turbo Inline-6 3.0L (2JZ-GTE)" },
             { model: "Toyota GR86 Gazoo Racing", brand: "Toyota", category: "Supercar", year: 2024, transmission: "6-Speed Manual", fuel_type: "Naturally Aspirated Boxer-4 2.4L" },
+            
+            // Mazda
+            { model: "Mazda 3 Hatchback 2.0 Skyactiv-G", brand: "Mazda", category: "Daily Luxury", year: 2024, transmission: "6-Speed Automatic", fuel_type: "Naturally Aspirated Inline-4 2.0L Skyactiv-G" },
+            { model: "Mazda 3 Hatchback Turbo AWD (BP)", brand: "Mazda", category: "Supercar", year: 2024, transmission: "6-Speed Automatic", fuel_type: "Turbocharged Skyactiv-G 2.5L" },
+            { model: "Mazda 3 Hatchback Speed3 / MPS", brand: "Mazda", category: "Supercar", year: 2013, transmission: "6-Speed Manual", fuel_type: "Turbocharged MZR 2.3L DISI" },
+            { model: "Mazda RX-7 Spirit R Type-A (FD3S)", brand: "Mazda", category: "Supercar", year: 2002, transmission: "5-Speed Manual", fuel_type: "Twin-Turbo Twin-Rotor 13B-REW Rotary" },
+            { model: "Mazda RX-8 Spirit R (SE3P)", brand: "Mazda", category: "Supercar", year: 2012, transmission: "6-Speed Manual", fuel_type: "RENESIS 13B-MSP Rotary" },
+            { model: "Mazda MX-5 Miata RF (ND2)", brand: "Mazda", category: "Supercar", year: 2024, transmission: "6-Speed Manual", fuel_type: "Naturally Aspirated Skyactiv-G 2.0L" },
+
             { model: "Ford GT Heritage Edition", brand: "Ford" },
             { model: "Rimac Nevera", brand: "Rimac Automobili" },
             { model: "Range Rover SV Autobiography", brand: "Land Rover" }
