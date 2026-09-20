@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Car;
 use App\Models\Inquiry;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $totalVisits = Cache::get('website_visits', 0);
+
         $totalCars = Car::count();
         $totalRm = User::where('role', 'rm')->count();
         $totalDelivery = User::where('role', 'delivery')->count();
@@ -45,6 +48,7 @@ class DashboardController extends Controller
         $recentCars = Car::latest()->take(5)->get();
 
         return view('manager.dashboard', compact(
+            'totalVisits',
             'totalCars',
             'totalRm',
             'totalDelivery',

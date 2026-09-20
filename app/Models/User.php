@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
-use App\Helpers\QrCodeSvg;
+use chillerlan\QRCode\Common\EccLevel;
+use chillerlan\QRCode\Output\QRMarkupSVG;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -42,7 +45,25 @@ class User extends Authenticatable
      */
     public function getQrCodeSvgAttribute(): string
     {
-        return QrCodeSvg::generate($this->qr_login_payload, 130);
+        $options = new QROptions([
+            'outputInterface' => QRMarkupSVG::class,
+            'eccLevel' => EccLevel::L,
+            'addQuietzone' => true,
+            'quietzoneSize' => 4,
+            'svgAddXmlHeader' => false,
+            'outputBase64' => false,
+            'svgViewBoxSize' => null,
+            'markupDark' => '#000000',
+            'markupLight' => '#ffffff',
+        ]);
+
+        $svg = (new QRCode($options))->render($this->qr_login_payload);
+
+        // Remove XML declaration if present
+        $svg = preg_replace('/<\?xml[^>]*\?>/', '', $svg);
+
+        // Inject width and height
+        return preg_replace('/<svg/', '<svg width="130" height="130"', $svg, 1);
     }
 
     /**

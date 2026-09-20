@@ -1,35 +1,40 @@
-@extends('manager.layout')
+<?php $__env->startSection('title', $car->exists ? 'Edit Mobil Showroom' : 'Tambah Mobil Showroom Baru'); ?>
+<?php $__env->startSection('page_header', $car->exists ? 'Edit Mobil: '.$car->name : 'Tambah Mobil Showroom Baru'); ?>
 
-@section('title', $car->exists ? 'Edit Mobil Showroom' : 'Tambah Mobil Showroom Baru')
-@section('page_header', $car->exists ? 'Edit Mobil: '.$car->name : 'Tambah Mobil Showroom Baru')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div style="max-width: 1400px; margin: 0 auto;">
-    <form id="carForm" method="POST" action="{{ $car->exists ? route('manager.cars.update', $car) : route('manager.cars.store') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 40px;">
-        @csrf
-        @if($car->exists)
-            @method('PUT')
-        @endif
+    <form id="carForm" method="POST" action="<?php echo e($car->exists ? route('manager.cars.update', $car) : route('manager.cars.store')); ?>" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 40px;">
+        <?php echo csrf_field(); ?>
+        <?php if($car->exists): ?>
+            <?php echo method_field('PUT'); ?>
+        <?php endif; ?>
         
         <!-- KOLOM KIRI (GENERAL INFO) -->
         <div class="card-panel" style="display: flex; flex-direction: column; gap: 20px;">
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                @php
+                <?php
                     $primaryVariant = $car->variants ? $car->variants->where('type', 'primer')->first() : null;
-                @endphp
+                ?>
                 <div style="position: relative;">
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Nama Unit / Model <span style="color:#ef4444;">*</span></label>
-                    <input type="text" name="name" id="carNameInput" value="{{ old('name', $car->name) }}" required placeholder="Contoh: McLaren Senna GTR" class="mgr-input" autocomplete="off">
+                    <input type="text" name="name" id="carNameInput" value="<?php echo e(old('name', $car->name)); ?>" required placeholder="Contoh: McLaren Senna GTR" class="mgr-input" autocomplete="off">
                     <div id="carSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card, #1a1a2e); background-color: var(--bg-card, #1a1a2e); border: 1px solid var(--border); border-radius: 4px; z-index: 9999; display: none; max-height: 260px; overflow-y: auto; margin-top: 4px; box-shadow: 0 8px 32px rgba(0,0,0,0.7); isolation: isolate;"></div>
-                    @error('name')
-                        <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</span>
-                    @enderror
+                    <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Brand / Manufacturer</label>
-                    <input type="text" name="brand" id="carBrandInput" value="{{ old('brand', $car->brand) }}" placeholder="Contoh: McLaren Automotive" class="mgr-input">
+                    <input type="text" name="brand" id="carBrandInput" value="<?php echo e(old('brand', $car->brand)); ?>" placeholder="Contoh: McLaren Automotive" class="mgr-input">
                 </div>
             </div>
 
@@ -37,42 +42,42 @@
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Kategori <span style="color:#ef4444;">*</span></label>
                     <select name="category" required class="mgr-select">
-                        <option value="Hypercar"   {{ old('category', $car->category) == 'Hypercar'    ? 'selected' : '' }}>Hypercar</option>
-                        <option value="Supercar"   {{ old('category', $car->category) == 'Supercar'    ? 'selected' : '' }}>Supercar</option>
-                        <option value="Luxury SUV" {{ old('category', $car->category) == 'Luxury SUV'  ? 'selected' : '' }}>Luxury SUV</option>
-                        <option value="Grand Tourer" {{ old('category', $car->category) == 'Grand Tourer' ? 'selected' : '' }}>Grand Tourer</option>
+                        <option value="Hypercar"   <?php echo e(old('category', $car->category) == 'Hypercar'    ? 'selected' : ''); ?>>Hypercar</option>
+                        <option value="Supercar"   <?php echo e(old('category', $car->category) == 'Supercar'    ? 'selected' : ''); ?>>Supercar</option>
+                        <option value="Luxury SUV" <?php echo e(old('category', $car->category) == 'Luxury SUV'  ? 'selected' : ''); ?>>Luxury SUV</option>
+                        <option value="Grand Tourer" <?php echo e(old('category', $car->category) == 'Grand Tourer' ? 'selected' : ''); ?>>Grand Tourer</option>
                     </select>
                 </div>
 
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Harga Estimasi (IDR) <span style="color:#ef4444;">*</span></label>
-                    <input type="text" id="price_display" value="{{ old('price', $car->price) ? number_format(old('price', $car->price), 0, ',', '.') : '' }}" required placeholder="Contoh: 25.000.000.000" class="mgr-input" oninput="formatPrice(this)">
-                    <input type="hidden" name="price" id="price_hidden" value="{{ old('price', $car->price) }}">
+                    <input type="text" id="price_display" value="<?php echo e(old('price', $car->price) ? number_format(old('price', $car->price), 0, ',', '.') : ''); ?>" required placeholder="Contoh: 25.000.000.000" class="mgr-input" oninput="formatPrice(this)">
+                    <input type="hidden" name="price" id="price_hidden" value="<?php echo e(old('price', $car->price)); ?>">
                 </div>
 
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Tahun</label>
-                    <input type="number" name="year" value="{{ old('year', $car->year ?? date('Y')) }}" placeholder="2026" class="mgr-input">
+                    <input type="number" name="year" value="<?php echo e(old('year', $car->year ?? date('Y'))); ?>" placeholder="2026" class="mgr-input">
                 </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Transmisi</label>
-                    <input type="text" name="transmission" value="{{ old('transmission', $car->transmission) }}" placeholder="7-Speed Dual Clutch" class="mgr-input">
+                    <input type="text" name="transmission" value="<?php echo e(old('transmission', $car->transmission)); ?>" placeholder="7-Speed Dual Clutch" class="mgr-input">
                 </div>
 
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Bahan Bakar</label>
-                    <input type="text" name="fuel_type" value="{{ old('fuel_type', $car->fuel_type) }}" placeholder="V8 Twin-Turbo / Hybrid" class="mgr-input">
+                    <input type="text" name="fuel_type" value="<?php echo e(old('fuel_type', $car->fuel_type)); ?>" placeholder="V8 Twin-Turbo / Hybrid" class="mgr-input">
                 </div>
 
                 <div>
                     <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Status Ketersediaan <span style="color:#ef4444;">*</span></label>
                     <select name="status" required class="mgr-select">
-                        <option value="available" {{ old('status', $car->status) == 'available' ? 'selected' : '' }}>Available (Tersedia)</option>
-                        <option value="reserved"  {{ old('status', $car->status) == 'reserved'  ? 'selected' : '' }}>Reserved (Dipesan)</option>
-                        <option value="sold"      {{ old('status', $car->status) == 'sold'      ? 'selected' : '' }}>Sold (Terjual)</option>
+                        <option value="available" <?php echo e(old('status', $car->status) == 'available' ? 'selected' : ''); ?>>Available (Tersedia)</option>
+                        <option value="reserved"  <?php echo e(old('status', $car->status) == 'reserved'  ? 'selected' : ''); ?>>Reserved (Dipesan)</option>
+                        <option value="sold"      <?php echo e(old('status', $car->status) == 'sold'      ? 'selected' : ''); ?>>Sold (Terjual)</option>
                     </select>
                 </div>
             </div>
@@ -87,32 +92,39 @@
                         <div>
                             <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Pilih File Berkas Gambar</span>
                             <input type="file" name="image_file" accept="image/*" class="mgr-input" onchange="previewImageFile(this)" style="padding: 8px;">
-                            <input type="hidden" name="image_url" value="{{ old('image_url', $car->image_url) }}">
-                            @error('image_file')
-                                <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</span>
-                            @enderror
+                            <input type="hidden" name="image_url" value="<?php echo e(old('image_url', $car->image_url)); ?>">
+                            <?php $__errorArgs = ['image_file'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <span style="color: #f87171; font-size: 11px; margin-top: 4px; display: block;"><?php echo e($message); ?></span>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             
                             <div style="display: grid; grid-template-columns: 50px 1fr 100px; gap: 10px; margin-top: 12px; align-items: center; border: 1px dashed rgba(255,255,255,0.1); padding: 10px; border-radius: 4px;">
-                                <input type="color" name="primary_color_hex" value="{{ old('primary_color_hex', $primaryVariant->hex ?? '#ffffff') }}" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
-                                <input type="text" name="primary_color_name" value="{{ old('primary_color_name', $primaryVariant->name ?? '') }}" oninput="updatePalettePreview()" placeholder="Nama Warna Utama (Misal: Alpine White)" class="mgr-input">
+                                <input type="color" name="primary_color_hex" value="<?php echo e(old('primary_color_hex', $primaryVariant->hex ?? '#ffffff')); ?>" onchange="updatePalettePreview()" style="width: 100%; height: 38px; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer;">
+                                <input type="text" name="primary_color_name" value="<?php echo e(old('primary_color_name', $primaryVariant->name ?? '')); ?>" oninput="updatePalettePreview()" placeholder="Nama Warna Utama (Misal: Alpine White)" class="mgr-input">
                                 <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-hover); height: 38px; overflow: hidden;">
                                     <span style="font-size: 10px; font-family: monospace; color: var(--text-muted); padding: 0 6px;">STOCK</span>
-                                    <input type="number" name="primary_stock" value="{{ old('primary_stock', $primaryVariant->stock ?? 0) }}" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
+                                    <input type="number" name="primary_stock" value="<?php echo e(old('primary_stock', $primaryVariant->stock ?? 0)); ?>" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
                                 </div>
                             </div>
                         </div>
 
                     <div>
                         <div id="imagePreviewContainer" onclick="if(document.getElementById('imagePreviewImg').src) openImageModal(document.getElementById('imagePreviewImg').src)" style="width: 140px; height: 95px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
-                            @if($car->image_url)
-                                <img id="imagePreviewImg" src="{{ $car->image_url }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
+                            <?php if($car->image_url): ?>
+                                <img id="imagePreviewImg" src="<?php echo e($car->image_url); ?>" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                            <?php else: ?>
                                 <div id="imagePreviewPlaceholder" style="text-align: center; color: var(--text-dim); font-size: 11px;">
                                     <i class="fa-solid fa-cloud-arrow-up" style="font-size: 20px; display: block; margin-bottom: 4px; color: #ef4444;"></i>
                                     Format JPG/PNG/WEBP
                                 </div>
                                 <img id="imagePreviewImg" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -142,7 +154,7 @@
                 </div>
 
                 <div id="variantsContainer" style="display: flex; flex-direction: column; gap: 10px;">
-                    @php
+                    <?php
                         if (old('variant_names')) {
                             $existingVariants = array_map(function($t, $n, $h, $s, $i) { 
                                 return ['type' => $t, 'name' => $n, 'hex' => $h, 'stock' => $s, 'image_url' => $i]; 
@@ -158,38 +170,38 @@
                                 ['type' => 'color', 'name' => 'Rosso Corsa Red', 'hex' => '#dc2626', 'stock' => 0, 'image_url' => null],
                             ];
                         }
-                    @endphp
+                    ?>
 
-                    @foreach($existingVariants as $index => $v)
+                    <?php $__currentLoopData = $existingVariants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="variant-row" style="display: grid; grid-template-columns: 100px 50px 1fr 100px 220px 40px; gap: 10px; align-items: center; border: 1px dashed var(--border); padding: 10px; border-radius: 4px;">
-                            <select name="variant_types[{{ $index }}]" class="mgr-input" style="height: 38px;" onchange="handleVariantTypeChange(this)">
-                                <option value="color" {{ (isset($v['type']) && $v['type'] == 'color') ? 'selected' : '' }}>Warna Tambahan</option>
-                                <option value="bodykit" {{ (isset($v['type']) && $v['type'] == 'bodykit') ? 'selected' : '' }}>Bodykit</option>
+                            <select name="variant_types[<?php echo e($index); ?>]" class="mgr-input" style="height: 38px;" onchange="handleVariantTypeChange(this)">
+                                <option value="color" <?php echo e((isset($v['type']) && $v['type'] == 'color') ? 'selected' : ''); ?>>Warna Tambahan</option>
+                                <option value="bodykit" <?php echo e((isset($v['type']) && $v['type'] == 'bodykit') ? 'selected' : ''); ?>>Bodykit</option>
                             </select>
                             <div style="width: 100%; height: 38px; position: relative;">
-                                <input type="color" name="variant_hexes[{{ $index }}]" value="{{ $v['hex'] ?? '#dc2626' }}" onchange="updatePalettePreview()" style="width: 100%; height: 100%; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer; {{ (isset($v['type']) && $v['type'] == 'bodykit') ? 'display: none;' : '' }}">
-                                <div class="bodykit-badge" style="width: 100%; height: 100%; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 4px; display: {{ (isset($v['type']) && $v['type'] == 'bodykit') ? 'flex' : 'none' }}; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; font-weight: bold; color: var(--text-muted);">KIT</div>
+                                <input type="color" name="variant_hexes[<?php echo e($index); ?>]" value="<?php echo e($v['hex'] ?? '#dc2626'); ?>" onchange="updatePalettePreview()" style="width: 100%; height: 100%; padding: 2px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 4px; cursor: pointer; <?php echo e((isset($v['type']) && $v['type'] == 'bodykit') ? 'display: none;' : ''); ?>">
+                                <div class="bodykit-badge" style="width: 100%; height: 100%; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 4px; display: <?php echo e((isset($v['type']) && $v['type'] == 'bodykit') ? 'flex' : 'none'); ?>; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; font-weight: bold; color: var(--text-muted);">KIT</div>
                             </div>
-                            <input type="text" name="variant_names[{{ $index }}]" value="{{ $v['name'] ?? '' }}" oninput="updatePalettePreview()" placeholder="Nama (misal: Rosso Corsa)" class="mgr-input">
+                            <input type="text" name="variant_names[<?php echo e($index); ?>]" value="<?php echo e($v['name'] ?? ''); ?>" oninput="updatePalettePreview()" placeholder="Nama (misal: Rosso Corsa)" class="mgr-input">
                             <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-hover); height: 38px; overflow: hidden;">
                                 <span style="font-size: 10px; font-family: monospace; color: var(--text-muted); padding: 0 6px;">STOCK</span>
-                                <input type="number" name="variant_stocks[{{ $index }}]" value="{{ $v['stock'] ?? 0 }}" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
+                                <input type="number" name="variant_stocks[<?php echo e($index); ?>]" value="<?php echo e($v['stock'] ?? 0); ?>" min="0" style="width: 100%; height: 100%; border: none; background: transparent; text-align: center; color: var(--text-heading); font-family: monospace; font-size: 12px; outline: none;">
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)" style="width: 38px; height: 38px; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; background: var(--bg-card); flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                                    <img src="{{ $v['image_url'] ?? '' }}" alt="" style="width: 100%; height: 100%; object-fit: cover; {{ empty($v['image_url']) ? 'display: none;' : '' }}" class="variant-img-preview">
-                                    <div class="variant-img-placeholder" style="color: var(--text-dim); {{ !empty($v['image_url']) ? 'display: none;' : '' }}"><i class="fa-solid fa-image"></i></div>
+                                    <img src="<?php echo e($v['image_url'] ?? ''); ?>" alt="" style="width: 100%; height: 100%; object-fit: cover; <?php echo e(empty($v['image_url']) ? 'display: none;' : ''); ?>" class="variant-img-preview">
+                                    <div class="variant-img-placeholder" style="color: var(--text-dim); <?php echo e(!empty($v['image_url']) ? 'display: none;' : ''); ?>"><i class="fa-solid fa-image"></i></div>
                                 </div>
                                 <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
-                                    <input type="file" name="variant_images_upload[{{ $index }}]" accept="image/*" class="mgr-input" style="padding: 5px; font-size: 11px;" onchange="previewVariantImage(this)">
-                                    <input type="hidden" name="variant_images_existing[{{ $index }}]" value="{{ $v['image_url'] ?? '' }}">
+                                    <input type="file" name="variant_images_upload[<?php echo e($index); ?>]" accept="image/*" class="mgr-input" style="padding: 5px; font-size: 11px;" onchange="previewVariantImage(this)">
+                                    <input type="hidden" name="variant_images_existing[<?php echo e($index); ?>]" value="<?php echo e($v['image_url'] ?? ''); ?>">
                                 </div>
                             </div>
                             <button type="button" onclick="removeVariantRow(this)" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
 
                 <!-- Live Color Palette Dots Preview -->
@@ -212,7 +224,7 @@
                 <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Deskripsi unit dan spesifikasi teknis untuk halaman informasi detail.</p>
             </div>
 
-            @php
+            <?php
                 $descData = [];
                 if ($car->description) {
                     $parsed = json_decode($car->description, true);
@@ -223,26 +235,26 @@
                         $descData['intro'] = $car->description;
                     }
                 }
-            @endphp
+            ?>
 
             <div>
                 <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Judul Dokumen (Title)</label>
-                <input type="text" name="desc_title" value="{{ old('desc_title', $descData['title'] ?? '') }}" placeholder="Contoh: AUDI R8 V10 PERFORMANCE GT4 SPEC" class="mgr-input">
+                <input type="text" name="desc_title" value="<?php echo e(old('desc_title', $descData['title'] ?? '')); ?>" placeholder="Contoh: AUDI R8 V10 PERFORMANCE GT4 SPEC" class="mgr-input">
             </div>
 
             <div>
                 <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Subjudul (Subtitle)</label>
-                <input type="text" name="desc_subtitle" value="{{ old('desc_subtitle', $descData['subtitle'] ?? '') }}" placeholder="Contoh: Comprehensive Technical Blueprint & Official Manufacturer Specification Documentation" class="mgr-input">
+                <input type="text" name="desc_subtitle" value="<?php echo e(old('desc_subtitle', $descData['subtitle'] ?? '')); ?>" placeholder="Contoh: Comprehensive Technical Blueprint & Official Manufacturer Specification Documentation" class="mgr-input">
             </div>
 
             <div>
                 <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Overview & Ringkasan Desain (Intro)</label>
-                <textarea name="desc_intro" rows="3" placeholder="Deskripsi umum tentang mobil..." class="mgr-input" style="resize: vertical;">{{ old('desc_intro', $descData['intro'] ?? '') }}</textarea>
+                <textarea name="desc_intro" rows="3" placeholder="Deskripsi umum tentang mobil..." class="mgr-input" style="resize: vertical;"><?php echo e(old('desc_intro', $descData['intro'] ?? '')); ?></textarea>
             </div>
 
             <div>
                 <label style="display: block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Arsitektur Balap & Warisan Teknologi (History)</label>
-                <textarea name="desc_history" rows="3" placeholder="Deskripsi teknis tentang sejarah atau pengembangan mesin..." class="mgr-input" style="resize: vertical;">{{ old('desc_history', $descData['history'] ?? '') }}</textarea>
+                <textarea name="desc_history" rows="3" placeholder="Deskripsi teknis tentang sejarah atau pengembangan mesin..." class="mgr-input" style="resize: vertical;"><?php echo e(old('desc_history', $descData['history'] ?? '')); ?></textarea>
             </div>
 
             <!-- TABEL SPESIFIKASI DINAMIS -->
@@ -258,7 +270,7 @@
                 <input type="hidden" name="specs_json" id="specs_json">
 
                 <div id="specsContainer" style="display: flex; flex-direction: column; gap: 10px;">
-                    @php
+                    <?php
                         $existingSpecs = [];
                         if (old('spec_keys')) {
                             $existingSpecs = array_map(function($k, $v, $i) { 
@@ -280,37 +292,38 @@
                                 ['key' => 'Tenaga Maksimum', 'val' => '', 'icon' => 'fa-bolt'],
                             ];
                         }
-                    @endphp
+                    ?>
 
-                    @foreach($existingSpecs as $index => $s)
+                    <?php $__currentLoopData = $existingSpecs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="spec-row" style="display: grid; grid-template-columns: 1fr 1fr 140px 40px; gap: 10px; align-items: center;">
-                            <input type="text" name="spec_keys[]" value="{{ $s['key'] }}" placeholder="Komponen (Misal: Mesin)" class="mgr-input">
-                            <input type="text" name="spec_vals[]" value="{{ $s['val'] }}" placeholder="Spesifikasi (Misal: 5.2L V10)" class="mgr-input">
+                            <input type="text" name="spec_keys[]" value="<?php echo e($s['key']); ?>" placeholder="Komponen (Misal: Mesin)" class="mgr-input">
+                            <input type="text" name="spec_vals[]" value="<?php echo e($s['val']); ?>" placeholder="Spesifikasi (Misal: 5.2L V10)" class="mgr-input">
                             <select name="spec_icons[]" class="mgr-input" style="padding-left: 8px;">
-                                @php $curr = $s['icon'] ?? 'fa-circle-info'; @endphp
-                                <option value="fa-circle-info" {{ $curr == 'fa-circle-info' ? 'selected' : '' }}>Info</option>
-                                <option value="fa-bolt" {{ $curr == 'fa-bolt' ? 'selected' : '' }}>Listrik / Power</option>
-                                <option value="fa-gauge-high" {{ $curr == 'fa-gauge-high' ? 'selected' : '' }}>Kecepatan</option>
-                                <option value="fa-gears" {{ $curr == 'fa-gears' ? 'selected' : '' }}>Mesin / Gigi</option>
-                                <option value="fa-truck-monster" {{ $curr == 'fa-truck-monster' ? 'selected' : '' }}>Drivetrain</option>
-                                <option value="fa-weight-hanging" {{ $curr == 'fa-weight-hanging' ? 'selected' : '' }}>Berat</option>
-                                <option value="fa-wind" {{ $curr == 'fa-wind' ? 'selected' : '' }}>Aerodinamika</option>
-                                <option value="fa-tachometer-alt" {{ $curr == 'fa-tachometer-alt' ? 'selected' : '' }}>Torsi / RPM</option>
-                                <option value="fa-gas-pump" {{ $curr == 'fa-gas-pump' ? 'selected' : '' }}>Bahan Bakar</option>
-                                <option value="fa-battery-full" {{ $curr == 'fa-battery-full' ? 'selected' : '' }}>Baterai</option>
+                                <?php $curr = $s['icon'] ?? 'fa-circle-info'; ?>
+                                <option value="fa-circle-info" <?php echo e($curr == 'fa-circle-info' ? 'selected' : ''); ?>>Info</option>
+                                <option value="fa-bolt" <?php echo e($curr == 'fa-bolt' ? 'selected' : ''); ?>>Listrik / Power</option>
+                                <option value="fa-gauge-high" <?php echo e($curr == 'fa-gauge-high' ? 'selected' : ''); ?>>Kecepatan</option>
+                                <option value="fa-gears" <?php echo e($curr == 'fa-gears' ? 'selected' : ''); ?>>Mesin / Gigi</option>
+                                <option value="fa-truck-monster" <?php echo e($curr == 'fa-truck-monster' ? 'selected' : ''); ?>>Drivetrain</option>
+                                <option value="fa-weight-hanging" <?php echo e($curr == 'fa-weight-hanging' ? 'selected' : ''); ?>>Berat</option>
+                                <option value="fa-wind" <?php echo e($curr == 'fa-wind' ? 'selected' : ''); ?>>Aerodinamika</option>
+                                <option value="fa-tachometer-alt" <?php echo e($curr == 'fa-tachometer-alt' ? 'selected' : ''); ?>>Torsi / RPM</option>
+                                <option value="fa-gas-pump" <?php echo e($curr == 'fa-gas-pump' ? 'selected' : ''); ?>>Bahan Bakar</option>
+                                <option value="fa-battery-full" <?php echo e($curr == 'fa-battery-full' ? 'selected' : ''); ?>>Baterai</option>
                             </select>
                             <button type="button" onclick="this.closest('.spec-row').remove()" style="height: 38px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
 
             <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px;">
-                <a href="{{ route('manager.cars.index') }}" style="padding: 10px 18px; background: var(--bg-hover); color: var(--text-muted); text-decoration: none; border-radius: 4px; font-size: 13px; border: 1px solid var(--border);">Batal</a>
+                <a href="<?php echo e(route('manager.cars.index')); ?>" style="padding: 10px 18px; background: var(--bg-hover); color: var(--text-muted); text-decoration: none; border-radius: 4px; font-size: 13px; border: 1px solid var(--border);">Batal</a>
                 <button type="submit" style="padding: 10px 24px; background: #dc2626; color: #fff; border: none; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer;">
-                    {{ $car->exists ? 'Simpan Perubahan' : 'Tambah Mobil' }}
+                    <?php echo e($car->exists ? 'Simpan Perubahan' : 'Tambah Mobil'); ?>
+
                 </button>
             </div>
         </div>
@@ -382,7 +395,7 @@
         }
     }
 
-    let variantIndex = {{ count($existingVariants ?? []) }};
+    let variantIndex = <?php echo e(count($existingVariants ?? [])); ?>;
 
     function addVariantRow(colorName = '', hexCode = '#dc2626') {
         const container = document.getElementById('variantsContainer');
@@ -868,7 +881,7 @@
             localStorage.setItem('apex_car_draft', JSON.stringify(draft));
         }
 
-        @if(!$car->exists)
+        <?php if(!$car->exists): ?>
         const savedDraft = localStorage.getItem('apex_car_draft');
         if (savedDraft) {
             try {
@@ -892,7 +905,7 @@
                 if (draft.status) document.querySelector('select[name="status"]').value = draft.status;
             } catch (e) {}
         }
-        @endif
+        <?php endif; ?>
 
         // --- Format Price on Input ---
         window.formatPrice = function(input) {
@@ -907,4 +920,6 @@
         };
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('manager.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\apex-automotive\resources\views/manager/cars/form.blade.php ENDPATH**/ ?>

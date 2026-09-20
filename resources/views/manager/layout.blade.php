@@ -117,8 +117,96 @@
             border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
             background: var(--bg-topbar);
+        }
+        /* Topbar user dropdown */
+        .topbar-user-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px 6px 8px;
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-heading);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .topbar-user-btn:hover {
+            background: rgba(220, 38, 38, 0.15);
+            border-color: rgba(220, 38, 38, 0.4);
+        }
+        .topbar-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+        .topbar-user-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            text-align: left;
+        }
+        .topbar-user-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+        .topbar-user-role {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: #ef4444;
+            text-transform: uppercase;
+        }
+        .topbar-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 220px;
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            z-index: 200;
+            overflow: hidden;
+            display: none;
+        }
+        .topbar-dropdown.open { display: block; }
+        .topbar-dropdown-header {
+            padding: 14px 16px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .topbar-dropdown-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+        .topbar-dropdown-link:hover {
+            background: var(--nav-hover);
+            color: var(--text-heading);
+        }
+        .topbar-dropdown-link i { width: 14px; text-align: center; color: #ef4444; }
+        .topbar-dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0;
         }
         .user-info {
             display: flex;
@@ -297,16 +385,13 @@
         </div>
 
         <div class="user-footer">
+            <div class="topbar-avatar" style="width:36px;height:36px;font-size:13px;">
+                {{ strtoupper(substr(auth()->user()->name ?? 'M', 0, 1)) }}
+            </div>
             <div class="user-info">
                 <span class="user-name">{{ auth()->user()->name }}</span>
                 <span class="user-role">MANAGER EXEC</span>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:14px;" title="Keluar">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </form>
         </div>
     </aside>
 
@@ -320,10 +405,41 @@
                 <button onclick="toggleGlobalTheme()" class="apex-theme-btn" id="managerThemeBtn">
                     <i class="fa-solid fa-moon" style="color:#818cf8;"></i> DARK MODE
                 </button>
-                <span style="padding: 6px 12px; background: rgba(220, 38, 38, 0.12); border: 1px solid rgba(220, 38, 38, 0.3); color: #fca5a5; font-family: 'Space Mono', monospace; font-size: 11px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-user-shield text-red-500"></i>
-                    <span>{{ auth()->user()->email }}</span>
-                </span>
+
+                {{-- User Dropdown --}}
+                <div style="position: relative;" id="topbarUserWrapper">
+                    <button type="button" class="topbar-user-btn" onclick="toggleTopbarDropdown()" id="topbarUserBtn">
+                        <div class="topbar-avatar">
+                            {{ strtoupper(substr(auth()->user()->name ?? 'M', 0, 1)) }}
+                        </div>
+                        <div class="topbar-user-info">
+                            <span class="topbar-user-name">{{ auth()->user()->name }}</span>
+                            <span class="topbar-user-role">Manager Exec</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down" id="topbarChevron" style="font-size: 10px; color: #ef4444; margin-left: 4px; transition: transform 0.2s;"></i>
+                    </button>
+
+                    <div class="topbar-dropdown" id="topbarDropdown">
+                        <div class="topbar-dropdown-header">
+                            <div style="font-size: 11px; font-family: 'Space Mono', monospace; color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Manager Executive</div>
+                            <div style="font-size: 12px; color: var(--text-muted); word-break: break-all;">{{ auth()->user()->email }}</div>
+                        </div>
+                        <div style="padding: 6px 0;">
+                            <a href="{{ route('manager.profile.show') }}" class="topbar-dropdown-link">
+                                <i class="fa-solid fa-user-pen"></i>
+                                <span>Profil & Pengaturan</span>
+                            </a>
+                            <div class="topbar-dropdown-divider"></div>
+                            <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                                @csrf
+                                <button type="submit" class="topbar-dropdown-link" style="width:100%; background:none; border:none; cursor:pointer; text-align:left;" onmouseover="this.style.background='rgba(220,38,38,0.08)'" onmouseout="this.style.background=''">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span style="color: #f87171;">Keluar / Logout</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -346,6 +462,25 @@
         </main>
     </div>
 @include('partials.chatbot')
+<script>
+    function toggleTopbarDropdown() {
+        const dropdown = document.getElementById('topbarDropdown');
+        const chevron  = document.getElementById('topbarChevron');
+        const isOpen   = dropdown.classList.toggle('open');
+        chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('topbarUserWrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+            const dropdown = document.getElementById('topbarDropdown');
+            const chevron  = document.getElementById('topbarChevron');
+            if (dropdown) { dropdown.classList.remove('open'); }
+            if (chevron)  { chevron.style.transform = 'rotate(0deg)'; }
+        }
+    });
+</script>
 </body>
 </html>
 

@@ -3,29 +3,35 @@
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\GarageController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\Manager\CarController;
 use App\Http\Controllers\Manager\DashboardController;
-use App\Http\Controllers\Manager\TeamController;
+use App\Http\Controllers\Manager\ProfileController as ManagerProfileController;
 use App\Http\Controllers\Manager\SettingController;
+use App\Http\Controllers\Manager\TeamController;
 use App\Http\Controllers\Mechanic\ServiceController as MechanicServiceController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\ChatbotController;
+use App\Models\Car;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 // ──────────────────────────────────────────────
 // PUBLIC ROUTES (no login required)
 // ──────────────────────────────────────────────
 Route::get('/', function () {
-    $cars = \App\Models\Car::with('variants')->where('status', '!=', 'sold')->latest()->get();
+    Cache::increment('website_visits');
+    $cars = Car::with('variants')->where('status', '!=', 'sold')->latest()->get();
+
     return view('welcome', compact('cars'));
 })->name('home');
 
-Route::get('/debug-php', function() {
+Route::get('/debug-php', function () {
     return [
         'max_input_vars' => ini_get('max_input_vars'),
         'post_max_size' => ini_get('post_max_size'),
@@ -33,11 +39,12 @@ Route::get('/debug-php', function() {
     ];
 });
 
-Route::get('/reset-opcache', function() {
+Route::get('/reset-opcache', function () {
     if (function_exists('opcache_reset')) {
         opcache_reset();
     }
-    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    Artisan::call('view:clear');
+
     return 'OPcache reset successful';
 });
 
@@ -50,12 +57,15 @@ Route::get('/garage', function () {
 })->name('garage');
 
 Route::get('/car-info/{id}', function ($id) {
-    $car = \App\Models\Car::findOrFail($id);
+    $car = Car::findOrFail($id);
+
     return view('car_info', compact('car'));
 })->name('car.info');
 
 // Inquiry — VIP Viewing Request (works for guests & authenticated users)
-Route::get('/inquire', function() { return view('inquire'); })->name('inquire.create');
+Route::get('/inquire', function () {
+    return view('inquire');
+})->name('inquire.create');
 Route::post('/inquire', [InquiryController::class, 'store'])->name('inquire.store');
 
 // Auth — Login flow
@@ -142,6 +152,10 @@ Route::middleware(['auth', 'manager'])->prefix('manager')->name('manager.')->gro
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/preview', [DashboardController::class, 'preview'])->name('preview');
 
+    // Profile
+    Route::get('/profile', [ManagerProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ManagerProfileController::class, 'update'])->name('profile.update');
+
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
@@ -170,4 +184,6 @@ Route::middleware(['auth', 'mechanic'])->prefix('mechanic')->name('mechanic.')->
     Route::post('/{booking}/quote', [MechanicServiceController::class, 'setQuote'])->name('quote');
 });
 
-Route::get('/test', function() { return view('test-chatbot'); });
+Route::get('/test', function () {
+    return view('test-chatbot');
+});

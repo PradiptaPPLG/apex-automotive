@@ -16,7 +16,7 @@ class QrCodeSvg
         $matrix = self::encodeText($text);
         $moduleCount = count($matrix);
 
-        $quietZone = 2;
+        $quietZone = 4;
         $totalModules = $moduleCount + ($quietZone * 2);
 
         $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '.$totalModules.' '.$totalModules.'" width="'.$size.'" height="'.$size.'" shape-rendering="crispEdges">';

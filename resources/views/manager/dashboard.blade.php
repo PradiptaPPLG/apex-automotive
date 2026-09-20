@@ -232,7 +232,7 @@
                 <div class="mb-card-title">Total Visit Website</div>
                 <div class="mb-card-menu"><i class="fa-solid fa-ellipsis"></i></div>
             </div>
-            <div class="mb-number purple">2375</div>
+            <div class="mb-number purple">{{ $totalVisits }}</div>
             <div class="mb-sub-metric">Pengunjung Landing Page</div>
         </div>
 
@@ -354,23 +354,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Number Count Up Animation
+        // Number Count Up Animation — fixed 1000ms duration regardless of number size
+        const countUpEase = (t) => 1 - Math.pow(1 - t, 3);
         const statNumbers = document.querySelectorAll('.mb-number');
         statNumbers.forEach(el => {
-            const target = parseInt(el.innerText) || 0;
+            const raw = el.innerText.replace(/[^0-9]/g, '');
+            const target = parseInt(raw) || 0;
             if (target > 0) {
-                let current = 0;
-                // Determine speed based on size of number
-                const increment = Math.max(1, Math.floor(target / 40)); 
-                el.innerText = '0'; // start at 0
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    el.innerText = current.toLocaleString('id-ID'); 
-                }, 40);
+                el.innerText = '0';
+                const duration = 1000;
+                const startTime = performance.now();
+                function countStep(now) {
+                    const progress = Math.min((now - startTime) / duration, 1);
+                    el.innerText = Math.round(target * countUpEase(progress)).toLocaleString('id-ID');
+                    if (progress < 1) requestAnimationFrame(countStep);
+                }
+                requestAnimationFrame(countStep);
             }
         });
 
@@ -383,7 +382,18 @@
         const titleColor = getVar('--mb-text-main') || '#394359';
         const pieBorderColor = getVar('--mb-pie-border') || '#ffffff';
 
-        // Metabase Style Bar Chart
+        // Bar chart target values
+        const barTargets = [
+            {{ $inquiryStats['received'] }},
+            {{ $inquiryStats['consultation'] }},
+            {{ $inquiryStats['spk'] }},
+            {{ $inquiryStats['kyc'] }},
+            {{ $inquiryStats['contract'] }},
+            {{ $inquiryStats['payment'] }},
+            {{ $inquiryStats['delivery'] }},
+            {{ $inquiryStats['completed'] }}
+        ];
+
         const ctxBar = document.getElementById('mbBarChart').getContext('2d');
         const barChart = new Chart(ctxBar, {
             type: 'bar',
@@ -391,16 +401,7 @@
                 labels: ['Lead Masuk', 'Konsultasi', 'SPK Issued', 'Dokumen KYC', 'E-Sign SPA', 'Pembayaran', 'Pengiriman', 'Selesai'],
                 datasets: [{
                     label: 'Count',
-                    data: [
-                        {{ $inquiryStats['received'] }},
-                        {{ $inquiryStats['consultation'] }},
-                        {{ $inquiryStats['spk'] }},
-                        {{ $inquiryStats['kyc'] }},
-                        {{ $inquiryStats['contract'] }},
-                        {{ $inquiryStats['payment'] }},
-                        {{ $inquiryStats['delivery'] }},
-                        {{ $inquiryStats['completed'] }}
-                    ],
+                    data: [0, 0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: '#509ee3',
                     borderRadius: 2
                 }]
@@ -408,10 +409,12 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: false,
                 plugins: { legend: { display: false } },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        max: Math.max(...barTargets, 1) * 1.25,
                         ticks: { color: textColor, precision: 0 },
                         grid: { color: gridColor },
                         border: { display: false }
@@ -423,6 +426,23 @@
                     }
                 }
             }
+        });
+
+        // Manual staggered bar animation using requestAnimationFrame
+        const animDuration = 700;
+        const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+        barTargets.forEach((target, i) => {
+            setTimeout(() => {
+                const startTime = performance.now();
+                function step(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / animDuration, 1);
+                    barChart.data.datasets[0].data[i] = target * easeOutQuart(progress);
+                    barChart.update('none');
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }, i * 120);
         });
 
         // Metabase Style Doughnut/Pie Chart

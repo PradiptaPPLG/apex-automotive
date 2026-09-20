@@ -390,10 +390,12 @@
                                     </a>
                                 <?php endif; ?>
 
+                                <?php if(!auth()->user()->isManager()): ?>
                                     <a href="<?php echo e(route('portal.dashboard')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-headset text-red-500 w-4 text-center"></i>
                                         <span>Portal VIP &amp; Konsultasi (Chat)</span>
                                     </a>
+                                <?php endif; ?>
                                     <a href="<?php echo e(route('profile.complete')); ?>" class="flex items-center space-x-3 px-4 py-2.5 text-xs font-mono text-neutral-200 hover:text-white transition-colors" style="background: transparent;" onmouseover="this.style.background='rgba(255,255,255,0.07)'" onmouseout="this.style.background='transparent'">
                                         <i class="fa-solid fa-user-pen text-red-500 w-4 text-center"></i>
                                         <span>Profil &amp; Alamat VIP</span>
@@ -1310,12 +1312,22 @@
                                 <i class="fa-solid fa-lock mr-2 text-red-500"></i> BOOKING DINONAKTIFKAN (AKUN STAFF)
                             </button>
                         <?php else: ?>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div id="inspectActionButtonsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <button onclick="bookCarWithSelectedConfig()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-red-600/30 flex items-center justify-center">
                                     <i class="fa-solid fa-calendar-check mr-2"></i> BOOK THIS SPEC
                                 </button>
                                 <button onclick="window.location.href='/inquire'" class="py-3 border border-neutral-300 dark:border-white/20 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10 font-bold text-xs tracking-widest uppercase transition-colors flex items-center justify-center">
                                     REQUEST QUOTE
+                                </button>
+                            </div>
+                            <div id="inspectComingSoonContainer" class="hidden">
+                                <button type="button" disabled class="w-full py-3 bg-neutral-900/80 text-amber-500 font-bold text-[10px] sm:text-xs tracking-widest uppercase cursor-not-allowed flex items-center justify-center border border-amber-500/30 shadow-lg">
+                                    <i class="fa-solid fa-clock mr-2"></i> VEHICLE COMING SOON - NOT YET AVAILABLE
+                                </button>
+                            </div>
+                            <div id="inspectSoldContainer" class="hidden">
+                                <button type="button" disabled class="w-full py-3 bg-neutral-900/80 text-neutral-500 font-bold text-[10px] sm:text-xs tracking-widest uppercase cursor-not-allowed flex items-center justify-center border border-neutral-500/30 shadow-lg">
+                                    <i class="fa-solid fa-ban mr-2"></i> VEHICLE SOLD OUT
                                 </button>
                             </div>
                         <?php endif; ?>
@@ -1400,6 +1412,7 @@
                 finalPriceNum: <?php echo e($car->price); ?>,
                 discountPct: '10%',
                 condition: '<?php echo e($car->category ?? "NEW"); ?>',
+                status: '<?php echo e($car->status); ?>',
                 interior: "<?php echo e(asset('images/interior/interior_bmw.webp')); ?>",
                 engine: "<?php echo e(asset('images/mesin/mesin_bmw.webp')); ?>",
                 specs: [
@@ -1577,6 +1590,26 @@
                     garageBtn.innerHTML = '<i class="fa-solid fa-lock text-neutral-500"></i> <span>MODIFY WHEELS (UNAVAILABLE FOR THIS MODEL)</span>';
                     garageBtn.className = "w-full py-3 bg-neutral-950 text-neutral-500 font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-2 border border-white/5 cursor-not-allowed opacity-60";
                     garageBtn.disabled = true;
+                }
+            }
+
+            // Handle Booking Button Visibility based on Status
+            const btnAvailable = document.getElementById('inspectActionButtonsContainer');
+            const btnComingSoon = document.getElementById('inspectComingSoonContainer');
+            const btnSold = document.getElementById('inspectSoldContainer');
+
+            if (btnAvailable && btnComingSoon && btnSold) {
+                btnAvailable.classList.add('hidden');
+                btnComingSoon.classList.add('hidden');
+                btnSold.classList.add('hidden');
+
+                if (car.status === 'sold') {
+                    btnSold.classList.remove('hidden');
+                } else if (car.status === 'available') {
+                    btnAvailable.classList.remove('hidden');
+                } else {
+                    // Treat 'reserved', 'coming_soon', etc as COMING SOON
+                    btnComingSoon.classList.remove('hidden');
                 }
             }
 
@@ -2778,10 +2811,26 @@
             var marker = L.marker([lat, lng], {icon: redIcon}).addTo(map);
             marker.bindPopup("<b>APEX AUTOMOTIVE</b><br>Official Showroom").openPopup();
             
-            // Fix map rendering issues inside hidden or resized containers
-            setTimeout(function() {
-                map.invalidateSize();
-            }, 500);
+            // Robust fix for Leaflet rendering issues on scroll animations/resizing
+            if ('ResizeObserver' in window) {
+                var ro = new ResizeObserver(function() {
+                    map.invalidateSize();
+                });
+                ro.observe(mapEl);
+            }
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if(entry.isIntersecting) {
+                            setTimeout(function() { map.invalidateSize(); }, 100);
+                        }
+                    });
+                });
+                io.observe(mapEl);
+            }
+            
+            // Fallback for older browsers
+            setTimeout(function() { map.invalidateSize(); }, 1500);
         }
     });
 </script>

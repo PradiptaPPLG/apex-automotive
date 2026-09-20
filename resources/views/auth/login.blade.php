@@ -120,6 +120,32 @@
             flex-shrink: 0;
         }
 
+        /* ── CARD FLIP WRAPPER ── */
+        .flip-scene {
+            perspective: 1200px;
+            width: 100%;
+        }
+        .flip-card {
+            position: relative;
+            width: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-face {
+            width: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-face-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotateY(180deg);
+        }
+
         .login-card {
             background: rgba(12, 12, 16, 0.92);
             backdrop-filter: blur(20px);
@@ -131,6 +157,67 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             position: relative;
             overflow: hidden;
+        }
+
+        /* Staff QR card back */
+        .staff-card {
+            background: rgba(12, 12, 16, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(229, 9, 20, 0.25);
+            border-left: 3px solid #e50914;
+            padding: 32px 32px 28px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+        .staff-card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 12px 0 4px;
+            letter-spacing: 1px;
+        }
+        .staff-card-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            margin: 0 0 20px;
+            line-height: 1.5;
+        }
+        .staff-link {
+            font-size: 10px;
+            color: #e50914;
+            text-decoration: none;
+            font-family: monospace;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .staff-link:hover { opacity: 0.75; }
+        /* QR reader overrides inside staff card */
+        #staff-qr-reader {
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #000;
+            margin-bottom: 14px;
+        }
+        #staff-qr-reader > section { border-radius: 6px; }
+        #staffQrError {
+            display: none;
+            font-size: 11px;
+            font-family: monospace;
+            color: #ef4444;
+            margin-bottom: 14px;
+            padding: 10px;
+            background: rgba(239,68,68,0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(239,68,68,0.3);
         }
 
         .brand-header {
@@ -260,6 +347,23 @@
             margin: 20px 0 0 0;
         }
         .terms-text a { color: rgba(255,255,255,0.6); text-decoration: underline; }
+        .terms-staff-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 10px;
+            color: #e50914;
+            text-align: center;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            background: none;
+            padding: 0;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .terms-staff-link:hover { opacity: 1; }
 
         /* STEP 2 OTP POPUP / MODAL OVERLAY IN-CARD */
         .otp-modal {
@@ -386,8 +490,13 @@
             </div>
         </div>
 
-        <!-- RIGHT LOGIN FORM PANEL -->
+        <!-- RIGHT LOGIN FORM PANEL (FLIP CARD) -->
         <div class="right-content">
+            <div class="flip-scene">
+            <div class="flip-card" id="loginFlipCard">
+
+            <!-- FRONT FACE: Normal VIP Login -->
+            <div class="flip-face">
             <div class="login-card">
 
                 <div class="brand-header">
@@ -412,11 +521,7 @@
                     <span>Sign in with Google</span>
                 </a>
 
-                <!-- SIGN IN WITH VIP ID CARD BUTTON -->
-                <button type="button" onclick="openQrModal()" class="btn-google" style="margin-bottom: 20px; background: rgba(229, 9, 20, 0.12); border-color: rgba(229, 9, 20, 0.4); color: #fff;">
-                    <i class="fa-solid fa-qrcode" style="color: #e50914; font-size: 16px;"></i>
-                    <span>Sign in with VIP ID Card</span>
-                </button>
+
 
                 <div class="divider">
                     <div class="divider-line"></div>
@@ -493,11 +598,49 @@
                 </div>
 
                 <p class="terms-text">
-                    Dengan masuk, Anda menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi</a> PT Apex Automotive.
+                    Dengan masuk, Anda menyetujui <a href="#">Syarat &amp; Ketentuan</a> serta <a href="#">Kebijakan Privasi</a> PT Apex Automotive.
                 </p>
+                <button class="terms-staff-link" onclick="flipToStaff()">
+                    &mdash; saya adalah staff apex &mdash;
+                </button>
 
-            </div>
-        </div>
+            </div><!-- /.login-card -->
+            </div><!-- /.flip-face (front) -->
+
+            <!-- BACK FACE: Staff QR Scanner -->
+            <div class="flip-face flip-face-back">
+            <div class="staff-card">
+
+                <!-- Header icon -->
+                <div style="width:48px;height:48px;background:rgba(229,9,20,0.15);border:1px solid rgba(229,9,20,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;">
+                    <i class="fa-solid fa-id-badge" style="color:#e50914;font-size:22px;"></i>
+                </div>
+                <h2 class="staff-card-title">Staff ID Card Login</h2>
+                <p class="staff-card-sub">Arahkan QR Code pada ID Card staff Anda ke kamera.<br>QR dapat diunduh dari halaman Profil akun staff.</p>
+
+                <!-- QR Reader -->
+                <div id="staff-qr-reader"></div>
+                <div id="staffQrError"></div>
+
+                <!-- Upload QR File fallback -->
+                <div style="margin-bottom: 20px;">
+                    <label for="staffQrUpload" style="font-size:10px; font-family:monospace; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:8px 16px; border-radius:4px; cursor:pointer; display:inline-block; transition:all 0.2s;">
+                        <i class="fa-solid fa-upload"></i> Unggah File QR
+                    </label>
+                    <input type="file" id="staffQrUpload" accept="image/*" style="display:none;" onchange="handleStaffQrUpload(event)">
+                </div>
+
+                <!-- Back link -->
+                <button class="staff-link" onclick="flipToLogin()">
+                    &larr; kembali ke form
+                </button>
+
+            </div><!-- /.staff-card -->
+            </div><!-- /.flip-face-back -->
+
+            </div><!-- /.flip-card -->
+            </div><!-- /.flip-scene -->
+        </div><!-- /.right-content -->
 
     </div>
 
@@ -515,14 +658,63 @@
             <div id="qrError" style="display:none; font-size:11px; font-family:monospace; color:#ef4444; margin-bottom:14px; padding:10px; background:rgba(239,68,68,0.1); border-radius:4px; border:1px solid rgba(239,68,68,0.3);">
             </div>
 
+            <!-- Upload QR File fallback -->
+            <div style="margin-bottom: 20px;">
+                <label for="qrUpload" style="font-size:10px; font-family:monospace; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:8px 16px; border-radius:4px; cursor:pointer; display:inline-block; transition:all 0.2s;">
+                    <i class="fa-solid fa-upload"></i> Unggah File QR
+                </label>
+                <input type="file" id="qrUpload" accept="image/*" style="display:none;" onchange="handleQrUpload(event)">
+            </div>
+
             <button type="button" onclick="closeQrModal()" style="font-family:monospace; font-size:11px; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:10px 24px; border-radius:4px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition:all 0.2s;">
                 Tutup Pemindai
             </button>
         </div>
     </div>
 
+    <!-- DUMMY DIV FOR FILE UPLOAD QR READER -->
+    <div id="dummy-upload-reader" style="display:none;"></div>
+
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script>
+        // Global scanner instance for file upload
+        let globalQrCodeUpload = null;
+        function getGlobalQrCodeUpload() {
+            if (!globalQrCodeUpload) {
+                globalQrCodeUpload = new Html5Qrcode("dummy-upload-reader");
+            }
+            return globalQrCodeUpload;
+        }
+
+        async function handleQrUpload(e) {
+            if (e.target.files.length === 0) return;
+            const file = e.target.files[0];
+            try {
+                const decodedText = await getGlobalQrCodeUpload().scanFile(file, true);
+                onScanSuccess(decodedText);
+            } catch (err) {
+                const errDiv = document.getElementById('qrError');
+                errDiv.style.display = 'block';
+                errDiv.innerText = 'Gambar QR tidak dapat dibaca. Pastikan gambarnya jelas.';
+            }
+            e.target.value = '';
+        }
+
+        async function handleStaffQrUpload(e) {
+            if (e.target.files.length === 0) return;
+            const file = e.target.files[0];
+            try {
+                const decodedText = await getGlobalQrCodeUpload().scanFile(file, true);
+                onStaffScanSuccess(decodedText);
+            } catch (err) {
+                const errDiv = document.getElementById('staffQrError');
+                errDiv.style.display = 'block';
+                errDiv.innerText = 'Gambar QR tidak dapat dibaca. Pastikan gambarnya jelas.';
+            }
+            e.target.value = '';
+        }
+
+        /* ── OTP Popup Logic ── */
         const emailInput = document.getElementById('email');
         const displayTargetEmail = document.getElementById('displayTargetEmail');
         const modalOtpEmail = document.getElementById('modalOtpEmail');
@@ -532,7 +724,6 @@
             otpPopup.classList.remove('active');
         }
 
-        // OTP Input Sync Logic for Modal
         const modalDigits = Array.from(document.querySelectorAll('.modal-otp-box'));
         const modalHidden = document.getElementById('modalOtpHidden');
         const modalVerifyBtn = document.getElementById('modalVerifyBtn');
@@ -549,7 +740,6 @@
                 if (el.value && idx < 5) modalDigits[idx + 1].focus();
                 syncModalHidden();
             });
-
             el.addEventListener('keydown', (e) => {
                 if (e.key === 'Backspace' && !el.value && idx > 0) {
                     modalDigits[idx - 1].focus();
@@ -559,36 +749,44 @@
             });
         });
 
-        /* ── QR CODE SCANNER LOGIC ── */
-        let html5QrcodeScanner = null;
+        /* ── CARD FLIP LOGIC ── */
+        let staffQrScanner = null;
+        const flipCard = document.getElementById('loginFlipCard');
 
-        function openQrModal() {
-            const modal = document.getElementById('qrModal');
-            modal.style.display = 'flex';
-            document.getElementById('qrError').style.display = 'none';
-            
-            if (!html5QrcodeScanner) {
-                html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: { width: 220, height: 220 } });
-                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        function flipToStaff() {
+            flipCard.classList.add('flipped');
+            // Start QR scanner after flip animation
+            setTimeout(() => {
+                document.getElementById('staffQrError').style.display = 'none';
+                if (!staffQrScanner) {
+                    staffQrScanner = new Html5QrcodeScanner('staff-qr-reader', {
+                        fps: 15,
+                        qrbox: { width: 250, height: 250 },
+                        disableFlip: false,
+                        formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ]
+                    });
+                    staffQrScanner.render(onStaffScanSuccess, onStaffScanFailure);
+                }
+            }, 500);
+        }
+
+        function flipToLogin() {
+            flipCard.classList.remove('flipped');
+            // Stop QR scanner
+            if (staffQrScanner) {
+                staffQrScanner.clear().catch(err => console.error('Gagal menghentikan kamera:', err));
+                staffQrScanner = null;
             }
         }
 
-        function closeQrModal() {
-            document.getElementById('qrModal').style.display = 'none';
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(err => console.error("Gagal menghentikan kamera:", err));
-                html5QrcodeScanner = null;
-            }
-        }
-
-        async function onScanSuccess(decodedText) {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear();
-                html5QrcodeScanner = null;
+        async function onStaffScanSuccess(decodedText) {
+            if (staffQrScanner) {
+                staffQrScanner.clear();
+                staffQrScanner = null;
             }
 
             try {
-                const response = await fetch("{{ route('login.qr') }}", {
+                const response = await fetch('{{ route("login.qr") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -602,24 +800,29 @@
                 if (data.success) {
                     window.location.href = data.redirect;
                 } else {
-                    const errDiv = document.getElementById('qrError');
+                    const errDiv = document.getElementById('staffQrError');
                     errDiv.style.display = 'block';
-                    errDiv.innerText = data.message || "Autentikasi QR Gagal.";
+                    errDiv.innerText = data.message || 'Autentikasi QR Gagal. Pastikan ID Card valid.';
                     setTimeout(() => {
-                        html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: { width: 220, height: 220 } });
-                        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                        staffQrScanner = new Html5QrcodeScanner('staff-qr-reader', { 
+                            fps: 15, 
+                            qrbox: { width: 250, height: 250 },
+                            disableFlip: false,
+                            formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ]
+                        });
+                        staffQrScanner.render(onStaffScanSuccess, onStaffScanFailure);
                     }, 3000);
                 }
             } catch (e) {
-                console.error("Gagal autentikasi via QR:", e);
-                const errDiv = document.getElementById('qrError');
+                console.error('Gagal autentikasi via QR:', e);
+                const errDiv = document.getElementById('staffQrError');
                 errDiv.style.display = 'block';
-                errDiv.innerText = "Terjadi kesalahan koneksi server.";
+                errDiv.innerText = 'Terjadi kesalahan koneksi server.';
             }
         }
 
-        function onScanFailure(error) {
-            // Quietly continue scanning
+        function onStaffScanFailure(error) {
+            // Silently continue scanning
         }
     </script>
 </body>
